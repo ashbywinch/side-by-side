@@ -40,12 +40,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {
-    max-width: 100%
+
+div.book-view {
+  padding: 1rem;
 }
+
 .grid-container {
     max-width: 70rem;
-    font-size: 30px;
     display: flex;
     align-items: stretch;
     flex-wrap: wrap;
