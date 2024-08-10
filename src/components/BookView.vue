@@ -1,17 +1,19 @@
 <template>
   <div class="book-view">
-    <h1>{{title}}</h1>
-    <div id="main" class="grid-container">
+    <div id="main" class="container my-5">
+      <h1>{{title}}</h1>
       <template v-for="card in cards" :key="card.filename + ':' + card.index_in_file">
-        <div class="front card">
-            <div class="text">
-            {{ card.current }}
-            </div>
-        </div>
-        <div class="back card">
-            <div class="text">
-            {{ card.translation }}
-            </div>
+        <div class="row my-3 mx-0">
+          <div class="col-md-6 col-sm-6">
+              <div class="front border bg-light mx-2 p-3 fs-4">
+              {{ card.current }}
+              </div>
+          </div>
+          <div class="col-md-6 col-sm-6">
+              <div class="back border bg-light mx-2 p-3 fs-4">
+              {{ card.translation }}
+              </div>
+          </div>
         </div>
       </template>
     </div>    
@@ -41,28 +43,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-div.book-view {
-  padding: 1rem;
-}
 
-.grid-container {
-    max-width: 70rem;
-    display: flex;
-    align-items: stretch;
-    flex-wrap: wrap;
-}
-.card {
-  flex: 1 100%;
-}
-@media all and (min-width: 600px) {
-  .card { flex: 0 1 50% }
-}
-
-:nth-child(4n + 1 of div.card), :nth-child(4n + 2 of div.card) {
-  background-color: paleturquoise;
-}
-
-div.text {
-  padding: 1rem;
-}
 </style>
