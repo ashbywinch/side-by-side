@@ -1,3 +1,4 @@
+
 <template>
     <header>
         <nav class="navbar navbar-dark bg-dark">
@@ -8,18 +9,13 @@
                 </button>
                 <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Texts:</h5>
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Texts</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="#">Features</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link" href="#">Pricing</a>
+                    <div id="folder-tree">
+                        <TreeMenuWrapper/>
+                    </div>
                 </div>
                 </div>
             </div>
@@ -29,15 +25,14 @@
 </template>
 
 <script>
-
-import index from '@/assets/index.json'
+import TreeMenuWrapper from './TreeMenuWrapper.vue';
 
 export default {
-  name: 'FolderTree',   
-  data() {
-    return {
-      index: index
-    };
+  name: 'NavBar',
+  components: {
+    TreeMenuWrapper,
   },
 };
+
+
 </script>

@@ -1,16 +1,17 @@
 <template>
-  <FolderTree/>
-  <BookView title="Testing"/>
+  <NavBar/>
+  <BookView/>
 </template>
 
 <script>
+
 import BookView from './components/BookView.vue';
-import FolderTree from './components/FolderTree.vue';
+import NavBar from './components/NavBar.vue';
 
 export default {
   name: 'App',
   components: {
-    FolderTree,
+    NavBar,
     BookView
   },
   data() {
