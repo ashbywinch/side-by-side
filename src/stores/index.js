@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import index from '@/assets/index.json'
+import indexjson from '@/assets/index.json'
 
 
 function bookToDom(folderprefix, book) {
@@ -37,13 +37,11 @@ export const useIndex = defineStore('index', {
      * @returns {{ current: string, translation: string, filename: string }[]}
      */
     index(state) {
-      this.load(state)
-      return state._index;
-    },
-    load(state) {
-      if(state.index.length == 0){
-        state.index = dictToDom("", index)
+      if(state._index.length == 0){
+        state._index = dictToDom("", indexjson)
       }
+      return state._index;
     }
-  },
+      
+  }
 })
