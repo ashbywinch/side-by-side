@@ -1,15 +1,468 @@
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"0","prev":"","current":"This is a text file","next":"that contains a \"book\" for testing purposes.","translation":"elif txet a si sihT"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"20","prev":"This is a text file","current":"that contains a \"book\" for testing purposes.","next":"Some of the lines and sentences are quite long and","translation":".sesoprup gnitset rof \"koob\" a sniatnoc taht"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"65","prev":"that contains a \"book\" for testing purposes.","current":"Some of the lines and sentences are quite long and","next":"might need to be broken up to put on flashcards,","translation":"dna gnol etiuq era secnetnes dna senil eht fo emoS"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"116","prev":"Some of the lines and sentences are quite long and","current":"might need to be broken up to put on flashcards,","next":"because they use a large number of words","translation":",sdrachsalf no tup ot pu nekorb eb ot deen thgim"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"165","prev":"might need to be broken up to put on flashcards,","current":"because they use a large number of words","next":"without putting a full stop in between any of them,","translation":"sdrow fo rebmun egral a esu yeht esuaceb"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"206","prev":"because they use a large number of words","current":"without putting a full stop in between any of them,","next":"perhaps in","translation":",meht fo yna neewteb ni pots lluf a gnittup tuohtiw"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"258","prev":"without putting a full stop in between any of them,","current":"perhaps in","next":"order to emulate wise literary authors who seem","translation":"ni spahrep"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"269","prev":"perhaps in","current":"order to emulate wise literary authors who seem","next":"to gravitate towards excessively long sentences,","translation":"mees ohw srohtua yraretil esiw etalume ot redro"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"317","prev":"order to emulate wise literary authors who seem","current":"to gravitate towards excessively long sentences,","next":"making","translation":",secnetnes gnol ylevissecxe sdrawot etativarg ot"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"366","prev":"to gravitate towards excessively long sentences,","current":"making","next":"it quite hard for non native speakers to read","translation":"gnikam"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"373","prev":"making","current":"it quite hard for non native speakers to read","next":"their work (or even native speakers,","translation":"daer ot srekaeps evitan non rof drah etiuq ti"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"419","prev":"it quite hard for non native speakers to read","current":"their work (or even native speakers,","next":"for that matter).","translation":",srekaeps evitan neve ro( krow rieht"}
-{"filename":"test/data/dummy_books\\dummy_book.txt","index_in_file":"929","prev":"their work (or even native speakers,","current":"for that matter).","next":"","translation":".)rettam taht rof"}
-{"filename":"test/data/dummy_books\\second_dummy_book.txt","index_in_file":"0","prev":"","current":"This is a terrible book.","next":"Nobody should read this book.","translation":".koob elbirret a si sihT"}
-{"filename":"test/data/dummy_books\\second_dummy_book.txt","index_in_file":"53","prev":"This is a terrible book.","current":"Nobody should read this book.","next":"","translation":".koob siht daer dluohs ydoboN"}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Любил я нежные слова.","next":"","translation":"Nonsense"}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Искал таинственных соцветий.","next":"","translation":"Rubbish"}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"И, прозревающий едва,","next":"","translation":"Terrible translation"}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Еще шумел, как в играх дети.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Но выходя под утро в луг,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Твердя невнятные напевы,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Я знал Тебя, мой вечный друг,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Тебя, хранительница-Дева.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Я знал, задумчивый поэт,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Что ни один не ведал гений","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Такой свободы, как обет","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Моих невольничьих Служений.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Безмолвный призрак в терему,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Я  черный раб проклятой крови.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Я соблюдаю полутьму","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"В Ее нетронутом алькове.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Я стерегу Ее ключи","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"И с Ней присутствую, незримый,","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Когда скрещаются мечи","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"За красоту Недостижимой.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Мой голос глух, мой волос сед.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Черты до ужаса недвижны.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Со мной всю жизнь  один Завет:","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Завет служенья Непостижной.","next":"","translation":""}
+{"filename":"books/Александр Блок/Religio1_2070.txt","index_in_file":0,"prev":"","current":"Богослужение (лат.).","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Александр Блок","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Вот открыт балаганчик","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Для веселых и славных детей,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Смотрят девочка и мальчик","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"На дам, королей и чертей.","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"И звучит эта адская музыка,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Завывает унылый смычок.","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Страшный черт ухватил карапузика,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"И стекает клюквенный сок.","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Он спасется от черного гнева","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Мановением белой руки.","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Посмотри: огоньки","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Приближаются слева...","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Видишь факелы?","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":15,"prev":"","current":"видишь дымки?","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Это, верно, сама королева...","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Ах, нет, зачем ты дразнишь меня?","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Это  адская свита...","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Королева  та ходит средь белого дня,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Вся гирляндами роз перевита,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"И шлейф ее носит, мечами звеня,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Вздыхающих рыцарей свита.","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Вдруг паяц перегнулся за рампу","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"И кричит: Помогите!","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Истекаю я клюквенным соком!","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Забинтован тряпицей!","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"На голове моей  картонный шлем!","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"А в руке  деревянный меч!","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"Заплакали девочка и мальчик,","next":"","translation":""}
+{"filename":"books/Александр Блок/Балаганчик_1734.txt","index_in_file":0,"prev":"","current":"И закрылся веселый балаганчик.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Александр Блок","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Никогда не забуду (он был, или не был,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Этот вечер):","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":13,"prev":"","current":"пожаром зари","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Сожжено и раздвинуто бледное небо,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"И на желтой заре  фонари.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Я сидел у окна в переполненном зале.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Где-то пели смычки о любви.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Я послал тебе черную розу в бокале","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Золотого, как небо, Аи.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Ты взглянула.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":14,"prev":"","current":"Я встретил смущенно и дерзко","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Взор надменный и отдал поклон.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Обратясь к кавалеру,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":21,"prev":"","current":"намеренно резко","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Ты сказала: И этот влюблен.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"И сейчас же в ответ что-то грянули струны,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Исступленно запели смычки...","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Но была ты со мной всем презрением юным,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Чуть заметным дрожаньем руки...","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Ты рванулась движеньем испуганной птицы,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Ты прошла, словно сон мой легка...","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"И вздохнули духи, задремали ресницы,","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Зашептались тревожно шелка.","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"Но из глуби зеркал ты мне взоры бросала","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"И, бросая, кричала: Лови!..","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"А монисто бренчало, цыганка плясала","next":"","translation":""}
+{"filename":"books/Александр Блок/В ресторане_1747.txt","index_in_file":0,"prev":"","current":"И визжала заре о любви.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Александр Блок","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Отдых напрасен.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":16,"prev":"","current":"Дорога крута.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Вечер прекрасен.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":17,"prev":"","current":"Стучу в ворота.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Дольнему стуку чужда и строга,","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Ты рассыпаешь кругом жемчуга.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Терем высок, и заря замерла.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Красная тайна у входа легла.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Кто поджигал на заре терема,","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Что воздвигала Царевна Сама?","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Каждый конек на узорной резьбе","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Красное пламя бросает к тебе.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Купол стремится в лазурную высь.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Синие окна румянцем зажглись.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Все колокольные звоны гудят.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Залит весной беззакатный наряд.","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Ты ли меня на закатах ждала?","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":0,"prev":"","current":"Терем зажгла?","next":"","translation":""}
+{"filename":"books/Александр Блок/Вступление_1781.txt","index_in_file":14,"prev":"","current":"Ворота отперла?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Александр Блок","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Черный вечер.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Белый снег.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ветер, ветер!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На ногах не стоит человек.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ветер, ветер","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На всем Божьем свете!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Завивает ветер","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Белый снежок.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Под снежком  ледок.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Скользко, тяжко,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Всякий ходок","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Скользит  ах, бедняжка!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"От здания к зданию","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Протянут канат.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На канате  плакат:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вся власть Учредительному Собранию!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Старушка убивается  плачет,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Никак не поймет, что значит,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На что такой плакат,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Такой огромный лоскут?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Сколько бы вышло портянок для ребят,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А всякий  раздет, разут...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Старушка, как курица,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кой-как перемотнулась через сугроб.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ох, Матушка-Заступница!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ох, большевики загонят в гроб!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ветер хлесткий!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не отстает и мороз!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И буржуй на перекрестке","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В воротник упрятал нос.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А это кто?  ","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":12,"prev":"","current":"Длинные волосы","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И говорит вполголоса:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Предатели!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Погибла Россия!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Должно быть,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":13,"prev":"","current":"писатель","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вития...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А вон и долгополый","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Сторонкой  за сугроб...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что нынче невеселый,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Товарищ поп?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Помнишь, как бывало","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Брюхом шел вперед,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И крестом сияло","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Брюхо на народ?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вон барыня в каракуле","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"К другой подвернулась:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ужь мы плакали, плакали...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поскользнулась","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И  бац  растянулась!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ай, ай!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Тяни, подымай!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ветер веселый","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И зол, и рад.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Крутит подолы,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Прохожих косит,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Рвет, мнет и носит","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Большой плакат:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вся власть Учредительному Собранию...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И слова доносит:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"И у нас было собрание...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Вот в этом здании...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Обсудили","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Постановили:","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На время  десять, на ночь  двадцать пять...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"И меньше  ни с кого не брать...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Пойдем спать...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поздний вечер.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Пустеет улица.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Один бродяга","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Сутулится,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Да свищет ветер...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эй, бедняга!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Подходи","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поцелуемся...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Хлеба!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что впереди?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Проходи!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Черное, черное небо.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Злоба, грустная злоба","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кипит в груди...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Черная злоба, святая злоба...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Товарищ!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":9,"prev":"","current":"Гляди","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В оба!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Гуляет ветер, порхает снег.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Идут двенадцать человек.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Винтовок черные ремни,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кругом  огни, огни, огни...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В зубах  цыгарка, примят картуз,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На спину б надо бубновый туз!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Свобода, свобода,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, без креста!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Тра-та-та!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Холодно, товарищи, холодно!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А Ванька с Катькой  в кабаке...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"У ей керенки есть в чулке!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ванюшка сам теперь богат...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Был Ванька наш, а стал солдат!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ну, Ванька, сукин сын, буржуй,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Мою, попробуй, поцелуй!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Свобода, свобода,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, без креста!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Катька с Ванькой занята","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Чем, чем занята?..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Тра-та-та!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кругом  огни, огни, огни...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Оплечь  ружейные ремни...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Революцьонный держите шаг!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Неугомонный не дремлет враг!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Товарищ, винтовку держи, не трусь!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Пальнем-ка","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":11,"prev":"","current":"пулей в Святую Русь","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В кондовую,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В избяную,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В толстозадую!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, без креста!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Как пошли наши ребята","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В красной гвардии служить","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В красной гвардии служить","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Буйну голову сложить!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх ты, горе-горькое,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Сладкое житье!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Рваное пальтишко,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Австрийское ружье!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Мы на горе всем буржуям","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Мировой пожар раздуем,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Мировой пожар в крови","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Господи, благослови!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Снег крутит, лихач кричит,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ванька с Катькою летит","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Елекстрический фонарик","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На оглобельках...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ах, ах, пади!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Он в шинелишке","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":15,"prev":"","current":"солдатской","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"С физиономией дурацкой","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Крутит, крутит черный ус,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Да покручивает,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Да пошучивает...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вот так Ванька  он плечист!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вот так Ванька  он речист!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Катьку-дуру обнимает,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Заговаривает...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Запрокинулась лицом,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Зубки блещут жемчугом...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ах ты, Катя, моя Катя,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Толстоморденькая...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"У тебя на шее, Катя,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Шрам не зажил от ножа.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"У тебя под грудью, Катя,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Та царапина свежа!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, попляши!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Больно ножки хороши!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В кружевном белье ходила","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Походи-ка, походи!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"С офицерами блудила","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поблуди-ка, поблуди!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, поблуди!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Сердце екнуло в груди!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Помнишь, Катя, офицера","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не ушел он от ножа...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Аль не вспомнила, холера?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Али память не свежа?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, освежи,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Спать с собою положи!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Гетры серые носила,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Шоколад Миньон жрала,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"С юнкерьем гулять ходила","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"С солдатьем теперь пошла?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, эх, согреши!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Будет легче для души!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Опять навстречу несется вскачь.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Летит, вопит, орет лихач...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Стой, стой!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":12,"prev":"","current":"Андрюха, помогай!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Петруха, сзаду забегай!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Трах, тарарах-тах-тах-тах-тах!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вскрутился к небу снежный прах!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Лихач  и с Ванькой  наутек...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Еще разок!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":11,"prev":"","current":"Взводи курок!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Трах-","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":5,"prev":"","current":"тарарах!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":14,"prev":"","current":"Ты будешь знать,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Как с девочкой чужой гулять!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Утек, подлец!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":14,"prev":"","current":"Ужо, постой,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Расправлюсь завтра я с тобой!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А Катька где?  ","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":15,"prev":"","current":"Мертва, мертва!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Простреленная голова!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что Катька, рада?  ","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":19,"prev":"","current":"Ни гу-гу...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Лежи ты, падаль, на снегу!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Революцьонный держите шаг!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Неугомонный не дремлет враг!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И опять идут двенадцать,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"За плечами  ружьеца.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Лишь у бедного убийцы","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не видать совсем лица...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Все быстрее и быстрее","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Уторапливает шаг.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Замотал платок на шее","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не оправиться никак...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что, товарищ, ты не весел?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что, дружок, оторопел?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что, Петруха, нос повесил,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Или Катьку пожалел?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ох, товарищи, родные,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эту девку я любил...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ночки черные, хмельные","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"С этой девкой проводил...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Из-за удали бедовой","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В огневых ее очах,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Из-за родинки пунцовой","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Возле правого плеча,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Загубил я, бестолковый,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Загубил я сгоряча...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":21,"prev":"","current":"ах!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ишь, стервец, завел шарманку,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Что ты, Петька, баба что ль?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Верно, душу наизнанку","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вздумал вывернуть?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":19,"prev":"","current":"Изволь!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поддержи свою осанку!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Над собой держи контроль!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не такое нынче время,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Чтобы няньчиться с тобой!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Потяжеле будет бремя","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Нам, товарищ дорогой!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И Петруха замедляет","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Торопливые шаги...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Он головку вскидавает,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Он опять повеселел...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эх, Эх!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Позабавиться не грех!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Запирайте етажи,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Нынче будут грабежи!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Отмыкайте погреба","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Гуляет нынче голытьба!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ох ты, горе-горькое!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Скука скучная,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Смертная!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ужь я времячко","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Проведу, проведу...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ужь я темячко","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Почешу, почешу...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ужь я семячки","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Полущу, полущу...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ужь я ножичком","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Полосну, полосну!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ты лети, буржуй, воробышком!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Выпью кровушку","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"За зазнобушку,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Чернобровушку...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Упокой, Господи, душу рабы Твоея...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Скучно!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не слышно шуму городского,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Над невской башней тишина,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И больше нет","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":13,"prev":"","current":"городового","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Гуляй, ребята, без вина!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Стоит буржуй на перекрестке","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И в воротник упрятал нос.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"А рядом жмется шерстью жесткой","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Поджавший хвост паршивый пес.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Стоит буржуй, как пес голодный,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Стоит безмолвный, как вопрос.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И старый мир, как пес безродный,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Стоит за ним, поджавши хвост.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Разыгралась чтой-то вьюга,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ой, вьюга, ой, вьюга!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не видать совсем друг друга","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"За четыре за шага!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Снег воронкой завился,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Снег столбушкой поднялся...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ох, пурга какая, Спасе!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Петька!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":8,"prev":"","current":"Эй, не завирайся!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"От чего тебя упас","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Золотой иконостас?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Бессознательный ты, право,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Рассуди, подумай здраво","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Али руки не в крови","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Из-за Катькиной любви?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Шаг держи революцьонный!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Близок враг неугомонный!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вперед, вперед, вперед,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Рабочий народ!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"И идут без имени святого","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Все двенадцать  вдаль.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ко всему готовы,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ничего не жаль...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Их винтовочки стальные","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"На незримого врага...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В переулочки глухие,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Где одна пылит пурга...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Да в сугробы","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":13,"prev":"","current":"пуховые","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Не утянешь сапога...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В очи бьется","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Красный флаг.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Раздается","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Мерный шаг.","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вот  проснется","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Лютый враг...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И вьюга пылит им в очи","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Дни и ночи","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Напролет...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Вперед, вперед,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Рабочий народ!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Вдаль идут державным шагом...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кто еще там?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":13,"prev":"","current":"Выходи!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Это  ветер с красным флагом","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Разыгрался впереди...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Впереди  сугроб холодный,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кто в сугробе  выходи!..","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Только нищий пес голодный","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Ковыляет позади...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Отвяжись ты, шелудивый,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Я штыком пощекочу!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Старый мир, как пес паршивый,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Провались  поколочу!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Скалит зубы  волк голодный","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Хвост поджал  не отстает","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Пес холодный  пес безродный ...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эй, откликнись, кто идет?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кто там машет красным флагом?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Приглядись-ка, эка тьма!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Кто там ходит беглым шагом,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Хоронясь за все дома?","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Все равно, тебя добуду,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Лучше сдайся мне живьем!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Эй, товарищ, будет худо,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Выходи, стрелять начнем!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Трах-тах-тах!  ","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":15,"prev":"","current":"И только эхо","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Откликается в домах...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Только вьюга долгим смехом","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Заливается в снегах...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Трах-тах-тах!","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Трах-тах-тах...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"...","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":4,"prev":"","current":"Так идут державным шагом","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Позади  голодный пес,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Впереди  с кровавым флагом,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И за вьюгой невидим,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"И от пули невредим,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Нежной поступью надвьюжной,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Снежной россыпью жемчужной,","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"В белом венчике из роз","next":"","translation":""}
+{"filename":"books/Александр Блок/Двенадцать_1232.txt","index_in_file":0,"prev":"","current":"Впереди  Исус Христос.","next":"","translation":""}

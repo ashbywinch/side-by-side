@@ -1,6 +1,10 @@
+<script setup>
+import { useActiveBook } from '@/stores/activeBook.js'
+
+</script>
 <template>
     <div class="tree-menu">
-        <div class="label-wrapper" @click="onClick">
+        <div class="label-wrapper" @click="click()">
           
             <div :style="indent">
               <FontAwesomeIcon v-if="showChildren && root.children" icon="fa-solid fa-folder-open"></FontAwesomeIcon>
@@ -51,11 +55,12 @@ export default {
     }
   },
   methods: {
-    onClick() {
+    click() {
+      console.log(this.root.fullpath)
       if(this.root.children)
         this.showChildren = !this.showChildren;
       else
-        console.log(this.root.fullpath)
+        useActiveBook().$patch({activeBook: this.root.fullpath })
     }
   }
 }
