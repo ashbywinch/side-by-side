@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     click() {
-      console.log(this.root.fullpath)
       if(this.root.children)
         this.showChildren = !this.showChildren;
       else
