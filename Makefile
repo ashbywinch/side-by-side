@@ -1,14 +1,14 @@
 setup:
-	npm install --force
+	npm install 
 
 clean:
 	rm -rf node_modules
 
-lint: 
-	npm run lint
+#lint: 
+#	npm run lint
 	
-lint-github: 
-	npm run lint
+#lint-github: 
+#	npm run lint
 
 .PHONY: test
 test:

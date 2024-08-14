@@ -1,8 +1,18 @@
 import { defineStore } from 'pinia'
 import { useActiveBook } from './activeBook'
 
-import jsonl from '@/assets/cards.jsonl'
-var path = require('path');
+import path from 'path';
+
+const require = async fileName => {
+  try {
+    const files = import.meta.glob("@/assets/**/*.jsonl", { eager: true })
+    return files[fileName]?.default || {}
+  }
+  catch (e) {
+    console.warn(`The file "{fileName}" could not be loaded.`)
+    return {}
+  }
+}
 
 export const useCards = defineStore('cards', {
   
@@ -17,26 +27,26 @@ export const useCards = defineStore('cards', {
      * @returns {{ filename: string, index_in_file: Number, current: string, translation: string }[]}
      */
     cards(state) {
-      const store = useActiveBook()
-      state.load()
-      return state.allCards.filter((card)=> card.filename == store.activeBook);
+      return state.allCards;
     },
     /**
      * @returns string
      */
     title(state) {
-      state.load()
       return state.activeBook ? path.parse(state.activeBook).name : "";
     },
   },
   actions: {
+    
     load() {
-      if(this.allCards.length == 0){
-        this.allCards = jsonl.slice(1);
-      }
+      var jsonfilename = "/src/assets/" + path.format({ ...path.parse(this.activeBook), base: '', ext: '.jsonl' })
+      require(jsonfilename).then((jsonl) => {
+        this.allCards = jsonl
+      })
     },
     setActiveBook(activeBook) {
       this.activeBook = activeBook
+      this.load()
     }
-  },
+  }
 })

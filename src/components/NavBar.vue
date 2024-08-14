@@ -3,27 +3,36 @@
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div ref="offcanvas" class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Texts</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div id="folder-tree">
-                        <TreeMenuWrapper/>
+                <BButton @click="toggleNav">
+                  <span class="navbar-toggler-icon"></span>
+                </BButton>
+                <BOffcanvas v-model="show">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Texts</h5>
+                        <BButton @click="toggleNav" type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></BButton>
                     </div>
-                </div>
-                </div>
+                    <div class="offcanvas-body">
+                        <div id="folder-tree">
+                            <TreeMenuWrapper/>
+                        </div>
+                    </div>
+                </BOffcanvas>
             </div>
         </nav>
     </header>
 
 </template>
+<script setup lang="ts">
+import {ref} from 'vue'
 
-<script>
+const show = ref(false)
+
+const toggleNav = () => {
+  show.value = !show.value
+}
+</script>
+
+<script lang="ts">
 import TreeMenuWrapper from './TreeMenuWrapper.vue';
 
 export default {

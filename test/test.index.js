@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { useIndex } from '@/stores/index.js'
+import { useIndex } from '@/stores/index'
 import { setActivePinia, createPinia } from 'pinia'
 import { createApp } from 'vue'
 

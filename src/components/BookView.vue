@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCards } from '@/stores/cards.js'
+import { useCards } from '@/stores/cards'
 import { useActiveBook } from '@/stores/activeBook';
 
 const cardStore = useCards()
@@ -23,7 +23,7 @@ const main = ref(null)
         <div class="row my-3 mx-0">
           <div class="col-md-6 col-sm-6">
               <div class="front border bg-light mx-2 p-3 fs-4 h-100">
-              {{ card.current }}
+              {{ card.text }}
               </div>
           </div>
           <div class="col-md-6 col-sm-6">
@@ -37,13 +37,13 @@ const main = ref(null)
   </div>
 </template>
  
-<script>
+<script lang="ts">
 
 export default {
   name: 'BookView',
   data() {
     return {
-      showing: 2
+      showing: 0
     }
   },
   computed: {
