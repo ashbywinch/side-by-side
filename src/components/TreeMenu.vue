@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { useActiveBook } from '@/stores/activeBook.js'
-
+defineProps<{ root: {}, depth: Number }>()
 </script>
 <template>
     <div class="tree-menu">
@@ -27,7 +27,7 @@ import { useActiveBook } from '@/stores/activeBook.js'
 
 </template>
 
-<script>
+<script lang="ts">
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -42,7 +42,6 @@ library.add(faFolderClosed, faFolderOpen )
 
 export default {
   name: 'TreeMenu',   
-  props:['root', 'depth'],
   data() {
     return {
       showChildren: false

@@ -5,7 +5,7 @@
     </TreeMenu>
 </template>
 
-<script>
+<script lang="ts">
 
 import index from '@/assets/index.json'
 import TreeMenu from './TreeMenu.vue'
