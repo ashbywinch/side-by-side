@@ -11,8 +11,10 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "esModuleInterop": true,
     "jsx": "preserve",
+    "composite": true,
+    "emitDeclarationOnly": true,
 
     /* Linting */
     "strict": true,

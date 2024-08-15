@@ -1,113 +1,112 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useCards } from '@/stores/cards'
-import { useActiveBook } from '@/stores/activeBook';
+import { Ref, ref } from "vue";
+import { MutationType, storeToRefs, SubscriptionCallbackMutation } from "pinia";
+import { useCards } from "@/stores/cardsStore";
+import { useActiveBook } from "@/stores/activeBookStore";
 
-const cardStore = useCards()
-const { title, cards } = storeToRefs(cardStore)
+const cardStore = useCards();
+const { title, cards } = storeToRefs(cardStore);
 
-const activeBookStore = useActiveBook()
+const activeBookStore = useActiveBook();
 
-activeBookStore.$subscribe((mutation) => {
-  cardStore.setActiveBook(mutation.payload.activeBook)
-})
-const main = ref(null)
-
+activeBookStore.$subscribe((mutation: SubscriptionCallbackMutation<{activeBook: string}> ) => {
+  if (mutation.type === MutationType.patchObject) {
+    const payload = mutation.payload;
+    cardStore.setActiveBook(payload.activeBook);
+  }
+});
+const main: Ref<Element> = ref(null);
 </script>
 <template>
   <div class="book-view">
     <div id="main" ref="main" class="container my-5">
-      <h1>{{title}}</h1>
-      <template v-for="(card, index) in cards" :key="card.filename + ':' + card.index_in_file">
+      <h1>{{ title }}</h1>
+      <template
+        v-for="(card, index) in cards"
+        :key="card.filename + ':' + card.index_in_file"
+      >
         <div class="row my-3 mx-0">
           <div class="col-md-6 col-sm-6">
-              <div class="front border bg-light mx-2 p-3 fs-4 h-100">
+            <div class="front border bg-light mx-2 p-3 fs-4 h-100">
               {{ card.text }}
-              </div>
+            </div>
           </div>
           <div class="col-md-6 col-sm-6">
-              <div class="back border bg-light mx-2 p-3 fs-4 h-100">
-              <p :class="index >= showing ? 'masked' : ''">{{ card.translation }}</p>
-              </div>
+            <div class="back border bg-light mx-2 p-3 fs-4 h-100">
+              <p :class="index >= showing ? 'masked' : ''">
+                {{ card.translation }}
+              </p>
             </div>
+          </div>
         </div>
       </template>
-    </div>    
+    </div>
   </div>
 </template>
- 
-<script lang="ts">
 
+<script lang="ts">
 export default {
-  name: 'BookView',
+  name: "BookView",
   data() {
     return {
-      showing: 0
-    }
+      showing: 0,
+    };
   },
   computed: {
-    store: () => useCards()
-  }, 
-  methods: {
-    scrollToRow(index) {
-      // eslint-disable-next-line no-undef
-      const row = main.querySelectorAll('div')[index]
-      row.scrollIntoView()
-    },
-    showMore()
-    { 
-      var move = this.showing < this.store.cards.length 
-      if (move) {
-        this.showing = this.showing + 1
-        this.scrollToRow(this.showing)
-      }
-      return move
-    },
-    showLess()
-    {
-      var move = this.showing > 0
-      if (move) {
-        this.showing = this.showing - 1
-        this.scrollToRow(this.showing)
-      }
-      return move
-    },
-    showNone()
-    {
-      this.showing = 0
-    },
-    showAll()
-    {
-      this.showing = this.store.cards.length
-    },
-    onEvent(event)
-    {
-      if(event.key === "ArrowDown"){       
-        if(this.showMore())
-          event.preventDefault();
-      }
-      else if(event.key === "ArrowUp"){       
-        if(this.showLess())
-          event.preventDefault();
-      }
-      else if(event.key==="Escape"){
-        this.showNone()
-        event.preventDefault();
-      }
-    }
+    store: () => useCards(),
   },
   mounted() {
-    window.addEventListener('keydown', this.onEvent, true)
-  }
+    window.addEventListener("keydown", this.onEvent, true);
+  },
+  methods: {
+    scrollToRow(index: number) {
+      // eslint-disable-next-line no-undef
+      const row = main.querySelectorAll("div")[index];
+      row.focus();
+      row.scrollIntoView();
+    },
+    showMore() {
+      var move = this.showing < this.store.cards.length;
+      if (move) {
+        this.showing = this.showing + 1;
+        this.scrollToRow(this.showing);
+      }
+      return move;
+    },
+    showLess() {
+      var move = this.showing > 0;
+      if (move) {
+        this.showing = this.showing - 1;
+        this.scrollToRow(this.showing);
+      }
+      return move;
+    },
+    showNone() {
+      this.showing = 0;
+    },
+    showAll() {
+      this.showing = this.store.cards.length;
+    },
+    onEvent(event: { key: string; preventDefault: () => void }) {
+      if (event.key === "ArrowDown") {
+        if (this.showMore()) event.preventDefault();
+      } else if (event.key === "ArrowUp") {
+        if (this.showLess()) event.preventDefault();
+      } else if (event.key === "Escape") {
+        this.showNone();
+        event.preventDefault();
+      }
+    },
+  },
 };
 </script>
 <style scoped>
-  .masked {
-    filter: opacity(5%);
-    filter: blur(5px);
-  }
-  .front, .back {
-    height: fit-content;
-  }
+.masked {
+  filter: opacity(5%);
+  filter: blur(5px);
+}
+.front,
+.back {
+  height: fit-content;
+}
 </style>

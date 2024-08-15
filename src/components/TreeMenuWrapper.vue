@@ -1,49 +1,42 @@
 <template>
-    <TreeMenu
-        :root="tree" 
-        :depth="0"   >
-    </TreeMenu>
+  <TreeMenu :root="tree" :depth="0"> </TreeMenu>
 </template>
 
-<script lang="ts">
+<script lang="ts"> 
+import index from "@/assets/index.json";
+import TreeMenu from "./TreeMenu.vue";
+import IndexTree from "@/stores/IndexTree";
+ 
+type IndexJsonChild = IndexJsonTree | string;
+type IndexJsonTree = Map<string, IndexJsonChild[]>;
 
-import index from '@/assets/index.json'
-import TreeMenu from './TreeMenu.vue'
-
-function bookToDom(folderprefix, book) {
-    var fullpath = folderprefix == "" ? book : `${folderprefix}/${book}`
-    return { label: book, fullpath: fullpath}
+function toDom(folderprefix: string, json: IndexJsonChild): IndexTree {
+  const label =
+    typeof json == "string" ? (json as string) : Object.keys(json)[0];
+  const fullpath = folderprefix == "" ? label : `${folderprefix}/${label}`;
+  return {
+    label: label,
+    fullpath: fullpath,
+    children:
+      typeof json == "string"
+        ? null
+        : folderContentsToDom(fullpath, Object.values(json)[0]),
+  };
 }
 
-function folderContentsToDom(folderprefix, contents) {
-    return Object.values(contents).map((item) => {
-        if (typeof item === "string")
-            return bookToDom(folderprefix, item)
-        else
-            return dictToDom(folderprefix, item)
-    })
+function folderContentsToDom(folderprefix: string, children: IndexJsonChild[]) {
+  return children.map((c) => {
+    return toDom(folderprefix, c);
+  });
 }
 
-function dictToDom(folderprefix, dict) {
-    var item = Object.keys(dict)[0]
-    var fullpath = folderprefix == "" ? item : `${folderprefix}/${item}`
-    return {
-        label: item,
-        fullpath: fullpath,
-        children:folderContentsToDom(fullpath, dict[item])
-    }
-}
-   
 export default {
-  name: 'TreeMenuWrapper',   
+  name: "TreeMenuWrapper",
   components: { TreeMenu },
   data() {
     return {
-      tree: dictToDom("", index),
+      tree: toDom("", index),
     };
   },
-  
 };
-
-
 </script>

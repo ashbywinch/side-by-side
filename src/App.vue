@@ -1,20 +1,20 @@
 <template>
-  <NavBar/>
-  <BookView/>
+  <NavBar />
+  <BookView />
 </template>
 
 <script lang="ts">
-import BookView from '@/components/BookView.vue';
-import NavBar from '@/components/NavBar.vue';
+import BookView from "@/components/BookView.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     NavBar,
-    BookView
+    BookView,
   },
   data() {
     return {};
   },
-}
+};
 </script>
