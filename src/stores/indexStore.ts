@@ -19,7 +19,6 @@ function jsonChildToDom(
   child: JsonIndexChild,
 ): IndexTree {
   const label = typeof child == "string" ? child : Object.keys(child)[0];
-  console.log(label);
   const fullpath = folderprefix == "" ? label : `${folderprefix}/${label}`;
   return {
     label: label,
