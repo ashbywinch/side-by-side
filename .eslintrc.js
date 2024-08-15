@@ -10,7 +10,7 @@ module.exports = {
                     ['@/components', './src/components'],
                     ['@/pages', './src/pages'],
                     ['@/router', './src/router'],
-                    ['@/store', './src/store'],
+                    ['@/stores', './src/stores'],
                     ['@/styles', './src/styles'],
                     ['@/types', './src/types'],
                     ['@/utils', './src/utils'],

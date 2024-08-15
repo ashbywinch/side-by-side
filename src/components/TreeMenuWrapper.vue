@@ -9,41 +9,35 @@
 
 import index from '@/assets/index.json'
 import TreeMenu from './TreeMenu.vue'
+import IndexTree from './IndexTree'
 
-function bookToDom(folderprefix, book) {
-    var fullpath = folderprefix == "" ? book : `${folderprefix}/${book}`
-    return { label: book, fullpath: fullpath}
-}
 
-function folderContentsToDom(folderprefix, contents) {
-    return Object.values(contents).map((item) => {
-        if (typeof item === "string")
-            return bookToDom(folderprefix, item)
-        else
-            return dictToDom(folderprefix, item)
-    })
-}
+type IndexJsonChild = IndexJsonTree|string
+type IndexJsonTree = Map<string, IndexJsonChild[]>
 
-function dictToDom(folderprefix, dict) {
-    var item = Object.keys(dict)[0]
-    var fullpath = folderprefix == "" ? item : `${folderprefix}/${item}`
-    return {
-        label: item,
-        fullpath: fullpath,
-        children:folderContentsToDom(fullpath, dict[item])
+function toDom(folderprefix:string, json:IndexJsonChild) : IndexTree {
+    const label = typeof(json) == "string" ? json as string : Object.keys(json)[0]
+    const fullpath = folderprefix == "" ? label : `${folderprefix}/${label}`
+    return { 
+        label: label, 
+        fullpath: fullpath, 
+        children: typeof(json) == "string" ? null : folderContentsToDom(fullpath, Object.values(json)[0])
     }
 }
-   
+
+function folderContentsToDom(folderprefix:string, children:IndexJsonChild[]) {
+    return children.map((c) => { return toDom(folderprefix, c) })
+}
+
 export default {
   name: 'TreeMenuWrapper',   
   components: { TreeMenu },
   data() {
     return {
-      tree: dictToDom("", index),
+      tree: toDom("", index),
     };
   },
   
 };
-
 
 </script>

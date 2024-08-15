@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { useActiveBook } from '@/stores/activeBook.js'
-defineProps<{ root: {}, depth: Number }>()
+import { useActiveBook } from '@/stores/activeBook'
+
+defineProps<{ root: IndexTree, depth: number }>()
+
 </script>
 <template>
     <div class="tree-menu">
@@ -36,6 +38,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faFolderClosed, faFolderOpen } from '@fortawesome/free-solid-svg-icons'
+import IndexTree from './IndexTree'
 
 /* add icons to the library */
 library.add(faFolderClosed, faFolderOpen )

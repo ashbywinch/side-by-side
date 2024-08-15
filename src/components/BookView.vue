@@ -9,7 +9,7 @@ const { title, cards } = storeToRefs(cardStore)
 
 const activeBookStore = useActiveBook()
 
-activeBookStore.$subscribe((mutation) => {
+activeBookStore.$subscribe((mutation: { payload: { activeBook: string; }; }) => {
   cardStore.setActiveBook(mutation.payload.activeBook)
 })
 const main = ref(null)
@@ -50,9 +50,10 @@ export default {
     store: () => useCards()
   }, 
   methods: {
-    scrollToRow(index) {
+    scrollToRow(index: number) {
       // eslint-disable-next-line no-undef
       const row = main.querySelectorAll('div')[index]
+      row.focus()
       row.scrollIntoView()
     },
     showMore()
@@ -81,7 +82,7 @@ export default {
     {
       this.showing = this.store.cards.length
     },
-    onEvent(event)
+    onEvent(event: { key: string; preventDefault: () => void; })
     {
       if(event.key === "ArrowDown"){       
         if(this.showMore())
