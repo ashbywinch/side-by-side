@@ -9,7 +9,9 @@ function jsonChildrenToDom(
   folderprefix: string,
   children: JsonIndexChild[],
 ): IndexTree[] {
-  return children.map((c) => jsonChildToDom(folderprefix, c));
+  return (children as JsonIndexChild[]).map((c) =>
+    jsonChildToDom(folderprefix, c),
+  );
 }
 
 function jsonChildToDom(
@@ -17,15 +19,19 @@ function jsonChildToDom(
   child: JsonIndexChild,
 ): IndexTree {
   const label = typeof child == "string" ? child : Object.keys(child)[0];
+  console.log(label);
   const fullpath = folderprefix == "" ? label : `${folderprefix}/${label}`;
   return {
     label: label,
     fullpath: fullpath,
-    children: jsonChildrenToDom(fullpath, Object.values(child)[0]),
+    children:
+      typeof child == "string"
+        ? []
+        : jsonChildrenToDom(fullpath, Object.values(child)[0]),
   };
 }
 
-export const useIndex = defineStore("index", {
+export const useIndexStore = defineStore("index", {
   state: () => ({
     _index: IndexTree,
   }),
