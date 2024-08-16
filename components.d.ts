@@ -7,9 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BAlert: typeof import('bootstrap-vue-next')['BAlert']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BOffcanvas: typeof import('bootstrap-vue-next')['BOffcanvas']
     BookView: typeof import('./src/components/BookView.vue')['default']
+    BOverlay: typeof import('bootstrap-vue-next')['BOverlay']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     TreeMenu: typeof import('./src/components/TreeMenu.vue')['default']
     TreeMenuWrapper: typeof import('./src/components/TreeMenuWrapper.vue')['default']

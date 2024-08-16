@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Ref, ref } from "vue";
 import { MutationType, storeToRefs, SubscriptionCallbackMutation } from "pinia";
-import { useCards } from "@/stores/cardsStore";
+import { useCardStore } from "@/stores/cardsStore";
 import { useActiveBook } from "@/stores/activeBookStore";
 
-const cardStore = useCards();
+const cardStore = useCardStore();
 const { title, cards } = storeToRefs(cardStore);
 
 const activeBookStore = useActiveBook();
@@ -12,7 +12,7 @@ const activeBookStore = useActiveBook();
 activeBookStore.$subscribe((mutation: SubscriptionCallbackMutation<{activeBook: string}> ) => {
   if (mutation.type === MutationType.patchObject) {
     const payload = mutation.payload;
-    cardStore.setActiveBook(payload.activeBook);
+    cardStore.fetchCards(payload.activeBook, true);
   }
 });
 const main: Ref<Element> = ref(null);
@@ -23,7 +23,7 @@ const main: Ref<Element> = ref(null);
       <h1>{{ title }}</h1>
       <template
         v-for="(card, index) in cards"
-        :key="card.filename + ':' + card.index_in_file"
+        :key="card.index_in_file"
       >
         <div class="row my-3 mx-0">
           <div class="col-md-6 col-sm-6">
@@ -53,7 +53,7 @@ export default {
     };
   },
   computed: {
-    store: () => useCards(),
+    store: () => useCardStore(),
   },
   mounted() {
     window.addEventListener("keydown", this.onEvent, true);
