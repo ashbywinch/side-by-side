@@ -24,7 +24,7 @@ jobs:
       - name: Create distribution package 
         run: make dist
       - name: Run tests
-        run: make test
+        run: make test && ls ${{ github.workspace }}/coverage/
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
