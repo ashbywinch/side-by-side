@@ -1,55 +1,47 @@
 import { defineStore } from "pinia";
 
+import { computed, Ref, ref } from "vue";
+import { useFetch } from "@vueuse/core";
 import path from "path";
 
-const require = async (fileName: string) => {
-  try {
-    const files = import.meta.glob("@/assets/**/*.jsonl", { eager: true });
-    return files[fileName]?.default || {};
-  } catch (e) {
-    console.warn(`The file "{fileName}" could not be loaded.`);
-    console.warn(e);
-    return {};
-  }
-};
+export const useCardStore = defineStore("cardStore", () => {
+  const _activeBook: Ref<string | undefined> = ref();
 
-export const useCards = defineStore("cards", {
-  state: () => ({
-    /** @type {{ filename: string, index_in_file: Number, current: string, translation: string  }[]} */
-    allCards: [],
-    /** @type string */
-    activeBook: "",
-  }),
-  getters: {
-    /**
-     * @returns {{ filename: string, index_in_file: Number, current: string, translation: string }[]}
-     */
-    cards(state) {
-      return state.allCards;
-    },
-    /**
-     * @returns string
-     */
-    title(state) {
-      return state.activeBook ? path.parse(state.activeBook).name : "";
-    },
-  },
-  actions: {
-    load() {
-      const jsonfilename =
-        "/src/assets/" +
-        path.format({
-          ...path.parse(this.activeBook),
+  const url = computed(() =>
+    _activeBook.value
+      ? `/api/books/${path.format({
+          ...path.parse(_activeBook.value as string),
           base: "",
           ext: ".jsonl",
-        });
-      require(jsonfilename).then((jsonl) => {
-        this.allCards = jsonl;
-      });
+        })}`
+      : "",
+  );
+
+  function jsonlParse(code: string) {
+    const result = [];
+    for (const line of code.split("\n")) {
+      if (line.length > 0) result.push(JSON.parse(line));
+    }
+    return result;
+  }
+
+  const { data, isFetching, error, execute } = useFetch(url, {
+    immediate: false,
+    afterFetch(ctx) {
+      ctx.data = jsonlParse(ctx.data);
+      return ctx;
     },
-    setActiveBook(activeBook: string) {
-      this.activeBook = activeBook;
-      this.load();
-    },
-  },
+  }).get();
+
+  const cards = computed(() => data.value);
+  const title = computed(() =>
+    _activeBook.value ? path.parse(_activeBook.value).name : "",
+  );
+
+  const fetchCards = (activeBook: string, throwOnError: boolean) => {
+    _activeBook.value = activeBook;
+    return execute(throwOnError);
+  };
+
+  return { cards, title, isFetching, error, fetchCards };
 });

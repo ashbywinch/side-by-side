@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { useActiveBook } from "@/stores/activeBookStore";
 
-defineProps<{ root: IndexTree; depth: number }>();
+defineProps<{ root: IndexTree|null; depth: number }>();
 </script>
 <template>
   <div class="tree-menu">
     <div class="label-wrapper" @click="click()">
       <div :style="indent">
         <FontAwesomeIcon
-          v-if="showChildren && root.children"
+          v-if="showChildren && root?.children"
           icon="fa-solid fa-folder-open"
         ></FontAwesomeIcon>
         <FontAwesomeIcon
-          v-if="!showChildren && root.children"
+          v-if="!showChildren && root?.children"
           icon="fa-solid fa-folder-closed"
         ></FontAwesomeIcon>
-        {{ root.label }}
+        {{ root?.label }}
       </div>
     </div>
     <div v-if="showChildren">
@@ -31,17 +31,13 @@ defineProps<{ root: IndexTree; depth: number }>();
 </template>
 
 <script lang="ts">
-/* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
-
-/* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-/* import specific icons */
 import {
   faFolderClosed,
   faFolderOpen,
 } from "@fortawesome/free-solid-svg-icons";
+
 import IndexTree from "../stores/IndexTree";
 
 /* add icons to the library */

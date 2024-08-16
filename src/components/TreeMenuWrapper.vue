@@ -1,42 +1,24 @@
+<script setup lang="ts">
+import { useIndexStore } from "@/stores/indexStore";
+import { storeToRefs } from "pinia";
+const indexStore = useIndexStore()
+indexStore.fetchIndex("ru", true)
+
+const { error, index, isFetching } = storeToRefs(indexStore);
+</script>
+
 <template>
-  <TreeMenu :root="tree" :depth="0"> </TreeMenu>
+  <BAlert show="error" variant="danger">{{error}}</BAlert>
+  <BOverlay :show="isFetching">
+    <TreeMenu :show="index" :root="index" :depth="0"> </TreeMenu>  
+  </BOverlay>
 </template>
 
 <script lang="ts"> 
-import index from "@/assets/index.json";
 import TreeMenu from "./TreeMenu.vue";
-import IndexTree from "@/stores/IndexTree";
  
-type IndexJsonChild = IndexJsonTree | string;
-type IndexJsonTree = Map<string, IndexJsonChild[]>;
-
-function toDom(folderprefix: string, json: IndexJsonChild): IndexTree {
-  const label =
-    typeof json == "string" ? (json as string) : Object.keys(json)[0];
-  const fullpath = folderprefix == "" ? label : `${folderprefix}/${label}`;
-  return {
-    label: label,
-    fullpath: fullpath,
-    children:
-      typeof json == "string"
-        ? null
-        : folderContentsToDom(fullpath, Object.values(json)[0]),
-  };
-}
-
-function folderContentsToDom(folderprefix: string, children: IndexJsonChild[]) {
-  return children.map((c) => {
-    return toDom(folderprefix, c);
-  });
-}
-
 export default {
   name: "TreeMenuWrapper",
-  components: { TreeMenu },
-  data() {
-    return {
-      tree: toDom("", index as unknown as IndexJsonChild),
-    };
-  },
+  components: { TreeMenu }
 };
 </script>

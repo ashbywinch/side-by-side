@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import indexjson from "@/assets/index.json";
+import { useFetch } from "@vueuse/core";
 import IndexTree from "./IndexTree.js";
+import { computed, ref } from "vue";
 
 type JsonIndexChild = string | JsonIndexTree;
 type JsonIndexTree = Map<string, JsonIndexChild[]>;
@@ -25,23 +26,31 @@ function jsonChildToDom(
     fullpath: fullpath,
     children:
       typeof child == "string"
-        ? []
+        ? null
         : jsonChildrenToDom(fullpath, Object.values(child)[0]),
   };
 }
 
-export const useIndexStore = defineStore("index", {
-  state: () => ({
-    _index: IndexTree,
-  }),
-  getters: {
-    index(state): IndexTree {
-      if (this._index.length == 0) {
-        // @ts-expect-error: Property 'prototype' is missing in type 'IndexTree' but required in type 'typeof IndexTree'.ts(2741)
-        state._index = jsonChildToDom("", indexjson as JsonIndexTree);
-      }
-      // @ts-expect-error: Type 'typeof IndexTree' is missing the following properties from type 'IndexTree': label, fullpath, childrents(2739)
-      return state._index;
+export const useIndexStore = defineStore("indexStore", () => {
+  const lang = ref();
+
+  const url = computed(() => `/api/books/${lang.value}/index.json`);
+  const { data, isFetching, error, execute } = useFetch(url, {
+    immediate: false,
+    afterFetch(ctx) {
+      ctx.data = jsonChildToDom("", ctx.data);
+      return ctx;
     },
-  },
+  })
+    .get()
+    .json();
+
+  const index = computed(() => data.value);
+
+  const fetchIndex = (_lang: string, throwOnError: boolean) => {
+    lang.value = _lang;
+    return execute(throwOnError);
+  };
+
+  return { index, isFetching, error, fetchIndex };
 });
