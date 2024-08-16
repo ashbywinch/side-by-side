@@ -14,7 +14,11 @@ export default defineConfig({
     watch: false,
     coverage: {
       provider: "istanbul",
-      reporter: ["text", "html"],
+      reporter: ["text"],
+    },
+    reporters: ["junit"],
+    outputFile: {
+      junit: "./coverage.xml",
     },
   },
 });
