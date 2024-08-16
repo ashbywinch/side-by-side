@@ -35,7 +35,7 @@ export default {
   components: { TreeMenu },
   data() {
     return {
-      tree: toDom("", index),
+      tree: toDom("", index as unknown as IndexJsonChild),
     };
   },
 };
