@@ -6,6 +6,16 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+    # Access to your repository.
+    contents: read
+    # Access to pull request. The `write` access if you the `comment` is enabled
+    # within the action, otherwise can be `read`. 
+    pull-requests: write
+    # Access to pull request statuses. The `write` access if you the `check` is enabled
+    # within the action, otherwise can be `read`.
+    statuses: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +27,21 @@ jobs:
         with:
           node-version: 22.x
           cache: "npm"
-      - run: make setup
-      - run: make lint && make dist
-      - run: make test
+      - name: Install dependencies
+        run: make setup
+      - name: Run Lint
+        run: make lint 
+      - name: Create distribution package 
+        run: make dist
+      - name: Run tests
+        run: make test 
+
+      - name: Monitor coverage
+        uses: slavcodev/coverage-monitor-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          coverage_path: "coverage/clover.xml"
+          threshold_alert: 0
+          threshold_warning: 0
+          threshold_metric: "lines"
+        
