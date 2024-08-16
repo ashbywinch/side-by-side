@@ -14,7 +14,7 @@ export default defineConfig({
     watch: false,
     coverage: {
       provider: "istanbul",
-      reporter: ["text", "cobertura"],
+      reporter: ["text", "clover"],
     },
   },
 });
