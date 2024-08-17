@@ -1,26 +1,29 @@
 <script setup lang="ts">
-import { Ref, ref } from "vue";
-import { MutationType, storeToRefs, SubscriptionCallbackMutation } from "pinia";
+import { Ref, ref, watchEffect } from "vue";
 import { useCardStore } from "@/stores/cardsStore";
-import { useActiveBook } from "@/stores/activeBookStore";
+import { storeToRefs } from "pinia";
 
 const cardStore = useCardStore();
-const { title, cards } = storeToRefs(cardStore);
+const { cards } = storeToRefs(cardStore);
 
-const activeBookStore = useActiveBook();
-
-activeBookStore.$subscribe((mutation: SubscriptionCallbackMutation<{activeBook: string}> ) => {
-  if (mutation.type === MutationType.patchObject) {
-    const payload = mutation.payload;
-    cardStore.fetchCards(payload.activeBook, true);
-  }
-});
 const main: Ref<Element> = ref(null);
+
+const props = defineProps({
+  lang: { type:String, required:true},
+  author: { type:String, required:true},
+  title: { type:String, required:true},
+})
+
+watchEffect(() => {
+  cardStore.fetchCards(props.lang, props.author, props.title)
+});
+
 </script>
 <template>
   <div class="book-view">
     <div id="main" ref="main" class="container my-5">
       <h1>{{ title }}</h1>
+      <h2>{{ author}}</h2>
       <template
         v-for="(card, index) in cards"
         :key="card.index_in_file"

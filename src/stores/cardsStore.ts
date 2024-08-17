@@ -2,19 +2,14 @@ import { defineStore } from "pinia";
 
 import { computed, Ref, ref } from "vue";
 import { useFetch } from "@vueuse/core";
-import path from "path";
 
 export const useCardStore = defineStore("cardStore", () => {
-  const _activeBook: Ref<string | undefined> = ref();
+  const _lang: Ref<string | undefined> = ref();
+  const _author: Ref<string | undefined> = ref();
+  const _title: Ref<string | undefined> = ref();
 
-  const url = computed(() =>
-    _activeBook.value
-      ? `/api/books/${path.format({
-          ...path.parse(_activeBook.value as string),
-          base: "",
-          ext: ".jsonl",
-        })}`
-      : "",
+  const url = computed(
+    () => `/api/books/${_lang.value}/${_author.value}/${_title.value}.jsonl`,
   );
 
   function jsonlParse(code: string) {
@@ -34,14 +29,13 @@ export const useCardStore = defineStore("cardStore", () => {
   }).get();
 
   const cards = computed(() => data.value);
-  const title = computed(() =>
-    _activeBook.value ? path.parse(_activeBook.value).name : "",
-  );
 
-  const fetchCards = (activeBook: string, throwOnError: boolean) => {
-    _activeBook.value = activeBook;
-    return execute(throwOnError);
+  const fetchCards = (lang: string, author: string, title: string) => {
+    _lang.value = lang;
+    _author.value = author;
+    _title.value = title;
+    return execute(true);
   };
 
-  return { cards, title, isFetching, error, fetchCards };
+  return { cards, isFetching, error, fetchCards };
 });

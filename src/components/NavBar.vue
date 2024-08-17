@@ -38,7 +38,7 @@ const toggleNav = () => {
 </script>
 
 <script lang="ts">
-import TreeMenuWrapper from "./TreeMenuWrapper.vue";
+import TreeMenuWrapper from "./LoadingWrapper.vue";
 
 export default {
   name: "NavBar",

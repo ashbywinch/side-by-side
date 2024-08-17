@@ -1,17 +1,14 @@
 <template>
-  <NavBar />
-  <BookView />
+  <RouterView :key='$route.fullPath'/>
 </template>
 
 <script lang="ts">
-import BookView from "@/components/BookView.vue";
-import NavBar from "@/components/NavBar.vue";
+import { RouterView } from "vue-router";
 
 export default {
   name: "App",
   components: {
-    NavBar,
-    BookView,
+    RouterView,
   },
   data() {
     return {};
