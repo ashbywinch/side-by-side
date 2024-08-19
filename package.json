@@ -24,7 +24,7 @@
     "pinia": "^2.2.1",
     "rollup-plugin-jsonlines": "^0.0.1",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vue": "^3.4.35",
+    "vue": "^3.4.38",
     "vue-router": "^4.4.3"
   },
   "devDependencies": {
