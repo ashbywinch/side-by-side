@@ -15,6 +15,7 @@ declare module 'vue' {
     copy: typeof import('./src/components/Index copy.vue')['default']
     Index: typeof import('./src/components/Index.vue')['default']
     IndexPage: typeof import('./src/components/IndexPage.vue')['default']
+    IndexView: typeof import('./src/components/IndexView.vue')['default']
     IndexWrapper: typeof import('./src/components/IndexWrapper.vue')['default']
     LoadingWrapper: typeof import('./src/components/LoadingWrapper.vue')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
