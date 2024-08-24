@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, watchEffect } from "vue";
-import { useCardStore } from "@/stores/cardsStore";
-import { storeToRefs } from "pinia";
-
-const cardStore = useCardStore();
-const { cards } = storeToRefs(cardStore);
-
-const main: Ref<Element> = ref(null);
+import { onMounted, Ref, ref, watchEffect } from "vue";
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -14,9 +7,73 @@ const props = defineProps({
   title: { type:String, required:true},
 })
 
-watchEffect(() => {
-  cardStore.fetchCards(props.lang, props.author, props.title)
-});
+const main: Ref<Element> = ref(null);
+const is_loading = ref(false)
+const cards = ref(null)
+const error = ref(null)
+const translations_showing = ref(0) 
+
+async function fetchCards() {
+  try {
+    is_loading.value = true
+    const url = `/api/books/${props.lang}/${props.author}/${props.title}.jsonl`
+    cards.value = await fetch(url)
+                    .then(response => response.text())
+                    .then(text => text.split("\n")
+                      .filter(line => line.length > 0)
+                      .map(line => JSON.parse(line)))
+  } catch(err) {
+    error.value = err
+  }
+  finally {
+    is_loading.value = false
+  }
+}
+
+watchEffect(() => { fetchCards() });
+
+onMounted(() => {
+    window.addEventListener("keydown", onEvent, true);
+})
+
+function scrollToRow(index: number) {
+  const row = main.value.querySelectorAll("div.row")[index];
+  row.focus();
+  row.scrollIntoView({block:"nearest"});
+}
+function showMore() {
+  var move = translations_showing.value < cards.value.length;
+  if (move) {
+    translations_showing.value = translations_showing.value + 1;
+    scrollToRow(translations_showing.value);
+  }
+  return move;
+}
+function showLess() {
+  var move = translations_showing.value > 0;
+  if (move) {
+    translations_showing.value = translations_showing.value - 1;
+    scrollToRow(translations_showing.value);
+  }
+  return move;
+}
+function showNone() {
+  translations_showing.value = 0;
+}
+//function showAll() {
+//  translations_showing.value = cards.value.length;
+//}
+function onEvent(event: { key: string; preventDefault: () => void }) {
+  // if we've scrolled then prevent any further scrolling
+  if (event.key === "ArrowDown") {
+    if (showMore()) event.preventDefault();
+  } else if (event.key === "ArrowUp") {
+    if (showLess()) event.preventDefault();
+  } else if (event.key === "Escape") {
+    showNone();
+    event.preventDefault();
+  }
+}
 
 </script>
 <template>
@@ -36,7 +93,7 @@ watchEffect(() => {
           </div>
           <div class="col-md-6 col-sm-6">
             <div class="back border bg-light mx-2 p-3 fs-4 h-100">
-              <p :class="index >= showing ? 'masked' : ''">
+              <p :class="index >= translations_showing ? 'masked' : ''">
                 {{ card.translation }}
               </p>
             </div>
@@ -49,57 +106,8 @@ watchEffect(() => {
 
 <script lang="ts">
 export default {
-  name: "BookView",
-  data() {
-    return {
-      showing: 0,
-    };
-  },
-  computed: {
-    store: () => useCardStore(),
-  },
-  mounted() {
-    window.addEventListener("keydown", this.onEvent, true);
-  },
-  methods: {
-    scrollToRow(index: number) {
-      // eslint-disable-next-line no-undef
-      const row = main.querySelectorAll("div")[index];
-      row.focus();
-      row.scrollIntoView();
-    },
-    showMore() {
-      var move = this.showing < this.store.cards.length;
-      if (move) {
-        this.showing = this.showing + 1;
-        this.scrollToRow(this.showing);
-      }
-      return move;
-    },
-    showLess() {
-      var move = this.showing > 0;
-      if (move) {
-        this.showing = this.showing - 1;
-        this.scrollToRow(this.showing);
-      }
-      return move;
-    },
-    showNone() {
-      this.showing = 0;
-    },
-    showAll() {
-      this.showing = this.store.cards.length;
-    },
-    onEvent(event: { key: string; preventDefault: () => void }) {
-      if (event.key === "ArrowDown") {
-        if (this.showMore()) event.preventDefault();
-      } else if (event.key === "ArrowUp") {
-        if (this.showLess()) event.preventDefault();
-      } else if (event.key === "Escape") {
-        this.showNone();
-        event.preventDefault();
-      }
-    },
+    methods: {
+      
   },
 };
 </script>

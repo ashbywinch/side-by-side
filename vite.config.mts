@@ -2,7 +2,6 @@ import { defineConfig, PluginOption } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import vue from "@vitejs/plugin-vue";
 import * as path from "path";
-import jsonl from "rollup-plugin-jsonlines";
 import Components from "unplugin-vue-components/vite";
 import { BootstrapVueNextResolver } from "bootstrap-vue-next";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -13,9 +12,6 @@ export default defineConfig({
     vue(),
     nodePolyfills(), // for path
     tsconfigPaths(), // resolve aliases
-    jsonl({
-      ignoreErrors: true, // otherwise blank lines on the end of files cause json parse errors
-    }) as PluginOption,
     Components({
       resolvers: [BootstrapVueNextResolver()],
     }),
