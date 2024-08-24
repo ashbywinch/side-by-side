@@ -16,5 +16,6 @@ export default defineConfig({
       provider: "istanbul",
       reporter: ["text", "clover"],
     },
+    environment: "happy-dom",
   },
 });
