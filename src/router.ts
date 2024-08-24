@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import BookView from "./components/BookView.vue";
-import IndexWrapper from "./components/IndexWrapper.vue";
+import IndexView from "./components/IndexView.vue";
 
 const routes = [
   { path: "/", redirect: "/ru" },
-  { path: "/:lang", name: "Index", component: IndexWrapper },
+  { path: "/:lang", name: "Index", component: IndexView, props: true },
   {
-    path: "/books/:lang/:author/:title",
+    path: "/:lang/:author/:title",
     name: "Book",
     component: BookView,
     props: true,

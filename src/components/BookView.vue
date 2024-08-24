@@ -9,19 +9,19 @@ const props = defineProps({
 
 const main: Ref<Element> = ref(null);
 const is_loading = ref(false)
-const cards = ref(null)
-const error = ref(null)
+const cards = ref([])
+const error = ref("")
 const translations_showing = ref(0) 
 
 async function fetchCards() {
   try {
     is_loading.value = true
     const url = `/api/books/${props.lang}/${props.author}/${props.title}.jsonl`
-    cards.value = await fetch(url)
-                    .then(response => response.text())
-                    .then(text => text.split("\n")
-                      .filter(line => line.length > 0)
-                      .map(line => JSON.parse(line)))
+    await fetch(url)
+            .then(response => response.text())
+            .then(text => text.split("\n")
+              .filter(line => line.length > 0)
+              .forEach(line => cards.value.push(JSON.parse(line)))) // incremental loading
   } catch(err) {
     error.value = err
   }
