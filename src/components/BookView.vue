@@ -60,9 +60,9 @@ function showLess() {
 function showNone() {
   translations_showing.value = 0;
 }
-function showAll() {
-  translations_showing.value = cards.value.length;
-}
+//function showAll() {
+//  translations_showing.value = cards.value.length;
+//}
 function onEvent(event: { key: string; preventDefault: () => void }) {
   // if we've scrolled then prevent any further scrolling
   if (event.key === "ArrowDown") {
