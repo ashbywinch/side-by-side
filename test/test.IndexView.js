@@ -30,6 +30,7 @@ it("should load index", async () => {
     },
   });
   await flushPromises();
-  expect(await screen.queryByText("Test author, Test title")).toBeTruthy();
+  expect(await screen.queryByText("Test author")).toBeTruthy();
+  expect(await screen.queryByText("Test title")).toBeTruthy();
   expect(await screen.queryByText("20 words")).toBeTruthy();
 });
