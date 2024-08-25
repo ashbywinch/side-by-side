@@ -104,13 +104,6 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
   </div>
 </template>
 
-<script lang="ts">
-export default {
-    methods: {
-      
-  },
-};
-</script>
 <style scoped>
 .masked {
   filter: opacity(5%);

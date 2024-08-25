@@ -9,9 +9,13 @@ declare module 'vue' {
   export interface GlobalComponents {
     BAlert: typeof import('bootstrap-vue-next')['BAlert']
     BButton: typeof import('bootstrap-vue-next')['BButton']
+    BCard: typeof import('bootstrap-vue-next')['BCard']
+    BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
+    BCardText: typeof import('bootstrap-vue-next')['BCardText']
     BOffcanvas: typeof import('bootstrap-vue-next')['BOffcanvas']
     BookView: typeof import('./src/components/BookView.vue')['default']
     BOverlay: typeof import('bootstrap-vue-next')['BOverlay']
+    BPagination: typeof import('bootstrap-vue-next')['BPagination']
     copy: typeof import('./src/components/Index copy.vue')['default']
     Index: typeof import('./src/components/Index.vue')['default']
     IndexPage: typeof import('./src/components/IndexPage.vue')['default']
