@@ -24,6 +24,7 @@
     "pinia": "^2.2.2",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.4.38",
+    "vue-multiselect": "^3.0.0",
     "vue-router": "^4.4.3"
   },
   "devDependencies": {
