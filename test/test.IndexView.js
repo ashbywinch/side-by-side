@@ -5,8 +5,10 @@ import { http, HttpResponse } from "msw";
 import { createApp } from "vue";
 import { flushPromises } from "@vue/test-utils";
 import { render, screen } from "@testing-library/vue";
+import router from "@/router.ts";
 
 const app = createApp({});
+app.use(router);
 
 export const handlers = [
   http.get("api/books/en/index.jsonl", () => {

@@ -9,11 +9,11 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
-    "composite": true
+    "composite": true,
+    "target": "ES2015"
   },
   "include": ["src"]
 }

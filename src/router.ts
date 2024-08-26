@@ -4,10 +4,9 @@ import BookView from "./components/BookView.vue";
 import IndexView from "./components/IndexView.vue";
 
 const routes = [
-  { path: "/", redirect: "/ru/1" },
-  { path: "/:lang", name: "Index", component: IndexView, props: true },
+  { path: "/", redirect: "/ru/books/1" },
   {
-    path: "/:lang/:page",
+    path: "/:lang/books/:page",
     name: "Index",
     component: IndexView,
     props: (route: { params: { lang: string; page: string } }) => ({
@@ -16,7 +15,7 @@ const routes = [
     }),
   },
   {
-    path: "/:lang/:author/:title",
+    path: "/:lang/book/:author/:title",
     name: "Book",
     component: BookView,
     props: true,

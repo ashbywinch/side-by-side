@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, watchEffect } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import Multiselect from 'vue-multiselect'
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -11,19 +12,61 @@ const shadowPage = ref(props.page);
 const perPage = 24;
 
 const router = useRouter();
-watch(
-  shadowPage,
-  async () => {
-    if(shadowPage.value != props.page)
-      router.push({name:"Index", params:{lang:props.lang, page:shadowPage.value}})
-  }
-)
+const route = useRoute();
+const query = route.query;
+
+const shadowAuthor = ref(route.query.author);
+const shadowLevel = ref(route.query.level);
+const shadowSize = ref(route.query.size);
+async function reload()
+{
+  router.push({name:"Index", 
+                  params:{lang:props.lang, page:shadowPage.value}, 
+                  query: {author:shadowAuthor.value, level:shadowLevel.value, size:shadowSize.value}})
+}
+watch(shadowAuthor, reload);
+watch(shadowLevel, reload);
+watch(shadowSize, reload);
+watch(shadowPage, reload);
 
 const is_loading = ref(false);
 const index = ref([]);
 const error = ref("");
 
-const filtered_index = computed(() => index.value.slice((props.page - 1) * perPage, props.page * perPage))
+// make a set and put all the index levels in it 
+const levels = computed(() => Array.from(new Set(index.value.map(book => book["Vocab Level"]))))
+const authors = computed(() => Array.from(new Set(index.value.map(book => book.author))))
+
+const all_sizes = new Map([
+  ["small", {min: 0, max: 1000}],
+  ["medium", {min:1000, max:5000}],
+  ["large", {min:5000, max:99999999999}]
+])
+const sizes = computed(() => 
+  [...all_sizes].filter(size => !route.query["Size"] ||
+                              index.value.some(book => book.size > size[1].min && book.size <= size[1].max))
+                .map(size => size[0])) // just the name
+
+const filtered_index = computed(() => {
+  var reduced_index = index.value;
+  if(query.level)
+  {
+     reduced_index = reduced_index.filter(book => book["Vocab Level"] == query.level)
+  }
+  if(query.size)
+  {
+    const range = all_sizes.get(query.size);
+    reduced_index = reduced_index.filter(book => book["Word Count"] > range.min && book["Word Count"] <= range.max);
+  }
+  if(query.author)
+  {
+    reduced_index = reduced_index.filter(book => book.author == query.author);
+  }
+  return reduced_index;
+})
+const paginated_index = computed(() => 
+  filtered_index.value.slice((props.page - 1) * perPage, props.page * perPage))
+
 
 async function fetchIndex() {
   try {
@@ -47,16 +90,22 @@ watchEffect(() => { fetchIndex() });
 
 </script>
 <template>
-  <div>
+  <div class="m-sm-4">
     <h1>Books</h1>
     <div v-if="error" class="alert alert-danger">
       {{ error }}
     </div>
+    <nav class="options">
+      <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:12rem"></multiselect>
+      <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem"></multiselect>
+      <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem"></multiselect>
+    </nav>
     <div class="card-deck">
-      <template v-for="book in filtered_index" :key="book.author + book.title">
+      <template v-for="book in paginated_index" :key="book.author + book.title">
         <div class="card">
+          <h2 class="card-header">{{ book.title }}</h2>
           <div class="card-body d-flex flex-column ">
-            <h2 class="card-title">{{ book.title }}</h2>
+            
             <h3 class="card-text">{{ book.author }}</h3>
           </div>
           <div class="card-footer clearfix">
@@ -71,11 +120,11 @@ watchEffect(() => { fetchIndex() });
         </div>
       </template>
     </div>
-    <nav class="footer">
+    <nav v-if="filtered_index.length > perPage" class="footer">
       <b-pagination
-      v-if="index.length > 0"
+      v-if="filtered_index.length > 0"
       v-model="shadowPage"
-      :total-rows="index.length"
+      :total-rows="filtered_index.length"
       :per-page="perPage"
       align="center"
     ></b-pagination>
@@ -83,6 +132,7 @@ watchEffect(() => { fetchIndex() });
   </div>
 </template>
 
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
 
 #footer {
@@ -102,7 +152,7 @@ a.btn {
 .card {
   min-width: 18em;
   border:none;
-  box-shadow: 0px 0px 5px 0px lightgrey;
+  box-shadow: 0px 1px 1px 1px lightgrey;
 }
 .card-footer {
   background-color: transparent;
@@ -122,5 +172,13 @@ h3 {
 }
 .footer {
   margin: 2rem;
+}
+.multiselect {
+  display:inline-block;
+  margin: 0 1rem 1rem 0;
+}
+.ph-card-header {
+    color: white !important;
+    background-color: navy !important;
 }
 </style>
