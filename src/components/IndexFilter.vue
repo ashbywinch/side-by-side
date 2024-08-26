@@ -22,9 +22,10 @@ const authors = computed(() => Array.from(new Set(props.books.map(book => book.a
 
 const sizes = computed(() => 
   [...all_sizes].filter(size => !props.size ||
-                              props.books.some(book => book.size > size[1].min && book.size <= size[1].max))
-                .map(size => size[0])) // just the name
-
+                              props.books.some(book => book["Word Count"] > size[1].min && 
+                                                       book["Word Count"] <= size[1].max))
+                                          .map(size => size[0])) // just the name
+  
 const route = useRoute()
 const router = useRouter()
 
@@ -41,7 +42,7 @@ watch(shadowLevel, reload)
 </script>
 <template>
   <nav class="options">
-    <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:12rem"></multiselect>
+    <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:13rem"></multiselect>
     <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem"></multiselect>
     <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem"></multiselect>
   </nav>
