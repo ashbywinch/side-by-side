@@ -4,14 +4,13 @@ import BookView from "./components/BookView.vue";
 import IndexView from "./components/IndexView.vue";
 
 const routes = [
-  { path: "/", redirect: "/ru/books/1" },
+  { path: "/", redirect: "/ru/books" },
   {
-    path: "/:lang/books/:page",
+    path: "/:lang/books",
     name: "Index",
     component: IndexView,
-    props: (route: { params: { lang: string; page: string } }) => ({
+    props: (route: { params: { lang: string } }) => ({
       lang: route.params.lang,
-      page: Number.parseInt(route.params.page, 10) || undefined,
     }),
   },
   {

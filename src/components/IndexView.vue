@@ -1,54 +1,28 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
-import Multiselect from 'vue-multiselect'
+import { computed, ref, watchEffect } from 'vue';
+import { useRoute } from 'vue-router'
 import IndexDetailsView from './IndexDetailsView.vue';
+import { all_sizes } from '@/components/sizes';
 
 const props = defineProps({
   lang: { type:String, required:true},
-  page: { type: Number, default: 1}
 })
 
-const shadowPage = ref(props.page);
-const perPage = 24;
-
-const router = useRouter();
+const perPage = ref(24)
 const route = useRoute();
 const query = route.query;
-
-const shadowAuthor = ref(route.query.author);
-const shadowLevel = ref(route.query.level);
-const shadowSize = ref(route.query.size);
-async function reload()
-{
-  router.push({name:"Index", 
-                  params:{lang:props.lang, page:shadowPage.value}, 
-                  query: {author:shadowAuthor.value, level:shadowLevel.value, size:shadowSize.value}})
-}
-watch(shadowAuthor, reload);
-watch(shadowLevel, reload);
-watch(shadowSize, reload);
-watch(shadowPage, reload);
+const page = Number(query.page ? query.page : 1)
 
 const is_loading = ref(false);
 const index = ref([]);
 const error = ref("");
 
-// make a set and put all the index levels in it 
-const levels = computed(() => Array.from(new Set(index.value.map(book => book["Vocab Level"]))))
-const authors = computed(() => Array.from(new Set(index.value.map(book => book.author))))
-
-const all_sizes = new Map([
-  ["small", {min: 0, max: 1000}],
-  ["medium", {min:1000, max:5000}],
-  ["large", {min:5000, max:99999999999}]
-])
-const sizes = computed(() => 
-  [...all_sizes].filter(size => !route.query["Size"] ||
-                              index.value.some(book => book.size > size[1].min && book.size <= size[1].max))
-                .map(size => size[0])) // just the name
-
 const filtered_index = computed(() => {
+  if(!index.value)
+  {
+    return [] 
+  }
+  
   var reduced_index = index.value;
   if(query.level)
   {
@@ -66,7 +40,7 @@ const filtered_index = computed(() => {
   return reduced_index;
 })
 const paginated_index = computed(() => 
-  filtered_index.value.slice((props.page - 1) * perPage, props.page * perPage))
+  filtered_index.value.slice((page - 1) * perPage.value, page * perPage.value))
 
 
 async function fetchIndex() {
@@ -96,21 +70,9 @@ watchEffect(() => { fetchIndex() });
     <div v-if="error" class="alert alert-danger">
       {{ error }}
     </div>
-    <nav class="options">
-      <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:12rem"></multiselect>
-      <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem"></multiselect>
-      <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem"></multiselect>
-    </nav>
+    <IndexFilter :books=index :author="query.author" :size="query.size" :level="query.level"/>
     <IndexDetailsView :books="paginated_index"/>
-    <nav v-if="filtered_index.length > perPage" class="footer">
-      <b-pagination
-      v-if="filtered_index.length > 0"
-      v-model="shadowPage"
-      :total-rows="filtered_index.length"
-      :per-page="perPage"
-      align="center"
-    ></b-pagination>
-    </nav>
+    <IndexPagination :books="filtered_index" :per-page="perPage"/>
   </div>
 </template>
 
@@ -118,9 +80,5 @@ watchEffect(() => { fetchIndex() });
 <style scoped>
 .footer {
   margin: 2rem;
-}
-.multiselect {
-  display:inline-block;
-  margin: 0 1rem 1rem 0;
 }
 </style>
