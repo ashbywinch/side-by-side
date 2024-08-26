@@ -16,6 +16,7 @@ declare module 'vue' {
     BPagination: typeof import('bootstrap-vue-next')['BPagination']
     copy: typeof import('./src/components/Index copy.vue')['default']
     Index: typeof import('./src/components/Index.vue')['default']
+    IndexDetailsView: typeof import('./src/components/IndexDetailsView.vue')['default']
     IndexPage: typeof import('./src/components/IndexPage.vue')['default']
     IndexView: typeof import('./src/components/IndexView.vue')['default']
     IndexWrapper: typeof import('./src/components/IndexWrapper.vue')['default']

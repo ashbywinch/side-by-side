@@ -2,6 +2,7 @@
 import { computed, ref, watch, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import Multiselect from 'vue-multiselect'
+import IndexDetailsView from './IndexDetailsView.vue';
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -100,26 +101,7 @@ watchEffect(() => { fetchIndex() });
       <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem"></multiselect>
       <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem"></multiselect>
     </nav>
-    <div class="card-deck">
-      <template v-for="book in paginated_index" :key="book.author + book.title">
-        <div class="card">
-          <h2 class="card-header">{{ book.title }}</h2>
-          <div class="card-body d-flex flex-column ">
-            
-            <h3 class="card-text">{{ book.author }}</h3>
-          </div>
-          <div class="card-footer clearfix">
-            <div class="float-start h-100 d-flex">
-              <span class="badge rounded-pill bg-secondary align-bottom mt-auto">{{book["Vocab Level"]}}</span>
-              <span class="badge rounded-pill bg-secondary align-bottom mt-auto">{{book["Word Count"]}} words</span>
-            </div>
-            <div class="float-end">
-              <RouterLink class="btn btn-primary stretched-link" :to="{name:'Book',params:{lang: book.lang, author:book.author, title:book.title}}">Go</RouterLink>
-            </div>
-          </div>
-        </div>
-      </template>
-    </div>
+    <IndexDetailsView :books="paginated_index"/>
     <nav v-if="filtered_index.length > perPage" class="footer">
       <b-pagination
       v-if="filtered_index.length > 0"
@@ -134,51 +116,11 @@ watchEffect(() => { fetchIndex() });
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
-
-#footer {
-  width:100%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1em;
-}
-
-a {
-  text-decoration: none;
-}
-a.btn {
-  box-shadow: 0px 0px 3px 0px #2988c8;
-}
-.card {
-  min-width: 18em;
-  border:none;
-  box-shadow: 0px 1px 1px 1px lightgrey;
-}
-.card-footer {
-  background-color: transparent;
-  border: none
-}
-h2 {
-  font-size:1.7rem;
-  font-weight: normal;
-}
-h3 {
-  font-size:1.3rem;
-  font-weight: normal;
-}
-.badge {
-  padding: .5rem;
-  margin-right: .5rem;
-}
 .footer {
   margin: 2rem;
 }
 .multiselect {
   display:inline-block;
   margin: 0 1rem 1rem 0;
-}
-.ph-card-header {
-    color: white !important;
-    background-color: navy !important;
 }
 </style>
