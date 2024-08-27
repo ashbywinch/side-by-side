@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
+import { computed, ref } from 'vue';
 import Multiselect from 'vue-multiselect'
 import { all_sizes } from '@/components/sizes';
 
@@ -25,26 +24,19 @@ const sizes = computed(() =>
                               props.books.some(book => book["Word Count"] > size[1].min && 
                                                        book["Word Count"] <= size[1].max))
                                           .map(size => size[0])) // just the name
-  
-const route = useRoute()
-const router = useRouter()
 
-async function reload()
+const emit = defineEmits(["update-filter-value"])
+function doEmit()
 {
-  router.push({name: route.name, 
-                  params: route.params, 
-                  query: {author:shadowAuthor.value, level:shadowLevel.value, size:shadowSize.value}})
+  emit("update-filter-value", shadowLevel, shadowSize, shadowAuthor)
 }
-watch(shadowAuthor, reload)
-watch(shadowSize, reload)
-watch(shadowLevel, reload)
 
 </script>
 <template>
   <nav class="options">
-    <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:13rem"></multiselect>
-    <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem"></multiselect>
-    <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem"></multiselect>
+    <multiselect v-model="shadowLevel" :options="levels" placeholder="Any level" style="width:13rem" @update:modelValue="doEmit"></multiselect>
+    <multiselect v-model="shadowSize" :options="sizes" placeholder="Any size" style="width:14rem" @update:modelValue="doEmit"></multiselect>
+    <multiselect v-model="shadowAuthor" :options="authors" placeholder="Any author"  style="width:20rem" @update:modelValue="doEmit"></multiselect>
   </nav>
 </template>
 

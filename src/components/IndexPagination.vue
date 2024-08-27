@@ -1,34 +1,24 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
 
 const props = defineProps({
   books: { type:Array<Map<string, string>>, required:true},
-  perPage: { type: Number, default: 24 }
+  perPage: { type: Number, default: 24 },
+  page: { type: Number, default: 1}
 })
+const shadowPage = ref(props.page)
+const emit = defineEmits(["update-page-value"])
 
-const route = useRoute()
-const router = useRouter();
+watch(shadowPage, () => emit('update-page-value', shadowPage.value))
 
-const shadowPage = ref(Number(route.query.page ? route.query.page : 1));
-
-async function reload()
-{
-  router.push({name: route.name, 
-                  params: route.params, 
-                  query: {...route.query, page: String(shadowPage.value)}
-                })              
-}
-
-watch(shadowPage, reload);
 </script>
 <template>
     <nav v-if="books.length > props.perPage">
         <b-pagination
         v-if="books.length > 0"
-        v-model="shadowPage"
+        v-model.number="shadowPage"
         :total-rows="books.length"
-        :per-page="props.perPage"
+        :per-page="perPage"
         align="center"
     ></b-pagination>
     </nav>
