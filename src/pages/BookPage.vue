@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref, watchEffect } from "vue";
+import PageSurround from "@/components/PageSurround.vue";
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -77,34 +78,42 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 
 </script>
 <template>
-  <div class="book-view">
-    <div id="main" ref="main" class="container my-5">
-      <h1>{{ title }}</h1>
-      <h2>{{ author}}</h2>
+  <PageSurround :error="error">
+    <va-card class="page">
+      <div class="head"> 
+        <h1 class="va-h1">{{ title }}</h1>
+        <h3 class="va-h3">{{ author}}</h3>
+      </div>
       <template
         v-for="(card, index) in cards"
         :key="card.index_in_file"
       >
-        <div class="row my-3 mx-0">
-          <div class="col-md-6 col-sm-6">
-            <div class="front border bg-light mx-2 p-3 fs-4 h-100">
-              {{ card.text }}
-            </div>
+        <div class="row">
+          <div class="flex flex-col md6">
+            <va-card class="front item">
+              <va-card-content>{{ card.text }}</va-card-content>
+            </va-card>
           </div>
-          <div class="col-md-6 col-sm-6">
-            <div class="back border bg-light mx-2 p-3 fs-4 h-100">
-              <p :class="index >= translations_showing ? 'masked' : ''">
+          <div class="flex flex-col md6">
+            <va-card class="back item">
+              <va-card-content :class="index >= translations_showing ? 'masked' : ''">
                 {{ card.translation }}
-              </p>
-            </div>
+              </va-card-content>
+            </va-card>
           </div>
         </div>
       </template>
-    </div>
-  </div>
+    </va-card>
+  </PageSurround>
 </template>
 
 <style scoped>
+.head {
+  margin-bottom: 2rem;
+}
+.va-card__content {
+  padding: 0.3rem;
+}
 .masked {
   filter: opacity(5%);
   filter: blur(5px);
@@ -112,5 +121,18 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 .front,
 .back {
   height: fit-content;
+  box-shadow: none;
+  line-height: 1.3rem;
 }
+.page {
+  width: 40rem;
+  padding: 2rem;
+  margin: 2em auto;
+}
+.va-screen-xs .page {
+  width: 100%;
+  margin: 0;
+  box-shadow: none;
+}
+
 </style>

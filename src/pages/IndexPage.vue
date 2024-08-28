@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
-import IndexDetailsView from './IndexDetailsView.vue';
 import { all_sizes } from '@/components/sizes';
+import BookOverviewCards from '@/components/BookOverviewCards.vue';
+import BookFilter from '@/components/BookFilter.vue';
+import PageSurround from '@/components/PageSurround.vue';
+import SimplePagination from '@/components/SimplePagination.vue';
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -60,9 +63,8 @@ async function reload()
 
 function isVisible(book)
 {
-  const range = size.value ? all_sizes.get(size.value) : null;
   return (!level.value || book["Vocab Level"] == level.value)
-      && (!size.value || book["Word Count"] > range.min && book["Word Count"] <= range.max)
+      && (!size.value || book.size == size.value)
       && (!author.value || book["author"] == author.value)
 }
 
@@ -83,6 +85,13 @@ async function fetchIndex() {
     for (const line of lines)
         if(line.length > 0)
           index.value.push(JSON.parse(line))
+    for (var book of index.value)
+    {
+      book.size =  [...all_sizes].filter(size => book["Word Count"] > size[1].min && 
+                                                 book["Word Count"] <= size[1].max)
+                                .map(size => size[0]) // just the name
+                                [0]
+    }
   } catch(err) {
     error.value = err
   }
@@ -95,20 +104,24 @@ watchEffect(() => { fetchIndex() });
 
 </script>
 <template>
-  <div class="m-sm-4">
-    <h1>Books</h1>
-    <div v-if="error" class="alert alert-danger">
-      {{ error }}
-    </div>
-    <IndexFilter :books=index :author="author" :size="size" :level="level" @update-filter-value="updateFilterValue"/>
-    <IndexDetailsView :books="paginated_index"/>
-    <IndexPagination :page="page" :books="filtered_index" :per-page="perPage" @update-page-value="updatePageValue"/>
-  </div>
+  <PageSurround :error="error">
+    <BookFilter class="nav" :books=index :author="author" :size="size" :level="level" @update-filter-value="updateFilterValue"/>
+    <BookOverviewCards :books="paginated_index"/>
+    <SimplePagination :page="page" :items="filtered_index.length" :per-page="perPage" @update-page-value="updatePageValue"/>
+  </PageSurround>
 </template>
 
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
-.footer {
-  margin: 2rem;
+header {
+  margin-bottom: 2rem !important;
+}
+header * {
+  font-size: 1.2rem !important;
+}
+.nav {
+  margin-bottom: 1rem;
+}
+.container {
+  margin-left: 1rem
 }
 </style>
