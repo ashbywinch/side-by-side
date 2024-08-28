@@ -7,13 +7,20 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BookFilter: typeof import('./src/components/BookFilter.vue')['default']
+    BookOverviewCard: typeof import('./src/components/BookOverviewCard.vue')['default']
+    BookOverviewCards: typeof import('./src/components/BookOverviewCards.vue')['default']
     BookView: typeof import('./src/components/BookView.vue')['default']
     BPagination: typeof import('bootstrap-vue-next')['BPagination']
+    Card: typeof import('./src/components/Card.vue')['default']
+    IndexDetails: typeof import('./src/components/IndexDetails.vue')['default']
     IndexDetailsView: typeof import('./src/components/IndexDetailsView.vue')['default']
     IndexFilter: typeof import('./src/components/IndexFilter.vue')['default']
     IndexPagination: typeof import('./src/components/IndexPagination.vue')['default']
     IndexView: typeof import('./src/components/IndexView.vue')['default']
+    Pagination: typeof import('./src/components/Pagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Surround: typeof import('./src/components/Surround.vue')['default']
   }
 }

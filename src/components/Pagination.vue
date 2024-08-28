@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  books: { type:Array<Map<string, string>>, required:true},
+  items: { type:Number },
   perPage: { type: Number, default: 24 },
   page: { type: Number, default: 1}
 })
@@ -13,20 +13,22 @@ watch(shadowPage, () => emit('update-page-value', shadowPage.value))
 
 </script>
 <template>
-    <nav v-if="books.length > props.perPage">
-        <b-pagination
-        v-if="books.length > 0"
+    <nav v-if="props.items > props.perPage">
+        <va-pagination
+        v-if="props.items > 0"
         v-model.number="shadowPage"
-        :total-rows="books.length"
-        :per-page="perPage"
-        align="center"
-    ></b-pagination>
+        :pages="props.items / props.perPage"
+    ></va-pagination>
     </nav>
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
 nav {
-  margin: 2rem;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1em;
 }
 </style>
