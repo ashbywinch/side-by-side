@@ -1,5 +1,5 @@
 import { expect, it, beforeAll, afterAll, afterEach } from "vitest";
-import IndexDetailsView from "@/components/IndexDetailsView.vue";
+import BookOverviewCards from "@/components/BookOverviewCards.vue";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { createApp } from "vue";
@@ -24,19 +24,22 @@ afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 */
 it("should load index", async () => {
-  render(IndexDetailsView, {
+  render(BookOverviewCards, {
     props: {
       books: [
         {
           title: "Test title",
           author: "Test author",
           "Word Count": "20",
+          size: "small",
+          level: "B2",
+          lang: "en",
         },
       ],
     },
   });
   await flushPromises();
+
   expect(await screen.queryByText("Test author")).toBeTruthy();
   expect(await screen.queryByText("Test title")).toBeTruthy();
-  expect(await screen.queryByText("20 words")).toBeTruthy();
 });

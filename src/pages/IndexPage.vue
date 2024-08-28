@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { all_sizes } from '@/components/sizes';
 import BookOverviewCards from '@/components/BookOverviewCards.vue';
 import BookFilter from '@/components/BookFilter.vue';
+import PageSurround from '@/components/PageSurround.vue';
+import SimplePagination from '@/components/SimplePagination.vue';
 
 const props = defineProps({
   lang: { type:String, required:true},

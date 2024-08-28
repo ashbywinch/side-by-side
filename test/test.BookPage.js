@@ -1,16 +1,12 @@
 import { expect, it, beforeAll, afterAll, afterEach } from "vitest";
-import BookView from "@/components/BookView.vue";
+import BookPage from "@/pages/BookPage.vue";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
-import { setActivePinia, createPinia } from "pinia";
 import { createApp } from "vue";
 import { flushPromises } from "@vue/test-utils";
 import { render, screen } from "@testing-library/vue";
 
 const app = createApp({});
-const pinia = createPinia();
-app.use(pinia);
-setActivePinia(pinia);
 
 export const handlers = [
   http.get("api/books/en/testauthor/testtitle.jsonl", () => {
@@ -27,7 +23,7 @@ afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 
 it("should load books", async () => {
-  render(BookView, {
+  render(BookPage, {
     props: {
       lang: "en",
       author: "TestAuthor",
