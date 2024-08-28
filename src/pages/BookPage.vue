@@ -77,7 +77,7 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 
 </script>
 <template>
-  <Surround :error="error">
+  <PageSurround :error="error">
     <va-card class="page">
       <div class="head"> 
         <h1 class="va-h1">{{ title }}</h1>
@@ -103,7 +103,7 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
         </div>
       </template>
     </va-card>
-  </Surround>
+  </PageSurround>
 </template>
 
 <style scoped>

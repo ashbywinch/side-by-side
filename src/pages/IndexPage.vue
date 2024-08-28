@@ -102,11 +102,11 @@ watchEffect(() => { fetchIndex() });
 
 </script>
 <template>
-  <Surround :error="error">
+  <PageSurround :error="error">
     <BookFilter class="nav" :books=index :author="author" :size="size" :level="level" @update-filter-value="updateFilterValue"/>
     <BookOverviewCards :books="paginated_index"/>
-    <Pagination :page="page" :items="filtered_index.length" :per-page="perPage" @update-page-value="updatePageValue"/>
-  </Surround>
+    <SimplePagination :page="page" :items="filtered_index.length" :per-page="perPage" @update-page-value="updatePageValue"/>
+  </PageSurround>
 </template>
 
 <style scoped>

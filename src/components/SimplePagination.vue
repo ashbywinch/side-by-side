@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  items: { type:Number },
+  items: { type:Number, required:true },
   perPage: { type: Number, default: 24 },
   page: { type: Number, default: 1}
 })
