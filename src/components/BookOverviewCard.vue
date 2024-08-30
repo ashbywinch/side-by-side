@@ -45,7 +45,7 @@ const sizeColor = {
       {{ author }}
       <br/><br/><br/>
       <div class="row va-spacing-x-2">
-        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColor[level]" textcolor="white"/>
+        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColor[level]"/>
         <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
       </div>
     </va-card-content>
@@ -65,5 +65,8 @@ const sizeColor = {
 .va-badge * {
   font-size: 1rem !important;
   text-transform: none !important;
+}
+div.row a:focus .va-card {
+  border: 1px solid var(--va-primary);
 }
 </style>

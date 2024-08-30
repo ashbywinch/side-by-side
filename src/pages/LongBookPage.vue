@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref, watchEffect } from "vue";
+import PageSurround from "@/components/PageSurround.vue";
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -7,7 +8,6 @@ const props = defineProps({
   title: { type:String, required:true},
 })
 
-const main: Ref<Element> = ref(null);
 const is_loading = ref(false)
 const cards = ref([])
 const error = ref("")
@@ -75,33 +75,48 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
   }
 }
 
+const page = ref(null) // the containing element from the DOM
+const magicHeight = ref(window.innerHeight)  // where we keep the "real" height of the content
+  
+function resize() {
+   magicHeight.value = page.value.getClientRect().innerHeight
+}
+
+window.addEventListener("load", () => {
+  resize()
+});
+window.addEventListener("resize", () => {
+  resize()
+});
+
 </script>
 <template>
   <PageSurround :error="error">
-    <va-card class="page">
+    <va-card ref="page" class="page">
       <div class="head"> 
         <h1 class="va-h1">{{ title }}</h1>
         <h3 class="va-h3">{{ author}}</h3>
       </div>
-      <template
-        v-for="(card, index) in cards"
-        :key="card.index_in_file"
-      >
+      <va-virtual-scroller
+        v-slot="{ item, index }"
+        :items="cards"
+        :wrapper-size="magicHeight"
+      >     
         <div class="row">
           <div class="flex flex-col md6">
             <va-card class="front item">
-              <va-card-content>{{ card.text }}</va-card-content>
+              <va-card-content>{{ item.text }}</va-card-content>
             </va-card>
           </div>
           <div class="flex flex-col md6">
             <va-card class="back item">
               <va-card-content :class="index >= translations_showing ? 'masked' : ''">
-                {{ card.translation }}
+                {{ item.translation }}
               </va-card-content>
             </va-card>
           </div>
         </div>
-      </template>
+      </va-virtual-scroller>
     </va-card>
   </PageSurround>
 </template>
@@ -127,11 +142,11 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
   width: 40rem;
   padding: 2rem;
   margin: 2em auto;
+  overflow: hidden;
 }
 .va-screen-xs .page {
   width: 100%;
   margin: 0;
   box-shadow: none;
 }
-
 </style>
