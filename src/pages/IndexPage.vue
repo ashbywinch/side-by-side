@@ -24,7 +24,6 @@ usePagination(filtered_items, perPage)
 
 const route = useRoute();
 setFilter(getFilter(route));
-console.log(filter)
 setPage(getPage(route));
 
 const router = useRouter();

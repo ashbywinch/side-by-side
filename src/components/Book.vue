@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import { onMounted, ref, Ref } from 'vue';
 
-
 const props = defineProps({
-    title: { type:String, required: true},
-    author: { type:String, required: true},
-    cards: { type:Array, required:true},
-    isTitlePage: {type:Boolean, default:false}
+  title: { type:String, required: true},
+  author: { type:String, required: true},
+  cards: { type:Array, required:true},
+  isTitlePage: {type:Boolean, default:false}
 })
 
 const translations_showing = ref(0) 
 
 onMounted(() => {
-    window.addEventListener("keydown", onEvent, true);
+  window.addEventListener("keydown", onEvent, true);
 })
 
 const main: Ref<Element> = ref(null);
 
 function scrollToRow(index: number) {
   const row = main.value.$el.querySelectorAll("div.row")[index];
-  console.log(translations_showing.value)
-  row.focus();
-  row.scrollIntoView({block:"nearest"});
+  if(row)
+  {
+    row.focus();
+    row.scrollIntoView({block:"nearest"});
+  }
 }
 function showMore() {
   var move = translations_showing.value < props.cards.length;
