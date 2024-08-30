@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref, watchEffect } from "vue";
-import PageSurround from "@/components/PageSurround.vue";
 
 const props = defineProps({
   lang: { type:String, required:true},
