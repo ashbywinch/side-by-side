@@ -1,4 +1,3 @@
-import { useRoute, useRouter } from "vue-router";
 import { Filter } from "./Filter";
 import { toValue } from "vue";
 
@@ -17,7 +16,7 @@ export function getPage(route) {
 
 // Remove all null items from this query
 function newQuery(filter: Filter, page: number) {
-  let newQuery = {};
+  const newQuery = {};
   if (filter.level) newQuery["level"] = toValue(filter.level);
   if (filter.size) newQuery["size"] = toValue(filter.size);
   if (filter.author) newQuery["author"] = toValue(filter.author);
