@@ -30,7 +30,7 @@ it("should load index", async () => {
         {
           title: "Test title",
           author: "Test author",
-          "Word Count": "20",
+          "Word Count": 20,
           size: "small",
           level: "B2",
           lang: "en",
