@@ -9,6 +9,7 @@ import { getPage, getFilter, reload } from './IndexPageRouting'
 import BookOverviewCards from '@/components/BookOverviewCards.vue';
 import BookFilter from '@/components/BookFilter.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
+import PageSurround from '@/components/PageSurround.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({

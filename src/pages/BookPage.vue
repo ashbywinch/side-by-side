@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { usePagination, paginated_items, setPage, page } from "@/pages/Pagination";
+import { useRoute, useRouter } from "vue-router";
 import { onMounted, Ref, ref, watchEffect } from "vue";
+
+import SimplePagination from '@/components/SimplePagination.vue';
+import PageSurround from "@/components/PageSurround.vue";
 
 const props = defineProps({
   lang: { type:String, required:true},
@@ -31,6 +36,24 @@ async function fetchCards() {
 }
 
 watchEffect(() => { fetchCards() });
+
+const perPage = 24; 
+const router = useRouter()
+const route = useRoute()
+
+usePagination(cards, perPage);
+setPage(Number(route.query.page ?? 1));
+
+function updatePageValue(newPage)
+{
+  setPage(newPage)
+  router.push({
+    name: route.name,
+    params: route.params,
+    query: {"page": newPage}
+  });
+}
+
 
 onMounted(() => {
     window.addEventListener("keydown", onEvent, true);
@@ -79,12 +102,16 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 <template>
   <PageSurround :error="error">
     <va-card class="page">
-      <div class="head"> 
+      <div v-if="page == 1" class="p1head"> 
         <h1 class="va-h1">{{ title }}</h1>
         <h3 class="va-h3">{{ author}}</h3>
       </div>
+      <div v-if="page != 1" class="pXhead row justify-space-between"> 
+        <div class="item">{{ title }}</div>
+        <div class="item">{{ author}}</div>
+      </div>
       <template
-        v-for="(card, index) in cards"
+        v-for="(card, index) in paginated_items"
         :key="card.index_in_file"
       >
         <div class="row">
@@ -103,12 +130,16 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
         </div>
       </template>
     </va-card>
+    <SimplePagination :page="page" :items="cards.length" :per-page="perPage" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
 
 <style scoped>
-.head {
-  margin-bottom: 2rem;
+.p1head {
+  margin: 2rem 0 3rem;
+}
+.pXhead {
+  margin-bottom: 2em;
 }
 .va-card__content {
   padding: 0.3rem;
