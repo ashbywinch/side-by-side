@@ -23,7 +23,6 @@ watch(shadowPage, () => emit('update-page-value', shadowPage.value))
     </nav>
 </template>
 
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
 nav {
   width:100%;
