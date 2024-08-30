@@ -1,19 +1,15 @@
-import { Ref, ref } from "vue";
 import { all_sizes } from "../components/sizes";
-
-const is_loading = ref(false);
-const items = ref([]);
-const error: Ref<string> = ref("");
+import {
+  error,
+  is_loading,
+  items,
+  useFetchJsonl,
+} from "@/components/FetchJsonl";
 
 async function useFetchIndexItems(lang: string) {
   try {
-    is_loading.value = true;
     const url = `/api/books/${lang}/index.jsonl`;
-    const response = await fetch(url);
-    const text = await response.text();
-    const lines = text.split("\n");
-    for (const line of lines)
-      if (line.length > 0) items.value.push(JSON.parse(line));
+    await useFetchJsonl(url);
     for (const book of items.value) {
       book.size = [...all_sizes]
         .filter(

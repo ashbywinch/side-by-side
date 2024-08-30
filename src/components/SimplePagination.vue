@@ -17,12 +17,12 @@ watch(shadowPage, () => emit('update-page-value', shadowPage.value))
         <va-pagination
         v-if="props.items > 0"
         v-model.number="shadowPage"
-        :pages="props.items / props.perPage"
+        :pages="Math.ceil(props.items / props.perPage)"
+        :visible-pages="1"
     ></va-pagination>
     </nav>
 </template>
 
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style scoped>
 nav {
   width:100%;

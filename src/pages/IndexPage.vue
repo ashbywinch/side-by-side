@@ -3,12 +3,13 @@ import { watchEffect } from 'vue';
 
 import { useFetchIndexItems, items, error } from "./FetchIndex"
 import { useFilter, setFilter, filter, filtered_items } from '@/pages/FilterIndex';
-import { usePagination, setPage, page, paginated_items } from '@/pages/Pagination'
+import { usePagination, setPage, page, paginated_items } from '@/components/Pagination'
 import { getPage, getFilter, reload } from './IndexPageRouting'
 
 import BookOverviewCards from '@/components/BookOverviewCards.vue';
 import BookFilter from '@/components/BookFilter.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
+import PageSurround from '@/components/PageSurround.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -23,7 +24,6 @@ usePagination(filtered_items, perPage)
 
 const route = useRoute();
 setFilter(getFilter(route));
-console.log(filter)
 setPage(getPage(route));
 
 const router = useRouter();
