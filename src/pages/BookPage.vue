@@ -5,7 +5,7 @@ import { watchEffect } from "vue";
 import { usePagination, paginated_items, setPage, page } from "@/components/Pagination";
 import { items, useFetchJsonl, error } from "@/components/FetchJsonl";
 
-import Book from "@/components/Book.vue"
+import Book from "@/components/PageOfBook.vue"
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from "@/components/PageSurround.vue";
 

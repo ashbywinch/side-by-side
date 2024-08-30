@@ -6,7 +6,7 @@ import { createApp } from "vue";
 import { flushPromises } from "@vue/test-utils";
 import { render, screen } from "@testing-library/vue";
 
-const app = createApp({});
+createApp({});
 
 export const handlers = [
   http.get("api/books/en/testauthor/testtitle.jsonl", () => {
