@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Header from '@/components/Book/Header.vue';
+import PageHeader from '@/components/Book/PageHeader.vue';
 import TextSnippet from '@/components/Book/TextSnippet.vue';
 import { onMounted, ref, Ref } from 'vue';
 
@@ -64,7 +64,7 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 </script>
 <template>
   <va-card ref="main" class="page">
-    <Header :title="title" :author="author" :is-title-page="page == 1"/>
+    <PageHeader :title="title" :author="author" :is-title-page="page == 1"/>
     <div class="text">
       <template
         v-for="(card, index) in cards"
