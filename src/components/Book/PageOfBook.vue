@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import PageHeader from '@/components/Book/PageHeader.vue';
+import TextSnippet from '@/components/Book/TextSnippet.vue';
 import { onMounted, ref, Ref } from 'vue';
 
 const props = defineProps({
   title: { type:String, required: true},
   author: { type:String, required: true},
   cards: { type:Array, required:true},
-  isTitlePage: {type:Boolean, default:false}
+  page: {type:Number, required:true},
+  numPages: {type:Number, required:true},
 })
 
 const translations_showing = ref(0) 
@@ -60,37 +63,23 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 
 </script>
 <template>
-    <va-card ref="main" class="page">
-        <div v-if="isTitlePage" class="p1head"> 
-            <h1 class="va-h1">{{ title }}</h1>
-            <h3 class="va-h3">{{ author}}</h3>
-        </div>
-        <div v-if="!isTitlePage" class="pXhead row justify-space-between"> 
-            <div class="item">{{ title }}</div>
-            <div class="item">{{ author}}</div>
-        </div>
-        <template
+  <va-card ref="main" class="page">
+    <PageHeader :title="title" :author="author" :is-title-page="page == 1"/>
+    <div class="text">
+      <template
         v-for="(card, index) in cards"
-        :key="card.index_in_file"
-        >
-        <div class="row">
-            <div class="flex flex-col md6">
-            <va-card class="front item">
-                <va-card-content>{{ card.text }}</va-card-content>
-            </va-card>
-            </div>
-            <div class="flex flex-col md6">
-            <va-card class="back item" @click="translations_showing=index + 1">
-                <va-card-content>
-                  <span :class="index >= translations_showing ? 'masked' : ''" aria-hidden="index >= translations_showing">
-                    {{ card.translation }}
-                  </span>
-                </va-card-content>
-            </va-card>
-            </div>
-        </div>
-        </template>
-    </va-card>
+        :key="card.index_in_file">
+          <TextSnippet 
+            :text="card.text" 
+            :translation="card.translation" 
+            :showTranslation="index < translations_showing" 
+            @translation-clicked="translations_showing = index + 1"/>
+      </template>
+    </div>
+    <div v-if="numPages > 1" class="row justify-center">
+      <div>{{page}} of {{numPages}}</div>
+    </div>
+  </va-card>
 </template>
 
 <style scoped>
@@ -99,6 +88,9 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 }
 .pXhead {
   margin-bottom: 2em;
+}
+.text {
+  margin: 1rem 0;
 }
 .va-card__content {
   padding: 0.3rem;
@@ -119,7 +111,7 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 .page {
   width: 40rem;
   padding: 2rem;
-  margin: 2em auto;
+  margin: 2rem auto;
 }
 .va-screen-xs .page {
   width: 100%;

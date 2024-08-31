@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BookOverviewCard from '@/components/BookOverviewCard.vue';
+import BookOverviewCard from "./BookOverviewCard.vue";
 
 defineProps({
   books: { type:Array<Map<string, string>>, required:true}

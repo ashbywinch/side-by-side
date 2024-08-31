@@ -2,12 +2,12 @@
 import { watchEffect } from 'vue';
 
 import { useFetchIndexItems, items, error } from "./FetchIndex"
-import { useFilter, setFilter, filter, filtered_items } from '@/pages/FilterIndex';
+import { useFilter, setFilter, filter, filtered_items } from './FilterIndex';
 import { usePagination, setPage, page, paginated_items } from '@/components/Pagination'
 import { getPage, getFilter, reload } from './IndexPageRouting'
 
-import BookOverviewCards from '@/components/BookOverviewCards.vue';
-import BookFilter from '@/components/BookFilter.vue';
+import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
+import BookFilter from '@/components/Index/BookFilter.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from '@/components/PageSurround.vue';
 import { useRoute, useRouter } from 'vue-router';

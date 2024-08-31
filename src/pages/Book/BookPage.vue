@@ -2,10 +2,10 @@
 import { useRoute, useRouter } from "vue-router";
 import { watchEffect } from "vue";
 
-import { usePagination, paginated_items, setPage, page } from "@/components/Pagination";
+import { usePagination, paginated_items, setPage, page, numPages } from "@/components/Pagination";
 import { items, useFetchJsonl, error } from "@/components/FetchJsonl";
 
-import PageOfBook from "@/components/PageOfBook.vue"
+import PageOfBook from "@/components/Book/PageOfBook.vue"
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from "@/components/PageSurround.vue";
 
@@ -36,7 +36,7 @@ function updatePageValue(newPage)
 </script>
 <template>
   <PageSurround :error="error">
-    <PageOfBook :cards="paginated_items" :title="title" :author="author" :is-title-page="page == 1"/>
+    <PageOfBook :cards="paginated_items" :title="title" :author="author" :page="page" :num-pages = "numPages"/>
     <SimplePagination :page="page" :items="items.length" :per-page="perPage" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
