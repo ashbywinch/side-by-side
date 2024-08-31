@@ -5,7 +5,7 @@ import { watchEffect } from "vue";
 import { usePagination, paginated_items, setPage, page } from "@/components/Pagination";
 import { items, useFetchJsonl, error } from "@/components/FetchJsonl";
 
-import Book from "@/components/PageOfBook.vue"
+import PageOfBook from "@/components/PageOfBook.vue"
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from "@/components/PageSurround.vue";
 
@@ -36,7 +36,7 @@ function updatePageValue(newPage)
 </script>
 <template>
   <PageSurround :error="error">
-    <Book :cards="paginated_items" :title="title" :author="author" :is-title-page="page == 1"/>
+    <PageOfBook :cards="paginated_items" :title="title" :author="author" :is-title-page="page == 1"/>
     <SimplePagination :page="page" :items="items.length" :per-page="perPage" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>

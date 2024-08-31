@@ -8,15 +8,16 @@ import { render, screen } from "@testing-library/vue";
 
 createApp({});
 
+const booksJsonl = `{"title":"Test title","author":"Test author 1","Word Count":"20","size":"small","level":"A1","lang":"en"}
+{"title": "Test title 2", "author": "Test author 2", "Word Count": "20", "size": "medium", "level": "B2", "lang": "en"}
+{"title": "Test title 3", "author": "Test author 3", "Word Count": "20", "size": "large", "level": "C2", "lang": "en"}`;
+
 export const handlers = [
   http.get("api/books/en/index.jsonl", () => {
-    return HttpResponse.json({
-      title: "Test title",
-      author: "Test author",
-      "Word Count": "20",
-      size: "small",
-      level: "B2",
-      lang: "en",
+    return new HttpResponse(booksJsonl, {
+      headers: {
+        "Content-Type": "application/jsonl",
+      },
     });
   }),
 ];
@@ -25,6 +26,10 @@ const server = setupServer(...handlers);
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 const mockRoutePush = vi.fn();
 vi.mock("vue-router", async () => {
@@ -51,6 +56,6 @@ it("should load index", async () => {
   });
   await flushPromises();
 
-  expect(await screen.queryByText("Test author")).toBeTruthy();
+  expect(await screen.queryByText("Test author 1")).toBeTruthy();
   expect(await screen.queryByText("Test title")).toBeTruthy();
 });

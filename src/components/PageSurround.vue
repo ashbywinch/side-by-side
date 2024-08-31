@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { usePreferredColorScheme } from '@vueuse/core'
+import { useColors } from "vuestic-ui";
+
 defineProps({
   error: { type:String, required:true},
 })
+
+const preferredColor = usePreferredColorScheme()
+
+const { applyPreset } = useColors();
+applyPreset(preferredColor.value)
+
 </script>
 
 <template>

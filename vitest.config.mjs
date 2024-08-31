@@ -10,7 +10,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    include: ["test/test.*.js"],
+    include: ["test/test.*.ts"],
     watch: false,
     coverage: {
       provider: "istanbul",

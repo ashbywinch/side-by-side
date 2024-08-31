@@ -8,7 +8,6 @@ const props = defineProps({
   books: { type:Array<Map<string, string>>, required:true}
 })
 
-
 const shadowAuthor = ref(props.filter.author.value);
 const shadowLevel = ref(props.filter.level.value);
 const shadowSize = ref(props.filter.size.value);
@@ -23,7 +22,7 @@ const sizes = computed(() =>
 const emit = defineEmits(["update-filter-value"])
 function doEmit()
 {
-  emit("update-filter-value", { "level": shadowLevel.value, "size":shadowSize.value, "value":shadowAuthor.value })
+  emit("update-filter-value", { "level": shadowLevel.value, "size":shadowSize.value, "author":shadowAuthor.value })
 }
 
 </script>

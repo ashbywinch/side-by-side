@@ -21,7 +21,7 @@ function scrollToRow(index: number) {
   if(row)
   {
     row.focus();
-    row.scrollIntoView({block:"nearest"});
+    row.scrollIntoView({block:"center"});
   }
 }
 function showMore() {
@@ -80,9 +80,11 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
             </va-card>
             </div>
             <div class="flex flex-col md6">
-            <va-card class="back item">
-                <va-card-content :class="index >= translations_showing ? 'masked' : ''">
-                {{ card.translation }}
+            <va-card class="back item" @click="translations_showing=index + 1">
+                <va-card-content>
+                  <span :class="index >= translations_showing ? 'masked' : ''" aria-hidden="index >= translations_showing">
+                    {{ card.translation }}
+                  </span>
                 </va-card-content>
             </va-card>
             </div>
@@ -102,14 +104,17 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
   padding: 0.3rem;
 }
 .masked {
-  filter: opacity(5%);
-  filter: blur(5px);
+  color: transparent;
+  background-color: var(--va-shadow);
 }
 .front,
 .back {
   height: fit-content;
   box-shadow: none;
   line-height: 1.3rem;
+}
+.back:hover {
+  cursor: pointer;
 }
 .page {
   width: 40rem;
