@@ -1,4 +1,4 @@
-import { all_sizes } from "../components/sizes";
+import { all_sizes } from "@/components/sizes";
 import {
   error,
   is_loading,

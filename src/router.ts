@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import BookPage from "./pages/BookPage.vue";
-import IndexPage from "./pages/IndexPage.vue";
+import BookPage from "./pages/Book/BookPage.vue";
+import IndexPage from "./pages/Index/IndexPage.vue";
 
 const routes = [
   { path: "/", redirect: "/ru/books" },

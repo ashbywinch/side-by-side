@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { all_sizes } from '@/components/sizes';
-import { FilterRefs } from '@/pages/Filter';
+import { FilterRefs } from '@/pages/Index/Filter';
 import { computed, ref } from 'vue';
 
 const props = defineProps({
