@@ -1,5 +1,5 @@
 import { expect, it, beforeAll, afterAll, afterEach, vi } from "vitest";
-import BookPage from "@/pages/BookPage.vue";
+import BookPage from "@/pages/Book/BookPage.vue";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { createApp } from "vue";

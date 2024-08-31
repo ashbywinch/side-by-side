@@ -1,5 +1,5 @@
 import { expect, it, beforeAll, afterAll, afterEach, vi } from "vitest";
-import IndexPage from "@/pages/IndexPage.vue";
+import IndexPage from "@/pages/Index/IndexPage.vue";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { createApp } from "vue";
