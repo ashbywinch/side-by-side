@@ -4,7 +4,7 @@ import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { createApp } from "vue";
 import { flushPromises } from "@vue/test-utils";
-import { fireEvent, render, screen, within } from "@testing-library/vue";
+import { render, screen } from "@testing-library/vue";
 
 createApp({});
 
