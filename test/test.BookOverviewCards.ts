@@ -35,6 +35,7 @@ const mockRoutePush = vi.fn();
 vi.mock("vue-router", async () => {
   return {
     RouterView: {},
+    RouterLink: {},
     useRouter: () => {
       return {
         push: mockRoutePush,
