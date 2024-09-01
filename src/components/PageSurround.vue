@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePreferredColorScheme } from '@vueuse/core'
+import { RouterLink } from 'vue-router';
 import { useColors } from "vuestic-ui";
 
 defineProps({
@@ -16,7 +17,16 @@ applyPreset(preferredColor.value)
 <template>
   <div>
     <va-navbar color="primary" class="mb-3">
-      <va-navbar-item class="logo">Public Domain Books: Side by Side translations</va-navbar-item>
+      <RouterLink :to="{name:'Index'}">
+        <va-navbar-item class="logo">
+          <va-icon
+            class="mr-2"
+            name="home"
+            size="3rem"
+          />
+          <span>Public Domain Books: Side by Side translations</span>
+        </va-navbar-item>
+      </RouterLink>
     </va-navbar>
     <va-alert 
     v-if="error"
@@ -37,11 +47,13 @@ applyPreset(preferredColor.value)
 .va-screen-xs .container {
   margin: 0;
 }
-header * {
+header span {
   font-size: 1.2rem !important;
 }
 header {
   box-shadow: var(--va-card-box-shadow, var(--va-block-box-shadow));
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 }
 .va-alert {
     margin-bottom:2rem;
