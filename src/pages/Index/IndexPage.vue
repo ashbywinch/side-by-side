@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue';
 
-import { useFetchIndexItems, items, error } from "./FetchIndex"
-import { useFilter, setFilter, filter, filtered_items } from './FilterIndex';
-import { usePagination, setPage, page, paginated_items } from '@/components/Pagination'
-import { getPage, getFilter, reload } from './IndexPageRouting'
+import { useFetchIndexItems } from "./FetchIndex"
+import { useFilter } from './FilterIndex';
+import { usePagination } from '@/components/Pagination'
+import { useIndexRouting } from './IndexPageRouting'
 
 import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
 import BookFilter from '@/components/Index/BookFilter.vue';
@@ -18,33 +18,37 @@ const props = defineProps({
 
 const perPage = 24; 
 
-watchEffect(() => { useFetchIndexItems(props.lang) });
-useFilter(items)
-usePagination(filtered_items, perPage)
+const fetchItems = useFetchIndexItems(props.lang);
+watchEffect(() => fetchItems.fetch());
+
+const filter = useFilter(fetchItems.items)
+const pagination = usePagination(filter.items, perPage)
 
 const route = useRoute();
-setFilter(getFilter(route));
-setPage(getPage(route));
+const indexRouting = useIndexRouting();
+
+filter.set(indexRouting.getFilter(route));
+pagination.set(indexRouting.getPage(route));
 
 const router = useRouter();
 function updatePageValue(newPage)
 {
-  setPage(newPage)
-  reload(router, route, filter, newPage)
+  pagination.set(newPage)
+  indexRouting.reload(router, route, filter, newPage)
 }
-function updateFilterValue(filter)
+function updateFilterValue(newFilter)
 {
-  setFilter(filter)
-  setPage(1)
-  reload(router, route, filter, 1)
+  filter.set(newFilter)
+  pagination.set(1)
+  indexRouting.reload(router, route, newFilter, 1)
 }
 
 </script>
 <template>
-  <PageSurround :error="error">
-    <BookFilter class="nav" :books=items :filter="filter" @update-filter-value="updateFilterValue"/>
-    <BookOverviewCards :books="paginated_items"/>
-    <SimplePagination :page="page" :items="filtered_items.length" :per-page="perPage" @update-page-value="updatePageValue"/>
+  <PageSurround :error="fetchItems.error.value">
+    <BookFilter class="nav" :books=fetchItems.items.value :filter="filter.filter" @update-filter-value="updateFilterValue"/>
+    <BookOverviewCards :books="pagination.items.value"/>
+    <SimplePagination :page="pagination.page.value" :items="filter.items.value.length" :per-page="perPage" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
 

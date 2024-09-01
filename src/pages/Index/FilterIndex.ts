@@ -1,16 +1,16 @@
 import { ref, watchEffect } from "vue";
 import { Filter, FilterRefs } from "./Filter";
 
-const filter: FilterRefs = new FilterRefs();
-
-const filtered_items = ref([]);
-
-export function setFilter(newFilter: Filter) {
-  filter.level.value = newFilter.level;
-  filter.size.value = newFilter.size;
-  filter.author.value = newFilter.author;
-}
 export function useFilter(index) {
+  const filter: FilterRefs = new FilterRefs();
+  const filtered_items = ref([]);
+
+  function setFilter(newFilter: Filter) {
+    filter.level.value = newFilter.level;
+    filter.size.value = newFilter.size;
+    filter.author.value = newFilter.author;
+  }
+
   function filterIndex() {
     filtered_items.value = index.value
       ? index.value.filter((book) =>
@@ -18,7 +18,7 @@ export function useFilter(index) {
         )
       : [];
   }
-  watchEffect(filterIndex);
-}
 
-export { filtered_items, filter };
+  watchEffect(filterIndex);
+  return { filter, set: setFilter, items: filtered_items };
+}

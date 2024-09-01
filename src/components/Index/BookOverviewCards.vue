@@ -4,7 +4,6 @@ import BookOverviewCard from "./BookOverviewCard.vue";
 defineProps({
   books: { type:Array<Map<string, string>>, required:true}
 })
-
 </script>
 <template>
   <div class="row flex">
@@ -15,7 +14,7 @@ defineProps({
         :author="book.author" 
         :level="book['Vocab Level']"
         :words="book['Word Count']"
-        :size="book.size" />
+        :size="book.size ?? ''" />
     </template>
   </div>
 </template>
