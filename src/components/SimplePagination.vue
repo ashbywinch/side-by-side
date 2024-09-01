@@ -4,7 +4,8 @@ import { ref, watch } from 'vue';
 const props = defineProps({
   items: { type:Number, required:true },
   perPage: { type: Number, default: 24 },
-  page: { type: Number, default: 1}
+  page: { type: Number, default: 1},
+  visiblePages: { type: Number, default: 5}
 })
 const shadowPage = ref(props.page)
 const emit = defineEmits(["update-page-value"])
@@ -18,7 +19,7 @@ watch(shadowPage, () => emit('update-page-value', shadowPage.value))
         v-if="props.items > 0"
         v-model.number="shadowPage"
         :pages="Math.ceil(props.items / props.perPage)"
-        :visible-pages="1"
+        :visible-pages="visiblePages"
     ></va-pagination>
     </nav>
 </template>
