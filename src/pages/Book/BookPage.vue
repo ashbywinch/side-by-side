@@ -38,6 +38,6 @@ function updatePageValue(newPage)
 <template>
   <PageSurround :error="fetchJsonL.error.value">
     <PageOfBook :cards="pagination.items.value" :title="title" :author="author" :page="pagination.page.value" :num-pages = "pagination.numPages.value"/>
-    <SimplePagination :page="pagination.page.value" :items="fetchJsonL.items.value.length" :per-page="perPage" visible-pages=1 @update-page-value="updatePageValue"/>
+    <SimplePagination :page="pagination.page.value" :items="fetchJsonL.items.value.length" :per-page="perPage" :visible-pages=1 @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
