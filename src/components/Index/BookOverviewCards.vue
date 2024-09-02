@@ -18,6 +18,7 @@ defineProps({
     </template>
   </div>
 </template>
+
 <style scoped>
 .row {
   gap: 1rem;

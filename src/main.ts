@@ -2,6 +2,8 @@ import { createApp } from "vue";
 import router from "./router.ts";
 import "./style.css";
 import App from "./App.vue";
+import { VueResponsiveness } from "vue-responsiveness";
+
 import {
   createVuesticEssential,
   VaButton,
@@ -22,6 +24,13 @@ import {
 import "vuestic-ui/css";
 
 const app = createApp(App);
+app.use(VueResponsiveness, {
+  xs: 0,
+  sm: 600,
+  md: 960,
+  lg: 1260,
+  xl: 1920,
+});
 app.use(
   createVuesticEssential({
     components: {

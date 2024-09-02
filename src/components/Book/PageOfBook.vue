@@ -19,19 +19,10 @@ onMounted(() => {
 
 const main: Ref<Element> = ref(null);
 
-function scrollToRow(index: number) {
-  const row = main.value.$el.querySelectorAll("div.row")[index];
-  if(row)
-  {
-    row.focus();
-    row.scrollIntoView({block:"center"});
-  }
-}
 function showMore() {
   var move = translations_showing.value < props.cards.length;
   if (move) {
     translations_showing.value = translations_showing.value + 1;
-    scrollToRow(translations_showing.value);
   }
   return move;
 }
@@ -39,7 +30,6 @@ function showLess() {
   var move = translations_showing.value > 0;
   if (move) {
     translations_showing.value = translations_showing.value - 1;
-    scrollToRow(translations_showing.value);
   }
   return move;
 }
@@ -49,11 +39,11 @@ function showNone() {
 //function showAll() {
 //  translations_showing.value = cards.value.length;
 //}
-function onEvent(event: { key: string; preventDefault: () => void }) {
+function onEvent(event: { key: string; ctrlKey: boolean; preventDefault: () => void }) {
   // if we've scrolled then prevent any further scrolling
-  if (event.key === "ArrowDown") {
+  if (event.ctrlKey && event.key === "ArrowDown") {
     if (showMore()) event.preventDefault();
-  } else if (event.key === "ArrowUp") {
+  } else if (event.ctrlKey && event.key === "ArrowUp") {
     if (showLess()) event.preventDefault();
   } else if (event.key === "Escape") {
     showNone();
@@ -83,14 +73,11 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
 </template>
 
 <style scoped>
-.p1head {
-  margin: 2rem 0 3rem;
-}
-.pXhead {
-  margin-bottom: 2em;
-}
 .text {
-  margin: 1rem 0;
+  margin: 3rem 0;
+}
+.screen-xs .text {
+  margin: 1em 0;
 }
 .va-card__content {
   padding: 0.3rem;
@@ -113,10 +100,10 @@ function onEvent(event: { key: string; preventDefault: () => void }) {
   padding: 2rem;
   margin: 2rem auto;
 }
-.va-screen-xs .page {
-  width: 100%;
-  margin: 0;
-  box-shadow: none;
+.screen-xs .page {
+    width: 100%;
+    margin: 0;
+    padding: 1rem;
+    box-shadow:none;
 }
-
 </style>

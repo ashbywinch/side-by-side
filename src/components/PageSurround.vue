@@ -15,7 +15,7 @@ applyPreset(preferredColor.value)
 </script>
 
 <template>
-  <div>
+  <div :class="($matches && $matches.xs.only) ? 'screen-xs' : ''">
     <va-navbar color="primary" class="mb-3">
       <RouterLink :to="{name:'Index'}">
         <va-navbar-item class="logo">
@@ -42,11 +42,12 @@ applyPreset(preferredColor.value)
 
 <style scoped>
 .container {
-  margin: 2rem 1rem 1rem 1rem;
+  margin: 1rem;
 }
-.va-screen-xs .container {
+.screen-xs .container {
   margin: 0;
 }
+
 header span {
   font-size: 1.2rem !important;
 }
@@ -54,8 +55,13 @@ header {
   box-shadow: var(--va-card-box-shadow, var(--va-block-box-shadow));
   padding-top: .5rem;
   padding-bottom: .5rem;
+  margin-bottom: 0 !important;
 }
+
 .va-alert {
     margin-bottom:2rem;
+}
+.screen-xs .va-alert {
+    margin-bottom:0;
 }
 </style>
