@@ -16,7 +16,7 @@ applyPreset(preferredColor.value)
 </script>
 
 <template>
-  <div :class="$matches.xs.only ? 'screen-xs' : ''">
+  <div :class="($matches && $matches.xs.only) ? 'screen-xs' : ''">
     <va-navbar color="primary" class="mb-3">
       <RouterLink :to="{name:'Index'}">
         <va-navbar-item class="logo">
