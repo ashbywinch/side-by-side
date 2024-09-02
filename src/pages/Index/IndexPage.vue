@@ -51,18 +51,3 @@ function updateFilterValue(newFilter)
     <SimplePagination :page="pagination.page.value" :items="filter.items.value.length" :per-page="perPage" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
-
-<style scoped>
-header {
-  margin-bottom: 2rem !important;
-}
-header * {
-  font-size: 1.2rem !important;
-}
-.nav {
-  margin-bottom: 1rem;
-}
-.container {
-  margin-left: 1rem
-}
-</style>

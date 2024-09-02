@@ -38,4 +38,7 @@ function doEmit()
 .row {
   gap: 1rem;
 }
+nav {
+  margin: 1rem 0;
+}
 </style>

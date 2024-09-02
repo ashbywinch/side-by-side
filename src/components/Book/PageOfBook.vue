@@ -101,14 +101,9 @@ function onEvent(event: { key: string; ctrlKey: boolean; preventDefault: () => v
   margin: 2rem auto;
 }
 .screen-xs .page {
-    margin: 0;
-    padding: 1rem;
-}
-@include media-breakpoint-only(xs) { 
-  .page {
     width: 100%;
     margin: 0;
-    box-shadow: none;
-  }
+    padding: 1rem;
+    box-shadow:none;
 }
 </style>

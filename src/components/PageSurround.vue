@@ -43,10 +43,10 @@ applyPreset(preferredColor.value)
 
 <style scoped>
 .container {
-  margin: 2rem 1rem 1rem 1rem;
+  margin: 1rem;
 }
 .screen-xs .container {
-    margin: 0;
+  margin: 0;
 }
 
 header span {
@@ -56,11 +56,13 @@ header {
   box-shadow: var(--va-card-box-shadow, var(--va-block-box-shadow));
   padding-top: .5rem;
   padding-bottom: .5rem;
+  margin-bottom: 0 !important;
 }
-.screen-xs header {
-    margin: 0 !important;
-}
+
 .va-alert {
     margin-bottom:2rem;
+}
+.screen-xs .va-alert {
+    margin-bottom:0;
 }
 </style>
