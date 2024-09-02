@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from '@vue/reactivity';
 import { usePreferredColorScheme } from '@vueuse/core'
 import { RouterLink } from 'vue-router';
 import { useColors } from "vuestic-ui";
