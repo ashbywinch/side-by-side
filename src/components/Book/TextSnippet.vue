@@ -10,12 +10,12 @@ const emit = defineEmits(["translation-clicked"])
 </script>
 <template>
   <div class="row">
-    <div class="flex flex-col md6">
+    <div class="flex sm6">
       <va-card class="original item">
           <va-card-content>{{ text }}</va-card-content>
       </va-card>
     </div>
-    <div class="flex flex-col md6">
+    <div class="flex sm6">
       <va-card class="translation item" @click="emit('translation-clicked')">
         <va-card-content>
           <span :class="showTranslation ? '' : 'masked'" aria-hidden="!showTranslation">
@@ -28,6 +28,9 @@ const emit = defineEmits(["translation-clicked"])
 </template>
 
 <style scoped>
+.screen-xs .row {
+  flex-direction: column;
+}
 .va-card__content {
   padding: 0.3rem;
 }

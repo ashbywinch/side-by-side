@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from '@vue/reactivity';
 import { usePreferredColorScheme } from '@vueuse/core'
 import { RouterLink } from 'vue-router';
 import { useColors } from "vuestic-ui";
@@ -15,7 +16,7 @@ applyPreset(preferredColor.value)
 </script>
 
 <template>
-  <div>
+  <div :class="$matches.xs.only ? 'screen-xs' : ''">
     <va-navbar color="primary" class="mb-3">
       <RouterLink :to="{name:'Index'}">
         <va-navbar-item class="logo">
@@ -44,9 +45,10 @@ applyPreset(preferredColor.value)
 .container {
   margin: 2rem 1rem 1rem 1rem;
 }
-.va-screen-xs .container {
-  margin: 0;
+.screen-xs .container {
+    margin: 0;
 }
+
 header span {
   font-size: 1.2rem !important;
 }
@@ -54,6 +56,9 @@ header {
   box-shadow: var(--va-card-box-shadow, var(--va-block-box-shadow));
   padding-top: .5rem;
   padding-bottom: .5rem;
+}
+.screen-xs header {
+    margin: 0 !important;
 }
 .va-alert {
     margin-bottom:2rem;

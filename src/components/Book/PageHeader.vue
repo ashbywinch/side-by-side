@@ -20,9 +20,18 @@ defineProps({
 
 <style scoped>
 .p1head {
-  margin: 2rem 0 2rem;
+  margin: 1rem 0;
+}
+.screen-xs .p1head {
+  margin: 0;
 }
 .pXhead {
-  margin-bottom: 2em;
+  margin-bottom: 2rem;
+}
+.screen-xs .pXhead {
+  margin-bottom: 0rem;
+}
+.screen-xs .va-h1 {
+  margin: 0rem;
 }
 </style>
