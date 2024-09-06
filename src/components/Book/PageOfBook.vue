@@ -75,6 +75,10 @@ function onEvent(event: { key: string; ctrlKey: boolean; preventDefault: () => v
 <style scoped>
 .text {
   margin: 3rem 0;
+  white-space: pre-wrap;
+}
+.text * {
+  line-height: 1.5em;
 }
 .screen-xs .text {
   margin: 1em 0;
@@ -96,7 +100,7 @@ function onEvent(event: { key: string; ctrlKey: boolean; preventDefault: () => v
   cursor: pointer;
 }
 .page {
-  width: 40rem;
+  width: 50rem;
   padding: 2rem;
   margin: 2rem auto;
 }
