@@ -34,7 +34,7 @@ const router = useRouter();
 function updatePageValue(newPage)
 {
   pagination.set(newPage)
-  indexRouting.reload(router, route, filter, newPage)
+  indexRouting.reload(router, route, filter.filter, newPage)
 }
 function updateFilterValue(newFilter)
 {
