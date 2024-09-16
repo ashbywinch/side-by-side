@@ -24,7 +24,7 @@
     "vue": "^3.5.3",
     "vue-multiselect": "^3.0.0",
     "vue-responsiveness": "^0.2.0",
-    "vue-router": "^4.4.3",
+    "vue-router": "^4.4.5",
     "vuestic-ui": "^1.10.0"
   },
   "devDependencies": {
