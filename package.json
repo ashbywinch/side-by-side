@@ -41,7 +41,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-vue": "^9.30.0",
     "globals": "^15.11.0",
-    "happy-dom": "^15.7.4",
+    "happy-dom": "^15.11.0",
     "msw": "^2.6.0",
     "npm-check-updates": "^17.1.10",
     "prettier": "3.3.3",
