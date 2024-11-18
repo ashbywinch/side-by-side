@@ -19,7 +19,7 @@
     "@popperjs/core": "^2.11.8",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@vitejs/plugin-vue": "^5.1.2",
-    "pinia": "^2.2.2",
+    "pinia": "^2.2.6",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.5.12",
     "vue-multiselect": "^3.1.0",
