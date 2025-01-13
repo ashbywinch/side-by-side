@@ -40,7 +40,7 @@
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-vue": "^9.32.0",
-    "globals": "^15.13.0",
+    "globals": "^15.14.0",
     "happy-dom": "^15.11.7",
     "msw": "^2.6.0",
     "npm-check-updates": "^17.1.10",
