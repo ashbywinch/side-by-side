@@ -1,0 +1,30 @@
+[openai]
+custom_llm_provider = "openai"
+api_base = "https://opencode.ai/zen/go/v1"
+
+[config]
+model = "openai/deepseek-v4-flash"
+custom_model_max_tokens = 384000
+max_model_tokens = 384000
+fallback_models = []
+repo_context_from_default_branch = false
+
+# The translation data (book JSONL files and the generated index) is not
+# human-authored code: exclude it from the review's diff analysis so reviews
+# stay focused on code changes and the diff token budget is not consumed by
+# thousands of data lines.
+[ignore]
+glob = [
+    "public/api/**",
+    "src/assets/index.json",
+]
+
+[pr_reviewer]
+require_tests_review = true
+require_security_review = true
+require_estimate_effort_to_review = true
+num_max_findings = 5
+
+[github_action_config]
+handle_push_trigger = true
+push_commands = ["/review", "/improve"]
