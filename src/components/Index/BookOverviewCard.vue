@@ -7,6 +7,7 @@ defineProps({
   level: { type:String, required:true},
   size: { type:String, required:true},
   words: { type:Number, required:true},
+  translated: { type:Boolean, default:false},
 })
 
 const rainbow = {
@@ -45,6 +46,7 @@ const sizeColor = {
       {{ author }}
       <br/><br/><br/>
       <div class="row va-spacing-x-2">
+        <va-badge v-if="translated" text="Translated" style="--va-badge-text-wrapper-border-radius: 1.5rem" color="success"/>
         <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColor[level]"/>
         <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
       </div>
