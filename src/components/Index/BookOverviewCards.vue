@@ -14,7 +14,8 @@ defineProps({
         :author="book.author" 
         :level="book['Vocab Level']"
         :words="book['Word Count']"
-        :size="book.size ?? ''" />
+        :size="book.size ?? ''"
+        :translated="book.translated === true || book.translated === 'true'" />
     </template>
   </div>
 </template>
