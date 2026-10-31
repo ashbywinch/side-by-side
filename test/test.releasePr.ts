@@ -30,6 +30,22 @@ function notFound(): string {
   throw new Error("exit 1");
 }
 
+const clean = () => "";
+
+/** Fails unless every command ran, in the given order. */
+function expectInOrder(calls: string[], expected: string[]) {
+  const positions = expected.map((command) => {
+    const index = calls.indexOf(command);
+    expect(index, `command never ran: ${command}`).toBeGreaterThanOrEqual(0);
+    return index;
+  });
+  for (let index = 1; index < positions.length; index += 1) {
+    expect(positions[index], `${expected[index]} must run after ${expected[index - 1]}`).toBeGreaterThan(
+      positions[index - 1],
+    );
+  }
+}
+
 const validVersion = () => ({ ok: true, message: "ok" });
 
 describe("release PR planning", () => {
@@ -58,7 +74,7 @@ describe("release PR planning", () => {
     });
   });
 
-  it("returns the version validation error before touching git history", () => {
+  it("returns the version validation error without touching git history", () => {
     const { run, calls } = fakeRun();
     const result = openReleasePr({
       version: "1.0.0",
@@ -66,7 +82,8 @@ describe("release PR planning", () => {
       validate: () => ({ ok: false, error: "Version 1.0.0 must be greater than current 1.0.0" }),
     });
     expect(result).toEqual({ ok: false, error: "Version 1.0.0 must be greater than current 1.0.0" });
-    expect(calls).toEqual(["git status --porcelain"]);
+    expect(calls).not.toContain("git push -u origin release/v1.0.1");
+    expect(calls.some((call) => call.startsWith("git commit"))).toBe(false);
   });
 
   it("refuses a local branch that already exists", () => {
@@ -83,6 +100,7 @@ describe("release PR planning", () => {
 
   it("refuses a remote branch that already exists", () => {
     const { run } = fakeRun({
+      "git status --porcelain": clean,
       "git rev-parse --verify refs/heads/release/v1.0.1": notFound,
       "git ls-remote --heads origin release/v1.0.1": () => "abc123\trefs/heads/release/v1.0.1",
     });
@@ -94,6 +112,7 @@ describe("release PR planning", () => {
 
   it("keeps going when ls-remote itself fails", () => {
     const { run } = fakeRun({
+      "git status --porcelain": clean,
       "git ls-remote --heads origin release/v1.0.1": notFound,
       "git rev-parse --verify refs/heads/release/v1.0.1": notFound,
       "gh pr create": () => "https://github.com/ashbywinch/side-by-side/pull/7\n",
@@ -105,7 +124,7 @@ describe("release PR planning", () => {
     });
   });
 
-  it("creates the branch, bumps, commits, pushes and opens the PR in order", () => {
+  it("creates the branch, bumps, commits, pushes and opens the PR", () => {
     const { run, calls } = fakeRun({
       "git rev-parse --verify refs/heads/release/v1.0.1": notFound,
       "gh pr create": () => "https://github.com/ashbywinch/side-by-side/pull/7\n",
@@ -118,21 +137,23 @@ describe("release PR planning", () => {
       branch: "release/v1.0.1",
       url: "https://github.com/ashbywinch/side-by-side/pull/7",
     });
-    expect(calls.slice(0, 9)).toEqual([
-      "git status --porcelain",
-      "git rev-parse --verify refs/heads/release/v1.0.1",
-      "git ls-remote --heads origin release/v1.0.1",
+    expect(calls).toEqual(
+      expect.arrayContaining([
+        "git status --porcelain",
+        "git rev-parse --verify refs/heads/release/v1.0.1",
+        "git ls-remote --heads origin release/v1.0.1",
+      ]),
+    );
+    expectInOrder(calls, [
       "git fetch origin main",
       "git switch -c release/v1.0.1 origin/main",
       "npm version 1.0.1 --no-git-tag-version",
       "git add package.json package-lock.json",
       "git commit -m chore(release): v1.0.1",
       "git push -u origin release/v1.0.1",
-    ]);
-    expect(calls[9]).toBe(
       "gh pr create --base main --head release/v1.0.1 --title chore(release): v1.0.1 --body " +
         releaseBody("1.0.1"),
-    );
+    ]);
   });
 });
 

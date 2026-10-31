@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -25,7 +25,11 @@ function importsIn(source: string): string[] {
 }
 
 describe("layer scanner", () => {
-  const fixture = mkdtempSync(path.join(tmpdir(), "layer-scan-"));
+  let fixture: string;
+
+  beforeAll(() => {
+    fixture = mkdtempSync(path.join(tmpdir(), "layer-scan-"));
+  });
 
   afterAll(() => {
     rmSync(fixture, { recursive: true, force: true });
