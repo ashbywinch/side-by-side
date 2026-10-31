@@ -7,24 +7,29 @@ on:
 jobs:
   pr-review:
     runs-on: ubuntu-latest
+    # Dependabot bumps are mechanical and already covered by the build job.
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
       pull-requests: write
       issues: write
     steps:
-      - uses: actions/checkout@v4
-
+      # No actions/checkout: the action fetches the diff and its config via the
+      # GitHub API. A checkout of the PR head would let a branch ship a
+      # pyproject.toml overriding [openai] api_base and receive the gateway
+      # token. The config ref is pinned to main for the same reason.
       - uses: the-pr-agent/pr-agent@b249e568e0c0fb6c674ace55fe95d02f62f8f3b3
         id: pr-agent
         env:
-          OPENAI_KEY: ${{ secrets.OPENCODE_GO_BOOKS_API_KEY }}
-          OPENAI_BASE_URL: https://opencode.ai/zen/go/v1
+          # Cloudflare AI Gateway, same route as houses/omp-config:
+          # dynamic/fallback2 (OpenCode primary -> DeepSeek fallback).
+          OPENAI_KEY: ${{ secrets.CLOUDFLARE_AIGATEWAY_TOKEN }}
+          OPENAI_BASE_URL: https://gateway.ai.cloudflare.com/v1/e21a5be58ac1e8f7d5619539feb2dc3d/default/compat
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_AGENT_CONFIG_BRANCH: ${{ github.head_ref }}
-          # OpenCode Go requires a stable session id. PR-Agent ignores
-          # [litellm].extra_headers from repo settings, so supply it through
-          # Dynaconf's highest-precedence env layer instead.
-          LITELLM__EXTRA_HEADERS: '{"x-opencode-session": "pr-agent-ci"}'
+          PR_AGENT_CONFIG_BRANCH: pr-agent-config
+          # The gateway's head-only keys; repo settings ignore extra_headers,
+          # so supply them through Dynaconf's highest-precedence env layer.
+          LITELLM__EXTRA_HEADERS: '{"cf-aig-request-timeout": "1800000", "cf-aig-max-attempts": "0", "cf-aig-backoff": "exponential", "cf-aig-metadata": "{\"source\":\"review\",\"repo\":\"side-by-side\"}"}'
 
       - name: Check review succeeded
         env:
