@@ -59,11 +59,23 @@ describe("BookFilter", () => {
     const wrapper = mountFilter([book("C2"), book("")]);
     const select = wrapper.findComponent(VaSelect);
 
-    select.vm.$emit("update:modelValue", "unrated");
+    await select.setValue("unrated");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
       level: "unrated",
+    });
+  });
+
+  it("emits no filter when the level is cleared", async () => {
+    const wrapper = mountFilter([book("C2"), book("")]);
+    const select = wrapper.findComponent(VaSelect);
+
+    await select.setValue(null);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
+      level: "",
     });
   });
 });

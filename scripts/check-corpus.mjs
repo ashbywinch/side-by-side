@@ -2,6 +2,8 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+// The crawler rates texts from 250 words up; shorter texts are unrated.
+// Legacy corpus rows carried integer levels (0-5) from the pre-CEFR crawler.
 const CEFR_LEVELS = new Set(["A1", "A2", "B1", "B2", "C1", "C2"]);
 const MIN_ANALYSED_WORDS = 250;
 
@@ -156,6 +158,7 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
   const raw = await readFile(file.path, "utf8");
   const lines = raw.split("\n");
   let segments = 0;
+  let readableSegments = 0;
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     const line = lines[lineIndex];
@@ -187,6 +190,8 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
       continue;
     }
 
+    readableSegments += 1;
+
     if (translation.trim() === "") {
       const key = `${lang}/${file.author}/${file.title}:${lineIndex + 1}`;
       if (!allowlist.has(key)) {
@@ -197,9 +202,9 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
     }
   }
 
-  if (segments === 0) {
+  if (readableSegments === 0) {
     errors.push(
-      `${file.path}: book has no source segments (remove it from the corpus)`,
+      `${file.path}: book has no readable source segments (remove it from the corpus)`,
     );
   }
 

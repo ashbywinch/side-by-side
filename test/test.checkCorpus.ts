@@ -234,6 +234,21 @@ describe("checkCorpus", () => {
 
     const result = await checkCorpus({ root });
 
-    expect(result.errors.join("\n")).toMatch(/no source segments/i);
+    expect(result.errors.join("\n")).toMatch(/no readable source segments/i);
+  });
+
+  it("fails when every source segment is blank", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Blank", "Author", true, {
+        "Word Count": 0,
+        "Vocab Level": "",
+      })}\n`,
+      "ru/Author/Blank.jsonl": `${segment("\n", "translated")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors.join("\n")).toMatch(/blank source/i);
+    expect(result.errors.join("\n")).toMatch(/no readable source segments/i);
   });
 });

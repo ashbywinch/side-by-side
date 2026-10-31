@@ -99,7 +99,7 @@ describe("level filtering", () => {
     const filter = refs("unrated");
 
     expect(filter.matches("", "small", "Author")).toBe(true);
-    expect(filter.matches(2 as unknown as string, "small", "Author")).toBe(true);
+    expect(filter.matches(2, "small", "Author")).toBe(true);
     expect(filter.matches("B3", "small", "Author")).toBe(true);
     expect(filter.matches("C1", "small", "Author")).toBe(false);
   });
