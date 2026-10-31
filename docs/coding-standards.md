@@ -356,4 +356,4 @@ without a check is a wish:
 - **Husky hooks**: pre-commit runs `make check` plus `gitleaks git --staged --redact`; pre-push runs `make check`. Tests stay in `make test` and CI. Hooks must finish in seconds.
 - **Vue components** are thin: data fetching/composition lives in `use*` composables or page controllers; components receive props and emit events. `src/pages` may import `src/components`; `src/components` must not import `src/pages`.
 - **Generated corpus output** (`public/api/`) is owned by `scripts/build-corpus.mjs`; never hand-edit it. Source of truth is `corpus/books/`.
-- **Release**: semver tags and production promotion go through `.github/workflows/release.yml` and `ci.yml`; never run `wrangler deploy` ad hoc and never create release tags by hand. See `docs/releasing.md`.
+- **Release**: `make release VERSION=x.y.z` opens a version-bump PR; merging it runs the gated `ci.yml` promotion. Never run `wrangler deploy` ad hoc, never merge the release PR yourself, and never create release tags by hand. See `docs/releasing.md`.

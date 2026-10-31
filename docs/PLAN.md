@@ -18,7 +18,7 @@ app passes its quality gates.
 
 - **Inputs**: the Phase 0 corpus, Cloudflare account and zone, GitHub repo.
 - **Outputs**: generated chunk corpus, `sbs.blueumbrella.net`, CI gates,
-  green-version approval and promotion, smoke tests, semver release workflow.
+  green-version approval and promotion, smoke tests, reviewed semver release PR.
 - **Operations**: build/stage green, approve production, promote, rollback,
   release a version.
 - **Quality gate**: first page ≤60 KB gzipped for the largest book; page turns
@@ -65,6 +65,7 @@ app passes its quality gates.
 
 ## Release operation (applies to every phase)
 
-Input: a semver version supplied for the release. Output: a promoted version,
-`production` tag and `v<version>` tag. Quality gate: green smoke, required
-production approval, production smoke, automatic rollback on failure.
+Input: a semver version supplied for the release. Output: a reviewed release
+PR, a promoted version, `production` tag and `v<version>` tag. Quality gate:
+protected-main PR checks, green smoke, required production approval,
+production smoke, automatic rollback on failure.

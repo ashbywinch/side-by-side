@@ -73,7 +73,8 @@ import `src/`. `test/test.architecture.ts` enforces these boundaries.
   prebuilt; a Worker script is added only for accounts/sync.
 - **Every card has source text**; a blank card is a data defect and fails
   `check-corpus` and the builder (PRD user requirement: readable passages).
-- **Semver releases are explicit**: `release.yml` takes a version; CI tags
+- **Semver releases are explicit and reviewed**: `make release VERSION=x.y.z`
+  opens a version-bump PR; merging it triggers the gated pipeline. CI tags
   `v<version>` once and moves `production` after a successful smoke
   (PRD longevity/rollback).
 - **Green before blue**: production traffic changes only after the candidate

@@ -15,11 +15,15 @@ live in the docs this tree links to.
 ## Releasing — the short version
 
 1. The user supplies the semver version. **Never guess it.**
-2. `make release VERSION=x.y.z` → dispatches the release workflow.
-3. Wait for **Smoke test green** in the main CI run. Do not switch production.
-4. Ask the user to approve the `production` deployment. **Never approve it
+2. `make release VERSION=x.y.z` → creates the version-bump branch and opens a
+   release PR.
+3. Ask the user to review and merge the release PR. **Never merge it
+   yourself**; `main` is protected.
+4. After merge, wait for **Smoke test green** in the main CI run. Do not switch
+   production.
+5. Ask the user to approve the `production` deployment. **Never approve it
    yourself.**
-5. After approval, verify `/version.json`, `production`, and `v<version>`.
+6. After approval, verify `/version.json`, `production`, and `v<version>`.
 
 Full runbook: `docs/releasing.md`. Hosting details: `docs/deployment.md`.
 
@@ -69,7 +73,7 @@ Read the relevant doc before changing behavior.
 
 ## Git and production rules
 
-- Never commit directly to `main`; use a branch and a PR.
+- Never commit directly to `main`; `main` is protected and requires a PR with an approving review and the CI check.
 - Never run `wrangler deploy`; production changes only through the release
   workflow.
 - Never create or move `v*`/`production` tags by hand; CI owns them after a
