@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const SEMVER = /^(\d+)\.(\d+)\.(\d+)$/;
@@ -39,26 +40,48 @@ export function validateReleaseVersion({ version, current, tags = [] }) {
   return null;
 }
 
-function main() {
-  const version = process.argv[2];
-  const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+export function runCli({ version, cwd = process.cwd() }) {
+  let pkg;
+  try {
+    pkg = JSON.parse(readFileSync(path.join(cwd, "package.json"), "utf8"));
+  } catch (error) {
+    return {
+      ok: false,
+      error: `Could not read package.json: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    };
+  }
+
   let tags = [];
   try {
-    tags = execFileSync("git", ["tag", "-l", "v*"], { encoding: "utf8" })
+    tags = execFileSync("git", ["tag", "-l", "v*"], { cwd, encoding: "utf8" })
       .split("\n")
       .filter(Boolean);
   } catch {
     // A shallow checkout without tags still lets the workflow validate the
     // version shape and monotonicity; the tag check is best effort.
   }
+
   const error = validateReleaseVersion({ version, current: pkg.version, tags });
-  if (error) {
-    console.error(`::error::${error}`);
-    process.exit(1);
-  }
-  console.log(`release version ${version} is valid (current ${pkg.version})`);
+  if (error) return { ok: false, error };
+  return {
+    ok: true,
+    message: `release version ${version} is valid (current ${pkg.version})`,
+  };
 }
 
+/* istanbul ignore next -- CLI entrypoint; covered by spawn tests, not in-process coverage */
+function main() {
+  const result = runCli({ version: process.argv[2] });
+  if (!result.ok) {
+    console.error(`::error::${result.error}`);
+    process.exit(1);
+  }
+  console.log(result.message);
+}
+
+/* istanbul ignore next -- CLI entrypoint */
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }
