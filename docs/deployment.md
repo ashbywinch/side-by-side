@@ -40,67 +40,21 @@ switching traffic; `wrangler versions deploy` promotes it atomically.
    `wrangler versions upload` and `wrangler versions deploy`. Do not run
    `wrangler deploy` ad hoc.
 
-## The normal release flow
+## Release flow
 
-Every push to `main` runs two jobs:
+Every push to `main` builds and stages a green Worker version, smoke-tests it,
+then waits for the required `production` approval. Approval promotes that exact
+version atomically; production smoke runs after the switch and rolls back
+automatically on failure. PRs get a preview and smoke without an approval gate.
 
-1. **Verify, build and stage** — lint, typecheck, coverage, `check-corpus`,
-   build, then `wrangler versions upload --preview-alias green-<run-id>`. This
-   creates a **green** Worker version without switching production traffic.
-   The green version gets `scripts/smoke.mjs` against its preview URL. The
-   version ID and preview URL are written to the job summary.
-2. **Promote approved version** — gated by the `production` GitHub
-   Environment. The required reviewer (`ashbywinch`) must approve; the
-   environment is restricted to `main` and admins cannot bypass it. On
-   approval, CI runs
-   `wrangler versions deploy <version-id>@100% --name side-by-side --yes`,
-   smoke-tests production, and automatically rolls back with
-   `wrangler rollback` if that smoke fails.
-
-Production stays on the previous version until approval; the traffic switch is
-atomic at the Worker-version level. PRs run the same build and upload a preview
-version (`--preview-alias pr-<n>`), smoke-test it, and comment its URL. Fork PRs
-skip previews because secrets are unavailable to them.
-
-No `wrangler deploy` runs in the release path; no ad-hoc production command is
-a deployment. `/version.json` always exposes the exact deployed commit.
-
-After a successful production smoke, CI:
-
-- moves the annotated **`production`** tag to the deployed commit, so
-  `git rev-parse production` is always the live SHA;
-- creates **`v<package.version>`** once, if that tag does not already exist.
-  `v*` tags are immutable release markers and are never moved.
-
-## Releasing a semver version
-
-Do not create semver tags by hand. Run the Release workflow with the version
-supplied for the release:
-
-```sh
-gh workflow run release.yml --repo ashbywinch/side-by-side -f version=1.1.0
-```
-
-The workflow:
-
-1. validates that the version is strict `x.y.z`, greater than the version in
-   `package.json`, and not already tagged;
-2. bumps `package.json` and `package-lock.json`, commits
-   `chore(release): v<version>`, and pushes the bump to `main`;
-3. dispatches the gated `ci.yml` pipeline.
-
-CI then stages the green version, waits for the `production` approval, promotes
-it, smoke-tests production, and tags it. The version supplied here is the
-version that appears in `/version.json` and in the semver tag.
-
-The Release workflow's version-bump commit is a direct push to `main`; the
-production traffic switch remains gated. If `main` is protected later, use a
-release PR or a token allowed to push the bump.
+The step-by-step agent runbook, semver command, tag policy and failure handling
+are in [`releasing.md`](releasing.md). No `wrangler deploy` runs in the release
+path.
 
 ## Smoke test
 
 ```sh
-npm run smoke -- --base https://sbs.blueumbrella.net --sha "$(git rev-parse HEAD)"
+make smoke ARGS="--base https://sbs.blueumbrella.net --sha $(git rev-parse HEAD)"
 ```
 
 It verifies the app shell, the `/ru/books` route, a Cyrillic book deep link,
@@ -123,7 +77,7 @@ Then re-run the smoke test against the rolled-back SHA:
 
 ```sh
 SHA=$(curl -s https://sbs.blueumbrella.net/version.json | jq -r .sha)
-npm run smoke -- --base https://sbs.blueumbrella.net --sha "$SHA"
+make smoke ARGS="--base https://sbs.blueumbrella.net --sha $SHA"
 ```
 
 To restore an older commit, open a revert PR and let the release process run,
@@ -138,9 +92,9 @@ runbook: [`translation-repair.md`](translation-repair.md).
 
 - Add or edit a book in `corpus/books/<lang>/<author>/<title>.jsonl`, and add
   or update its line in `corpus/books/<lang>/index.jsonl`.
-- `npm run data` regenerates `public/api` and removes stale chunks. A warm run
+- `make data` regenerates `public/api` and removes stale chunks. A warm run
   is skipped using a stamp of source paths, sizes and mtimes.
-- `npm run check-corpus` fails on missing files, orphan files, duplicate index
+- `make check-corpus` fails on missing files, orphan files, duplicate index
   entries, non-translated index entries, malformed JSON, real source text
   without a translation, and **any blank source card**. Every card must have
   source text; a translation-only or fully blank card is a data defect and

@@ -1,0 +1,8 @@
+# Generated and vendored artifacts. One formatter per artifact: generated
+# corpus output is owned by scripts/build-corpus.mjs, not Prettier.
+corpus/books/
+public/api/
+dist/
+coverage/
+node_modules/
+package-lock.json

@@ -1,15 +1,21 @@
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
+# Dependabot — weekly for npm and github-actions.
+#
+# Patch/minor and major updates are grouped per ecosystem. Patch/minor may
+# auto-merge on green CI; majors stay human-reviewed. github-actions bumps are
+# never grouped or auto-merged: action refs are SHA-pinned and need a human to
+# update the pin.
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
-
+    groups:
+      minor-patch:
+        update-types: ["minor", "patch"]
+      major:
+        update-types: ["major"]
   - package-ecosystem: "github-actions"
-    # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.)
     directory: "/"
     schedule:
       interval: "weekly"

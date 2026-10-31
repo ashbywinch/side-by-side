@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# Fast checks only: lint, typecheck, staged secrets scan.
+make check
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "gitleaks is required for the pre-commit secrets scan. Install it (brew install gitleaks)." >&2
+  exit 1
+fi
+gitleaks git --staged --redact

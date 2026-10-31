@@ -1,5 +1,5 @@
 import { ref, watchEffect, type Ref } from "vue";
-import { Filter, FilterRefs } from "./Filter";
+import { Filter, FilterRefs } from "@/components/Index/Filter";
 import type { BookIndexEntry } from "@/types/corpus";
 
 export function useFilter(index: Ref<BookIndexEntry[]>) {

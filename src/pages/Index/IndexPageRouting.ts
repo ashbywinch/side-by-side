@@ -1,4 +1,4 @@
-import { Filter } from "./Filter";
+import { Filter } from "@/components/Index/Filter";
 import { toValue } from "vue";
 import type { RouteLocationNormalized, Router } from "vue-router";
 

@@ -3,7 +3,7 @@ import { watch, watchEffect } from 'vue';
 
 import { useFetchIndexItems } from "./FetchIndex"
 import { useFilter } from './FilterIndex';
-import { Filter } from './Filter';
+import { Filter } from '@/components/Index/Filter';
 import { usePagination } from '@/components/Pagination'
 import { useIndexRouting } from './IndexPageRouting'
 

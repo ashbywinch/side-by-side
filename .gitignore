@@ -1,34 +1,44 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# .gitignore — the house set, curated.
+#
+# Never ignore lockfiles; they are committed for reproducibility.
+# Test fixtures are committed; only recreatable build output is ignored.
 
-node_modules
-dist
-dist-ssr
-*.local
+# env/secrets
+.env
+.env.local
+*.keystore
 
-# Editor directories and files
+# deps and build output
+node_modules/
+dist/
+dist-ssr/
+public/api/
+
+# caches and coverage
+coverage/
+coverage.xml
+*.tsbuildinfo
+vite.config.d.mts
+
+# tooling / agent state
+.wrangler/
+.opencode/
+.sisyphus/
+.code-review-graph/
+.logs/
+.tools/
+
+# IDE/OS
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+*.log
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-coverage
-
-# Generated corpus output (source of truth lives in corpus/)
-public/api/
-
-# Tooling artifacts
-.wrangler/
-*.tsbuildinfo
-vite.config.d.mts
+# local env copies
+*.local
