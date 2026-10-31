@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `corpus/books/` | Canonical Russian JSONL: one line per source segment with translation; `index.jsonl` per language | Consumed by the builder |
 | `scripts/build-corpus.mjs` | Validate and split each book into `public/api/books/<lang>/<author>/<title>/meta.json` + 500-segment chunks; reject blank-source segments | Reads corpus; writes generated assets |
-| `scripts/check-corpus.mjs` | Index/file parity, parse checks, source/translation completeness, CEFR/tag guardrails | CI gate |
+| `scripts/check-corpus.mjs` | Index/file parity, parse checks, source/translation completeness, Vocab Level guardrails (CEFR or Unrated; empty below 250 words), zero-segment books | CI gate |
 | `src/pages/Index` | Index route, filters, pagination | Reads `index.jsonl`; renders cards |
 | `src/pages/Book` | Book route; maps URL page to a chunk | Uses `useBookReader` |
 | `src/components/Book` | Reader presentation, chunk math, JSONL fetching | Props/events; no routing |
@@ -18,7 +18,7 @@
 
 | Object | Fields | Notes |
 | --- | --- | --- |
-| Book | `lang`, `author`, `title`, stats, `translated` | Index entry |
+| Book | `lang`, `author`, `title`, stats, `translated` | Index entry; `Vocab Level` is a CEFR string or empty (Unrated), and is empty below 250 words |
 | Segment | `title`, `author`, `start`, `end`, `text`, `translation` | One JSONL line |
 | BookMeta | `segments`, `chunkSize`, `chunkCount` | Generated per book |
 | Chunk | ordered segments | 500 segments by default |

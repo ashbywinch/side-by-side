@@ -25,15 +25,19 @@ app passes its quality gates.
   inside a chunk make no request; production smoke passes; failed production
   smoke rolls back.
 
-## Phase 2 — Valid CEFR levels (issue #140)
+## Phase 2 — Valid CEFR levels (implemented, issue #140)
 
-- **Inputs**: `index.jsonl` with five non-CEFR `Vocab Level` values (`0`, `2`).
-- **Outputs**: only A1–C2 options; non-CEFR books normalised to `Unrated` or a
-  correct level; defined badge colours; corpus check rejects future numeric
-  values.
-- **Operations**: filter by level; open an unrated book without a broken badge.
-- **Quality gate**: dropdown contains only A1–C2 (+ Unrated if chosen); the
-  five affected books render; corpus check passes.
+- **Inputs**: `index.jsonl` with 1,331 entries under 250 words carrying
+  levels, including five legacy numeric values (`0`, `2`).
+- **Outputs**: the 250-word rule applied globally (under 250 words is
+  Unrated); the zero-word book removed; only present CEFR levels plus
+  Unrated in the filter; defined badge colours; corpus check rejects numeric
+  levels and rated short books.
+- **Operations**: filter by level or Unrated; open an unrated book without a
+  broken badge.
+- **Quality gate**: no book under 250 words carries a level; the dropdown
+  contains only CEFR values and Unrated; every book renders; corpus check
+  passes; smoke expects 2,147 books.
 
 ## Phase 3 — Local bookshelf (issue #138)
 

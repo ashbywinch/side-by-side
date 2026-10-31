@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { levelColorFor } from "./levels";
 
 defineProps({
   lang: { type:String, required:true},
@@ -24,14 +25,6 @@ const rainbow = {
 11: "#36b",
 12: "#639",
 } as Record<number, string>
-const levelColor: Record<string, string> = {
-  "A1": rainbow[7],
-  "A2": rainbow[6],
-  "B1": rainbow[5],
-  "B2": rainbow[4],
-  "C1": rainbow[3],
-  "C2": rainbow[2],
-}
 const sizeColor: Record<string, string> = {
   "small": rainbow[6],
   "medium": rainbow[4],
@@ -47,7 +40,7 @@ const sizeColor: Record<string, string> = {
       <br/><br/><br/>
       <div class="row va-spacing-x-2">
         <va-badge v-if="translated" text="Translated" style="--va-badge-text-wrapper-border-radius: 1.5rem" color="success"/>
-        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColor[level]"/>
+        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
         <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
       </div>
     </va-card-content>

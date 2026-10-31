@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { all_sizes } from '@/components/sizes';
 import { FilterRefs } from '@/components/Index/Filter';
-import { computed, ref, type PropType } from 'vue';
+import { levelOptions, normaliseLevelFilter } from '@/components/Index/levels';
+import { computed, ref, watch, type PropType } from 'vue';
 import type { BookIndexEntry } from '@/types/corpus';
 
 const props = defineProps({
@@ -10,11 +11,19 @@ const props = defineProps({
 })
 
 const shadowAuthor = ref(props.filter.author.value);
-const shadowLevel = ref(props.filter.level.value);
+const shadowLevel = ref(normaliseLevelFilter(props.filter.level.value));
 const shadowSize = ref(props.filter.size.value);
 
-// make a set and put all the index levels in it 
-const levels = computed(() => Array.from(new Set(props.books.map(book => book["Vocab Level"]))))
+// Keep the visible selection in sync with route changes (back/forward, links).
+watch(
+  () => props.filter.level.value,
+  (level) => {
+    shadowLevel.value = normaliseLevelFilter(level);
+  },
+);
+
+// Only levels that can match a book, in CEFR order, plus Unrated.
+const levels = computed(() => levelOptions(props.books))
 const authors = computed(() => Array.from(new Set(props.books.map(book => book.author))))
 
 const sizes = computed(() => 
@@ -23,13 +32,13 @@ const sizes = computed(() =>
 const emit = defineEmits(["update-filter-value"])
 function doEmit()
 {
-  emit("update-filter-value", { "level": shadowLevel.value, "size":shadowSize.value, "author":shadowAuthor.value })
+  emit("update-filter-value", { "level": normaliseLevelFilter(shadowLevel.value), "size":shadowSize.value, "author":shadowAuthor.value })
 }
 
 </script>
 <template>
   <nav class="row">
-    <va-select v-model="shadowLevel" :options="levels" label="Level" placeholder="Any level" clearable @update:model-value="doEmit"></va-select>
+    <va-select v-model="shadowLevel" :options="levels" text-by="text" value-by="value" label="Level" placeholder="Any level" clearable @update:model-value="doEmit"></va-select>
     <va-select v-model="shadowSize" :options="sizes" label="Size" placeholder="Any size" clearable @update:model-value="doEmit"></va-select>
     <va-select v-model="shadowAuthor" :options="authors" label="Author" placeholder="Any author" clearable autocomplete highlight-matched-text  @update:model-value="doEmit"></va-select>
   </nav>

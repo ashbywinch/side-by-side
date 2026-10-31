@@ -2,6 +2,11 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+// The crawler rates texts from 250 words up; shorter texts are unrated.
+// Legacy corpus rows carried integer levels (0-5) from the pre-CEFR crawler.
+const CEFR_LEVELS = new Set(["A1", "A2", "B1", "B2", "C1", "C2"]);
+const MIN_ANALYSED_WORDS = 250;
+
 /**
  * Validate the canonical corpus. Non-destructive: whitespace-only source rows
  * are reported as warnings, because several carry translation text that has
@@ -43,6 +48,25 @@ export async function checkCorpus({ root, allowlist = new Set(), log = () => {} 
       }
       if (!entry.value.author || !entry.value.title) {
         errors.push(`${indexPath}:${entry.line}: index entry is missing author or title`);
+      }
+
+      const level = entry.value["Vocab Level"];
+      if (level !== undefined && level !== null && level !== "") {
+        if (typeof level !== "string" || !CEFR_LEVELS.has(level)) {
+          errors.push(
+            `${indexPath}:${entry.line}: ${lang}/${key} has invalid Vocab Level ${JSON.stringify(
+              level,
+            )}; expected "" or one of ${[...CEFR_LEVELS].join(", ")}`,
+          );
+        } else if (
+          typeof entry.value["Word Count"] === "number" &&
+          entry.value["Word Count"] < MIN_ANALYSED_WORDS
+        ) {
+          errors.push(
+            `${indexPath}:${entry.line}: ${lang}/${key} has ${entry.value["Word Count"]} words; ` +
+              `Vocab Level must be empty below ${MIN_ANALYSED_WORDS} words`,
+          );
+        }
       }
     }
 
@@ -134,6 +158,7 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
   const raw = await readFile(file.path, "utf8");
   const lines = raw.split("\n");
   let segments = 0;
+  let readableSegments = 0;
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     const line = lines[lineIndex];
@@ -165,6 +190,8 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
       continue;
     }
 
+    readableSegments += 1;
+
     if (translation.trim() === "") {
       const key = `${lang}/${file.author}/${file.title}:${lineIndex + 1}`;
       if (!allowlist.has(key)) {
@@ -173,6 +200,12 @@ async function checkBook({ file, lang, allowlist, errors, warnings }) {
         );
       }
     }
+  }
+
+  if (readableSegments === 0) {
+    errors.push(
+      `${file.path}: book has no readable source segments (remove it from the corpus)`,
+    );
   }
 
   return { segments };

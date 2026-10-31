@@ -1,5 +1,6 @@
 import { ref, watchEffect, type Ref } from "vue";
 import { Filter, FilterRefs } from "@/components/Index/Filter";
+import { normaliseLevel } from "@/components/Index/levels";
 import type { BookIndexEntry } from "@/types/corpus";
 
 export function useFilter(index: Ref<BookIndexEntry[]>) {
@@ -15,7 +16,11 @@ export function useFilter(index: Ref<BookIndexEntry[]>) {
   function filterIndex() {
     filtered_items.value = index.value
       ? index.value.filter((book: BookIndexEntry) =>
-          filter.matches(book["Vocab Level"] ?? "", book.size ?? "", book.author),
+          filter.matches(
+            normaliseLevel(book["Vocab Level"]),
+            book.size ?? "",
+            book.author,
+          ),
         )
       : [];
   }
