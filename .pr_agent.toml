@@ -55,6 +55,7 @@ persistent_comment = true
 [github_action_config]
 handle_push_trigger = true
 push_commands = ["/review"]
+skip_commands = ["/skip"]
 
 # cf-aig-* headers are supplied by the workflow's LITELLM__EXTRA_HEADERS env
 # because this PR-Agent version treats [litellm].extra_headers as host-only

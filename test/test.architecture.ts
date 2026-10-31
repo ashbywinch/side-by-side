@@ -1,16 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const root = process.cwd();
+const SOURCE_FILE = /\.(ts|js|mjs|cjs|vue)$/;
 
 async function filesUnder(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const files: string[] = [];
   for (const entry of entries) {
     const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await filesUnder(absolute)));
-    else if (/\.(ts|js|vue)$/.test(entry.name)) files.push(absolute);
+    if (entry.isDirectory()) {
+      if (entry.name === "node_modules") continue;
+      files.push(...(await filesUnder(absolute)));
+    } else if (SOURCE_FILE.test(entry.name)) files.push(absolute);
   }
   return files;
 }
@@ -18,6 +23,29 @@ async function filesUnder(directory: string): Promise<string[]> {
 function importsIn(source: string): string[] {
   return [...source.matchAll(/from\s+["']([^"']+)["']/g)].map((match) => match[1]);
 }
+
+describe("layer scanner", () => {
+  let fixture: string;
+
+  beforeAll(() => {
+    fixture = mkdtempSync(path.join(tmpdir(), "layer-scan-"));
+  });
+
+  afterAll(() => {
+    rmSync(fixture, { recursive: true, force: true });
+  });
+
+  it("scans every source extension and skips node_modules", async () => {
+    writeFileSync(path.join(fixture, "keep.mjs"), "export {};\n");
+    writeFileSync(path.join(fixture, "keep.ts"), "export {};\n");
+    mkdirSync(path.join(fixture, "node_modules/pkg"), { recursive: true });
+    writeFileSync(path.join(fixture, "node_modules/pkg/index.js"), "export {};\n");
+
+    const found = (await filesUnder(fixture)).map((file) => path.relative(fixture, file)).sort();
+
+    expect(found).toEqual(["keep.mjs", "keep.ts"]);
+  });
+});
 
 describe("architecture layers", () => {
   it("components do not import pages or the router", async () => {

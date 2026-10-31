@@ -55,30 +55,38 @@ describe("release version validation", () => {
 describe("release version CLI", () => {
   let cwd: string;
   const script = path.resolve(process.cwd(), "scripts/check-version.mjs");
+  const repos: string[] = [];
 
-  beforeAll(() => {
-    cwd = mkdtempSync(path.join(tmpdir(), "release-version-"));
+  /** A committed repo with a package.json at `version` and one tag per entry. */
+  function makeRepo(version: string, tags: string[] = ["v1.0.0"]) {
+    const repo = mkdtempSync(path.join(tmpdir(), "release-version-"));
+    repos.push(repo);
     writeFileSync(
-      path.join(cwd, "package.json"),
-      JSON.stringify({ name: "fixture", version: "1.0.0" }),
+      path.join(repo, "package.json"),
+      JSON.stringify({ name: "fixture", version }),
     );
     const git = (...args: string[]) =>
-      execFileSync("git", args, { cwd, encoding: "utf8" });
+      execFileSync("git", args, { cwd: repo, encoding: "utf8" });
     git("init", "-q");
     git("config", "user.email", "test@example.com");
     git("config", "user.name", "Test");
     git("add", "package.json");
     git("commit", "-qm", "init");
-    git("tag", "v1.0.0");
+    for (const tag of tags) git("tag", tag);
+    return repo;
+  }
+
+  beforeAll(() => {
+    cwd = makeRepo("1.0.0");
   });
 
   afterAll(() => {
-    rmSync(cwd, { recursive: true, force: true });
+    for (const repo of repos) rmSync(repo, { recursive: true, force: true });
   });
 
-  function run(version: string) {
+  function run(version: string, dir = cwd) {
     return spawnSync(process.execPath, [script, version], {
-      cwd,
+      cwd: dir,
       encoding: "utf8",
     });
   }
@@ -107,14 +115,21 @@ describe("release version CLI", () => {
     expect(() => compareVersions("1.0", "1.0.0")).toThrow(/semver/i);
   });
 
-  it("rejects equal, lower, invalid and tagged versions", () => {
+  it("rejects equal, lower and invalid versions", () => {
     expect(run("1.0.0").status).toBe(1);
     expect(run("0.9.0").status).toBe(1);
     expect(run("1.1").status).toBe(1);
+  });
 
-    execFileSync("git", ["tag", "v1.1.0"], { cwd });
-    const tagged = run("1.1.0");
+  it("rejects an already-tagged version without touching the shared fixture", () => {
+    const taggedRepo = makeRepo("1.0.0", ["v1.0.0", "v1.1.0"]);
+    const tagged = run("1.1.0", taggedRepo);
     expect(tagged.status).toBe(1);
     expect(tagged.stderr).toMatch(/already exists/i);
+    // The shared fixture still has only its initial tag, so no other test can
+    // depend on the order this one ran in.
+    expect(
+      execFileSync("git", ["tag", "-l", "v*"], { cwd, encoding: "utf8" }).trim(),
+    ).toBe("v1.0.0");
   });
 });
