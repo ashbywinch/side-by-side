@@ -1,8 +1,9 @@
 import { Filter } from "./Filter";
 import { toValue } from "vue";
+import type { RouteLocationNormalized, Router } from "vue-router";
 
 export function useIndexRouting() {
-  function getFilter(route): Filter {
+  function getFilter(route: RouteLocationNormalized): Filter {
     const query = route.query;
     return new Filter(
       query.level as string,
@@ -10,22 +11,27 @@ export function useIndexRouting() {
       query.author as string,
     );
   }
-  function getPage(route) {
+  function getPage(route: RouteLocationNormalized): number {
     const query = route.query;
     return Number(query.page ?? 1);
   }
 
   // Remove all null items from this query
   function newQuery(filter: Filter, page: number) {
-    const newQuery = {};
-    if (filter.level) newQuery["level"] = toValue(filter.level);
-    if (filter.size) newQuery["size"] = toValue(filter.size);
-    if (filter.author) newQuery["author"] = toValue(filter.author);
-    if (page) newQuery["page"] = page;
-    return newQuery;
+    const query: Record<string, string | number> = {};
+    if (filter.level) query["level"] = toValue(filter.level);
+    if (filter.size) query["size"] = toValue(filter.size);
+    if (filter.author) query["author"] = toValue(filter.author);
+    if (page) query["page"] = page;
+    return query;
   }
 
-  async function reload(router, route, filter: Filter, page: number) {
+  async function reload(
+    router: Router,
+    route: RouteLocationNormalized,
+    filter: Filter,
+    page: number,
+  ) {
     const query = route.query;
     if (
       query.level == toValue(filter.level) &&

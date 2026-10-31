@@ -1,17 +1,9 @@
-<template>
-  <RouterView :key='$route.fullPath'/>
-</template>
+<script setup lang="ts">
+import { RouterView, useRoute } from "vue-router";
 
-<script lang="ts">
-import { RouterView } from "vue-router";
-
-export default {
-  name: "App",
-  components: {
-    RouterView,
-  },
-  data() {
-    return {};
-  },
-};
+const route = useRoute();
 </script>
+
+<template>
+  <RouterView :key="route.path" />
+</template>

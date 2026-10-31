@@ -1,13 +1,14 @@
 import { all_sizes } from "@/components/sizes";
 import { useFetchJsonl } from "@/components/FetchJsonl";
 import { ref } from "vue";
+import type { BookIndexEntry } from "@/types/corpus";
 
 export function useFetchIndexItems(lang: string) {
   const error = ref("");
   const is_loading = ref(true);
 
   const url = `/api/books/${lang}/index.jsonl`;
-  const fetchJsonl = useFetchJsonl(url);
+  const fetchJsonl = useFetchJsonl<BookIndexEntry>(url);
 
   async function doFetch() {
     try {

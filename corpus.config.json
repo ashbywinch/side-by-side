@@ -1,0 +1,5 @@
+{
+  "chunkSize": 500,
+  "perPage": 24,
+  "lruChunks": 5
+}

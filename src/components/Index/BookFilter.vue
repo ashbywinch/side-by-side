@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { all_sizes } from '@/components/sizes';
 import { FilterRefs } from '@/pages/Index/Filter';
-import { computed, ref } from 'vue';
+import { computed, ref, type PropType } from 'vue';
+import type { BookIndexEntry } from '@/types/corpus';
 
 const props = defineProps({
   filter: { type:FilterRefs, default:null},
-  books: { type:Array<Map<string, string>>, required:true}
+  books: { type: Array as PropType<BookIndexEntry[]>, required:true}
 })
 
 const shadowAuthor = ref(props.filter.author.value);
@@ -28,9 +29,9 @@ function doEmit()
 </script>
 <template>
   <nav class="row">
-    <va-select v-model="shadowLevel" :options="levels" label="Level" placeholder="Any level" clearable @update:modelValue="doEmit"></va-select>
-    <va-select v-model="shadowSize" :options="sizes" label="Size" placeholder="Any size" clearable @update:modelValue="doEmit"></va-select>
-    <va-select v-model="shadowAuthor" :options="authors" label="Author" placeholder="Any author" clearable autocomplete highlight-matched-text  @update:modelValue="doEmit"></va-select>
+    <va-select v-model="shadowLevel" :options="levels" label="Level" placeholder="Any level" clearable @update:model-value="doEmit"></va-select>
+    <va-select v-model="shadowSize" :options="sizes" label="Size" placeholder="Any size" clearable @update:model-value="doEmit"></va-select>
+    <va-select v-model="shadowAuthor" :options="authors" label="Author" placeholder="Any author" clearable autocomplete highlight-matched-text  @update:model-value="doEmit"></va-select>
   </nav>
 </template>
 

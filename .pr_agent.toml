@@ -15,7 +15,7 @@ repo_context_from_default_branch = false
 # thousands of data lines.
 [ignore]
 glob = [
-    "public/api/**",
+    "corpus/**",
     "src/assets/index.json",
 ]
 

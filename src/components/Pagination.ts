@@ -1,8 +1,8 @@
-import { ref, toValue, watchEffect } from "vue";
+import { ref, toValue, watchEffect, type Ref } from "vue";
 
-export function usePagination(items: [], perPage: number) {
+export function usePagination<T>(items: Ref<T[]>, perPage: number) {
   const page = ref(1);
-  const paginatedItems = ref([]);
+  const paginatedItems = ref<T[]>([]) as Ref<T[]>;
   const numPages = ref(0);
 
   function setPage(newPage: number) {

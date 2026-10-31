@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { watchEffect } from 'vue';
+import { watch, watchEffect } from 'vue';
 
 import { useFetchIndexItems } from "./FetchIndex"
 import { useFilter } from './FilterIndex';
+import { Filter } from './Filter';
 import { usePagination } from '@/components/Pagination'
 import { useIndexRouting } from './IndexPageRouting'
 
@@ -31,16 +32,35 @@ filter.set(indexRouting.getFilter(route));
 pagination.set(indexRouting.getPage(route));
 
 const router = useRouter();
-function updatePageValue(newPage)
+
+// The route component is keyed by path, so query-only navigation (filters,
+// pagination, browser back/forward) must be applied here instead of remounting.
+watch(() => route.query, (query) => {
+  filter.set(new Filter(
+    query.level as string,
+    query.size as string,
+    query.author as string,
+  ));
+  pagination.set(Number(query.page ?? 1));
+}, { deep: true });
+
+function updatePageValue(newPage: number)
 {
   pagination.set(newPage)
-  indexRouting.reload(router, route, filter.filter, newPage)
+  indexRouting.reload(router, route, currentFilter(), newPage)
 }
-function updateFilterValue(newFilter)
+function updateFilterValue(newFilter: Filter)
 {
   filter.set(newFilter)
   pagination.set(1)
   indexRouting.reload(router, route, newFilter, 1)
+}
+function currentFilter(): Filter {
+  return new Filter(
+    filter.filter.level.value,
+    filter.filter.size.value,
+    filter.filter.author.value,
+  )
 }
 
 </script>
@@ -48,6 +68,6 @@ function updateFilterValue(newFilter)
   <PageSurround :error="fetchItems.error.value">
     <BookFilter class="nav" :books=fetchItems.items.value :filter="filter.filter" @update-filter-value="updateFilterValue"/>
     <BookOverviewCards :books="pagination.items.value"/>
-    <SimplePagination :page="pagination.page.value" :items="filter.items.value.length" :per-page="perPage" @update-page-value="updatePageValue"/>
+    <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
