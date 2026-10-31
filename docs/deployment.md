@@ -42,8 +42,9 @@ switching traffic; `wrangler versions deploy` promotes it atomically.
 
 ## Release flow
 
-Every push to `main` builds and stages a green Worker version, smoke-tests it,
-then waits for the required `production` approval. Approval promotes that exact
+`main` is protected (PR + review + CI check). Every merge builds and stages a
+green Worker version, smoke-tests it, then waits for the required `production`
+approval. Approval promotes that exact
 version atomically; production smoke runs after the switch and rolls back
 automatically on failure. PRs get a preview and smoke without an approval gate.
 

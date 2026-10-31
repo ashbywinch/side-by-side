@@ -56,9 +56,10 @@ or create release tags by hand.
 make release VERSION=1.1.0
 ```
 
-Then wait for **Smoke test green**, ask the user to approve the `production`
-deployment, and verify `/version.json`, `production`, and `v1.1.0`. The full
-agent runbook is [`docs/releasing.md`](docs/releasing.md).
+This opens a version-bump release PR. A maintainer reviews and merges it; CI
+then stages the green version and waits for the `production` approval. After
+approval, CI promotes, smokes, and tags `production` + `v1.1.0`. The full agent
+runbook is [`docs/releasing.md`](docs/releasing.md).
 
 ## Docs
 

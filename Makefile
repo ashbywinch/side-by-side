@@ -24,7 +24,7 @@ help:
 	  '  make dist            production build in dist/' \
 	  '  make clean           remove node_modules, coverage, dist, generated corpus' \
 	  '  make smoke ARGS=...  run scripts/smoke.mjs' \
-	  '  make release VERSION=x.y.z  dispatch the gated semver release workflow'
+	  '  make release VERSION=x.y.z  open the gated semver release PR'
 
 setup:
 	$(NPM) ci
@@ -70,5 +70,4 @@ smoke:
 
 release:
 	@test -n "$(VERSION)" || (echo "usage: make release VERSION=x.y.z" >&2; exit 1)
-	gh workflow run release.yml --repo ashbywinch/side-by-side -f version=$(VERSION)
-	@echo "Release dispatched. Watch the CI run; approve the production deployment when the green smoke passes."
+	$(NODE) scripts/release-pr.mjs $(VERSION)

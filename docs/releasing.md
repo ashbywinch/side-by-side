@@ -8,7 +8,7 @@ production. The long-form hosting details are in `deployment.md`.
 - **Never guess the version.** The user supplies the semver version. If they
   have not supplied one, ask; do not infer it from the diff.
 - **Never run `wrangler deploy`.** Production changes only through the release
-  workflow.
+  PR and the gated CI pipeline.
 - **Never create or move release tags by hand.** CI owns `v<version>` and
   `production`.
 - **Never approve the production deployment on the user's behalf.** Ask them.
@@ -28,28 +28,23 @@ gh run list --repo ashbywinch/side-by-side --branch main --limit 5
 
 ## Release
 
-1. Dispatch the release workflow with the supplied version:
+1. Create the release PR with the supplied version:
 
    ```sh
    make release VERSION=1.0.1
    ```
 
-   Equivalent: `gh workflow run release.yml --repo ashbywinch/side-by-side -f version=1.0.1`.
+   The target validates strict semver, greater-than-current, and no existing
+   tag; creates `release/vX`, bumps `package.json`/`package-lock.json`, commits
+   `chore(release): vX`, pushes the branch and opens a PR. A validation failure
+   creates nothing.
 
-   The workflow validates strict semver, greater-than-current, and no existing
-   tag. It bumps `package.json`/`package-lock.json`, commits
-   `chore(release): vX`, pushes the bump to `main`, and dispatches `ci.yml`.
+2. Ask the user to review and merge the release PR. Do not merge it yourself;
+   `main` is protected and requires an approving review plus the
+   **Verify, build and stage** check.
 
-2. Follow the Release workflow:
-
-   ```sh
-   gh run list --repo ashbywinch/side-by-side --workflow release.yml --limit 1
-   gh run watch <run-id> --repo ashbywinch/side-by-side
-   ```
-
-   A validation failure means no changes were made; fix the version and retry.
-
-3. Follow the resulting main CI run until **Verify, build and stage** passes:
+3. After the release PR merges, follow the main CI run until **Verify, build
+   and stage** passes:
 
    ```sh
    gh run list --repo ashbywinch/side-by-side --branch main --limit 3
@@ -96,10 +91,9 @@ gh run list --repo ashbywinch/side-by-side --branch main --limit 5
   environment deployment record has the SHA. Fix the tag/CI and do not deploy
   again just to retag.
 
-## Current process constraint
+## Branch protection
 
-`release.yml` pushes the version-bump commit directly to `main` (with
-`GITHUB_TOKEN`) and dispatches CI explicitly. `main` is not branch-protected
-today; production is protected by the required `production` environment
-approval. If branch protection is added later, convert the bump to a release
-PR (or use a token whose push triggers CI) before enabling it.
+`main` requires a pull request with one approving review and the
+**Verify, build and stage** status check; direct pushes are rejected. Release
+bumps therefore go through a release PR. Production still requires the
+separate `production` environment approval after the green smoke.
