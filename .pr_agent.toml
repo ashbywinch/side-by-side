@@ -9,6 +9,11 @@ max_model_tokens = 384000
 fallback_models = []
 repo_context_from_default_branch = false
 
+# OpenCode Go requires a stable session id. PR-Agent's LiteLLM handler reads
+# this as a JSON string, not a TOML table.
+[litellm]
+extra_headers = '{"x-opencode-session": "pr-agent-ci"}'
+
 # The translation data (book JSONL files and the generated index) is not
 # human-authored code: exclude it from the review's diff analysis so reviews
 # stay focused on code changes and the diff token budget is not consumed by
