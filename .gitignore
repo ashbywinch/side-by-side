@@ -24,3 +24,11 @@ dist-ssr
 *.sw?
 
 coverage
+
+# Generated corpus output (source of truth lives in corpus/)
+public/api/
+
+# Tooling artifacts
+.wrangler/
+*.tsbuildinfo
+vite.config.d.mts

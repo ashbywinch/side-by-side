@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { watchEffect } from "vue";
 
-import { usePagination } from "@/components/Pagination";
-import { useFetchJsonl } from "@/components/FetchJsonl";
+import { useBookReader } from "@/components/Book/useBookReader";
 
 import PageOfBook from "@/components/Book/PageOfBook.vue"
 import SimplePagination from '@/components/SimplePagination.vue';
@@ -15,29 +14,60 @@ const props = defineProps({
   title: { type:String, required:true},
 })
 
-const fetchJsonL = useFetchJsonl(`/api/books/${props.lang}/${props.author}/${props.title}.jsonl`);
-watchEffect(() => { fetchJsonL.fetch() })
-
-const perPage = 24; 
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
 
-const pagination = usePagination(fetchJsonL.items, perPage);
-pagination.set(Number(route.query.page ?? 1));
+const reader = useBookReader({
+  lang: props.lang,
+  author: props.author,
+  title: props.title,
+  autoPrefetch: true,
+})
 
-function updatePageValue(newPage)
+function requestedPage(): number {
+  return Number(route.query.page ?? 1)
+}
+
+async function loadPage() {
+  const requested = requestedPage()
+  const effective = await reader.setPage(requested)
+  if (effective !== requested) {
+    await router.replace({
+      name: route.name,
+      params: route.params,
+      query: { ...route.query, page: effective },
+    })
+  }
+}
+
+watch(() => route.query.page, loadPage, { immediate: true })
+onUnmounted(() => reader.dispose())
+
+function updatePageValue(newPage: number)
 {
-  pagination.set(newPage)
+  if (newPage === reader.page.value) return
   router.push({
     name: route.name,
     params: route.params,
-    query: {"page": newPage}
+    query: { ...route.query, page: newPage }
   });
 }
 </script>
 <template>
-  <PageSurround :error="fetchJsonL.error.value">
-    <PageOfBook :cards="pagination.items.value" :title="title" :author="author" :page="pagination.page.value" :num-pages = "pagination.numPages.value"/>
-    <SimplePagination :page="pagination.page.value" :items="fetchJsonL.items.value.length" :per-page="perPage" :visible-pages=1 @update-page-value="updatePageValue"/>
+  <PageSurround :error="reader.error.value">
+    <PageOfBook
+      :cards="reader.pageItems.value"
+      :title="title"
+      :author="author"
+      :page="reader.page.value"
+      :num-pages="reader.numPages.value"
+      :loading="reader.loading.value"
+    />
+    <SimplePagination
+      :page="reader.page.value"
+      :pages="reader.numPages.value"
+      :visible-pages="1"
+      @update-page-value="updatePageValue"
+    />
   </PageSurround>
 </template>

@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [vue(), tsconfigPaths()],
 
   test: {
+    setupFiles: ["./test/setup.ts"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
@@ -15,6 +16,12 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
       reporter: ["text", "clover"],
+      thresholds: {
+        lines: 78,
+        statements: 80,
+        functions: 77,
+        branches: 63,
+      },
     },
     environment: "happy-dom",
   },

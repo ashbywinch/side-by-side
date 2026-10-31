@@ -1,9 +1,10 @@
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, type Ref } from "vue";
 import { Filter, FilterRefs } from "./Filter";
+import type { BookIndexEntry } from "@/types/corpus";
 
-export function useFilter(index) {
+export function useFilter(index: Ref<BookIndexEntry[]>) {
   const filter: FilterRefs = new FilterRefs();
-  const filtered_items = ref([]);
+  const filtered_items = ref<BookIndexEntry[]>([]);
 
   function setFilter(newFilter: Filter) {
     filter.level.value = newFilter.level;
@@ -13,8 +14,8 @@ export function useFilter(index) {
 
   function filterIndex() {
     filtered_items.value = index.value
-      ? index.value.filter((book) =>
-          filter.matches(book["Vocab Level"], book.size, book.author),
+      ? index.value.filter((book: BookIndexEntry) =>
+          filter.matches(book["Vocab Level"] ?? "", book.size ?? "", book.author),
         )
       : [];
   }

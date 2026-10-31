@@ -23,8 +23,8 @@ const rainbow = {
 10: "#09c",
 11: "#36b",
 12: "#639",
-}
-const levelColor = {
+} as Record<number, string>
+const levelColor: Record<string, string> = {
   "A1": rainbow[7],
   "A2": rainbow[6],
   "B1": rainbow[5],
@@ -32,7 +32,7 @@ const levelColor = {
   "C1": rainbow[3],
   "C2": rainbow[2],
 }
-const sizeColor = {
+const sizeColor: Record<string, string> = {
   "small": rainbow[6],
   "medium": rainbow[4],
   "large": rainbow[2]

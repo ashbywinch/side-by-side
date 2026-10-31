@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import PageHeader from '@/components/Book/PageHeader.vue';
 import TextSnippet from '@/components/Book/TextSnippet.vue';
-import { onMounted, ref, Ref } from 'vue';
+import type { BookSegment } from '@/components/Book/useBookReader';
+import { onMounted, onUnmounted, ref, watch, type PropType, type Ref } from 'vue';
 
 const props = defineProps({
   title: { type:String, required: true},
   author: { type:String, required: true},
-  cards: { type:Array, required:true},
+  cards: { type: Array as PropType<BookSegment[]>, required:true},
   page: {type:Number, required:true},
   numPages: {type:Number, required:true},
+  loading: {type:Boolean, default:false},
 })
 
-const translations_showing = ref(0) 
+const translations_showing = ref(0)
+
+watch(() => props.page, () => {
+  translations_showing.value = 0
+})
 
 onMounted(() => {
   window.addEventListener("keydown", onEvent, true);
 })
 
-const main: Ref<Element> = ref(null);
+onUnmounted(() => {
+  window.removeEventListener("keydown", onEvent, true);
+})
+
+const main: Ref<Element | null> = ref(null);
 
 function showMore() {
   var move = translations_showing.value < props.cards.length;
@@ -55,14 +65,14 @@ function onEvent(event: { key: string; ctrlKey: boolean; preventDefault: () => v
 <template>
   <va-card ref="main" class="page">
     <PageHeader :title="title" :author="author" :is-title-page="page == 1"/>
-    <div class="text">
+    <div class="text" :aria-busy="loading ? 'true' : 'false'">
       <template
         v-for="(card, index) in cards"
-        :key="card.index_in_file">
-          <TextSnippet 
-            :text="card.text" 
-            :translation="card.translation" 
-            :showTranslation="index < translations_showing" 
+        :key="`${card.start ?? 'segment'}-${index}`">
+          <TextSnippet
+            :text="card.text"
+            :translation="card.translation"
+            :show-translation="index < translations_showing"
             @translation-clicked="translations_showing = index + 1"/>
       </template>
     </div>

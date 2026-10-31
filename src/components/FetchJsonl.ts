@@ -1,8 +1,8 @@
-import { Ref, ref } from "vue";
+import { ref, type Ref } from "vue";
 
-export function useFetchJsonl(url: string) {
+export function useFetchJsonl<T = Record<string, unknown>>(url: string) {
   const is_loading = ref(false);
-  const items = ref([]);
+  const items = ref<T[]>([]) as Ref<T[]>;
   const error: Ref<string> = ref("");
 
   async function doFetch() {
@@ -12,7 +12,7 @@ export function useFetchJsonl(url: string) {
       const text = await response.text();
       const lines = text.split("\n");
       for (const line of lines) {
-        if (line.length > 0) items.value.push(JSON.parse(line));
+        if (line.length > 0) items.value.push(JSON.parse(line) as T);
       }
     } catch (err) {
       error.value = err as string;

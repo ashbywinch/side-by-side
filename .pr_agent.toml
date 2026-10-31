@@ -1,30 +1,50 @@
 [openai]
 custom_llm_provider = "openai"
-api_base = "https://opencode.ai/zen/go/v1"
+# Cloudflare AI Gateway, same route as houses/omp-config:
+# dynamic/fallback2 (OpenCode primary -> DeepSeek fallback).
+api_base = "https://gateway.ai.cloudflare.com/v1/e21a5be58ac1e8f7d5619539feb2dc3d/default/compat"
 
 [config]
-model = "openai/deepseek-v4-flash"
-custom_model_max_tokens = 384000
-max_model_tokens = 384000
+model = "openai/dynamic/fallback2"
+custom_model_max_tokens = 128000
+max_model_tokens = 128000
+ai_timeout = 1800
 fallback_models = []
-repo_context_from_default_branch = false
+# Standards/docs are read from main, never from the PR head.
+repo_context_from_default_branch = true
+repo_context_files = [
+  "README.md",
+  "docs/deployment.md",
+  "docs/translation-repair.md",
+]
+# The gateway route reasons by default and reasoning tokens come out of the
+# completion budget; disable it for the review, as the house repos do.
+reasoning_effort = "none"
+additional_reasoning_effort_models = ["dynamic/fallback2"]
+temperature = 0.8
+verbosity_level = 1
 
-# The translation data (book JSONL files and the generated index) is not
-# human-authored code: exclude it from the review's diff analysis so reviews
-# stay focused on code changes and the diff token budget is not consumed by
-# thousands of data lines.
 [ignore]
 glob = [
-    "public/api/**",
+    "corpus/**",
     "src/assets/index.json",
 ]
 
 [pr_reviewer]
+publish_output_no_suggestions = false
 require_tests_review = true
 require_security_review = true
 require_estimate_effort_to_review = true
-num_max_findings = 5
+num_max_findings = 10
+
+[pr_code_suggestions]
+persistent_comment = true
 
 [github_action_config]
 handle_push_trigger = true
-push_commands = ["/review", "/improve"]
+push_commands = ["/review"]
+skip_commands = ["/skip"]
+
+# cf-aig-* headers are supplied by the workflow's LITELLM__EXTRA_HEADERS env
+# because this PR-Agent version treats [litellm].extra_headers as host-only
+# when it comes from repo settings.

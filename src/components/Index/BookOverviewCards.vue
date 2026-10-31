@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BookOverviewCard from "./BookOverviewCard.vue";
+import type { PropType } from "vue";
+import type { BookIndexEntry } from "@/types/corpus";
 
 defineProps({
-  books: { type:Array<Map<string, string>>, required:true}
+  books: { type: Array as PropType<BookIndexEntry[]>, required:true}
 })
 </script>
 <template>
@@ -12,7 +14,7 @@ defineProps({
         :lang="book.lang"
         :title="book.title" 
         :author="book.author" 
-        :level="book['Vocab Level']"
+        :level="book['Vocab Level'] ?? ''"
         :words="book['Word Count']"
         :size="book.size ?? ''"
         :translated="book.translated === true || book.translated === 'true'" />
