@@ -50,6 +50,15 @@ Every merge to `main` builds and stages a green Worker version, smoke-tests
 it, then waits for approval in the `production` GitHub Environment. Approval
 promotes that exact version; production smoke runs after the switch and rolls
 back automatically on failure. Pull requests get a preview URL and the same
-smoke test without an approval gate. See
+smoke test without an approval gate.
+
+Release a semver version from the workflow, not by hand:
+
+```sh
+gh workflow run release.yml --repo ashbywinch/side-by-side -f version=1.1.0
+```
+
+After the approved promotion, CI moves the `production` tag to the live commit
+and creates the immutable `v<version>` tag. See
 [`docs/deployment.md`](docs/deployment.md) for setup, rollback, the chunk size
 knob and the R2 scale-out trigger.
