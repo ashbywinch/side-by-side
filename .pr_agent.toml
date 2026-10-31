@@ -31,6 +31,7 @@ glob = [
 ]
 
 [pr_reviewer]
+publish_output_no_suggestions = false
 require_tests_review = true
 require_security_review = true
 require_estimate_effort_to_review = true
