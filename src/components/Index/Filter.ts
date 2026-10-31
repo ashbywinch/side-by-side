@@ -16,7 +16,7 @@ export class FilterRefs {
   level: Ref<string> = ref("");
   size: Ref<string> = ref("");
   author: Ref<string> = ref("");
-  matches(level: unknown, size: string, author: string): boolean {
+  matches(level: string, size: string, author: string): boolean {
     const wanted = normaliseLevelFilter(this.level.value);
     const bookLevel = normaliseLevel(level);
     const levelMatches =

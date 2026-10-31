@@ -1,16 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { VaDropdownPlugin, VaSelect, createVuesticEssential } from "vuestic-ui";
 
 import BookFilter from "@/components/Index/BookFilter.vue";
-import { FilterRefs } from "@/components/Index/Filter";
+import { Filter, FilterRefs } from "@/components/Index/Filter";
+import { useFilter } from "@/pages/Index/FilterIndex";
 import type { BookIndexEntry } from "@/types/corpus";
 
-function book(level: unknown, author = "Author"): BookIndexEntry {
+function book(level: unknown, title = "Title"): BookIndexEntry {
   return {
     lang: "ru",
-    title: "Title",
-    author,
+    title,
+    author: "Author",
     "Word Count": 100,
     "Vocab Level": level as string,
   };
@@ -77,5 +79,48 @@ describe("BookFilter", () => {
     expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
       level: "",
     });
+  });
+
+  it("filters the displayed books through the emitted filter", async () => {
+    const books = [book("C2", "c2"), book("", "unrated")];
+    const index = ref(books);
+    const { filter, set, items } = useFilter(index);
+    const Harness = defineComponent({
+      setup() {
+        return () =>
+          h("div", [
+            h(BookFilter, {
+              books,
+              filter,
+              onUpdateFilterValue: (next: Filter) => set(next),
+            }),
+            h(
+              "ul",
+              items.value.map((entry) => h("li", { key: entry.title }, entry.title)),
+            ),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Harness, {
+      global: {
+        plugins: [
+          createVuesticEssential({
+            components: { VaSelect },
+            plugins: { VaDropdownPlugin },
+          }),
+        ],
+      },
+    });
+
+    expect(wrapper.findAll("li").map((item) => item.text())).toEqual([
+      "c2",
+      "unrated",
+    ]);
+
+    await wrapper.findComponent(VaSelect).setValue("unrated");
+    await nextTick();
+
+    expect(wrapper.findAll("li").map((item) => item.text())).toEqual(["unrated"]);
   });
 });
