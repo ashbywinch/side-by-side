@@ -1,7 +1,7 @@
 # Translation repair runbook
 
 Audience: someone fixing shifted translations in the corpus.
-Related: [`books_to_anki`](../../books_to_anki) (the translation pipeline),
+Related: `books_to_anki` (the translation pipeline),
 `scripts/check-corpus.mjs`, `docs/deployment.md`.
 
 ## What went wrong
@@ -29,7 +29,7 @@ builder both fail on a violation, so the release cannot ship one.
 
 ```sh
 cd /home/ashby/Documents/code/side-by-side
-npm run check-corpus
+make check-corpus
 ```
 
 The gate fails on any blank source card, blank translation for a real source
@@ -140,16 +140,16 @@ export LITELLM_MASTER_KEY=...   # only the env var name is in the config
    mkdir -p /tmp/sbs-retranslate/backup
    cp -a corpus/books/ru/. /tmp/sbs-retranslate/backup/
    cp -a /tmp/sbs-retranslate/output/. corpus/books/ru/
-   npm run data
-   npm run check-corpus
+   make data
+   make check-corpus
    ```
 
    `check-corpus` must report 0 errors. The builder also rejects blank-source
-   cards, so `npm run data` fails rather than deploying one.
+   cards, so `make data` fails rather than deploying one.
 
 5. Rebuild and smoke after deploying:
 
    ```sh
-   npm run build
-   npm run smoke -- --base https://sbs.blueumbrella.net --sha "$(git rev-parse HEAD)"
+   make dist
+   make smoke ARGS="--base https://sbs.blueumbrella.net --sha $(git rev-parse HEAD)"
    ```

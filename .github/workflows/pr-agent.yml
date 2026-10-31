@@ -26,7 +26,7 @@ jobs:
           OPENAI_KEY: ${{ secrets.CLOUDFLARE_AIGATEWAY_TOKEN }}
           OPENAI_BASE_URL: https://gateway.ai.cloudflare.com/v1/e21a5be58ac1e8f7d5619539feb2dc3d/default/compat
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_AGENT_CONFIG_BRANCH: pr-agent-config
+          PR_AGENT_CONFIG_BRANCH: main
           # The gateway's head-only keys; repo settings ignore extra_headers,
           # so supply them through Dynaconf's highest-precedence env layer.
           LITELLM__EXTRA_HEADERS: '{"cf-aig-request-timeout": "1800000", "cf-aig-max-attempts": "0", "cf-aig-backoff": "exponential", "cf-aig-metadata": "{\"source\":\"review\",\"repo\":\"side-by-side\"}"}'

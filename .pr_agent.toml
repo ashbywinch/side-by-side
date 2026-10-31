@@ -13,7 +13,18 @@ fallback_models = []
 # Standards/docs are read from main, never from the PR head.
 repo_context_from_default_branch = true
 repo_context_files = [
+  "AGENTS.md",
   "README.md",
+  "docs/PRD.md",
+  "docs/TECHSPEC.md",
+  "docs/PLAN.md",
+  "docs/UX.md",
+  "docs/coding-standards.md",
+  "docs/testing-standards.md",
+  "docs/ux-standards.md",
+  "docs/writing-documentation.md",
+  "docs/documentation-structure.md",
+  "docs/releasing.md",
   "docs/deployment.md",
   "docs/translation-repair.md",
 ]
@@ -35,7 +46,8 @@ publish_output_no_suggestions = false
 require_tests_review = true
 require_security_review = true
 require_estimate_effort_to_review = true
-num_max_findings = 10
+num_max_findings = 20
+extra_instructions = "Check the PR against each file in repo_context_files. Add a 'Compliance' section per doc, listing any violations or 'No violations'. Flag violations as findings, not just notes: coding and structural deviations from docs/coding-standards.md (including JS/TS conventions), test-standard deviations from docs/testing-standards.md, requirement deviations from docs/PRD.md (JTBD, personas, constraints, user requirements), architecture/layer deviations from docs/TECHSPEC.md (components, object model, boundary rules), phase/scope deviations from docs/PLAN.md, UX deviations from docs/ux-standards.md and docs/UX.md, documentation-quality deviations from docs/writing-documentation.md, folder/reachability deviations from docs/documentation-structure.md, and release-process deviations from docs/releasing.md and docs/deployment.md. A release-process violation is a finding: ad-hoc wrangler deploy, manual semver/production tags, guessed versions, or approving production on the user's behalf. Suppression comments are findings when their why fails the evidence bar in docs/coding-standards.md."
 
 [pr_code_suggestions]
 persistent_comment = true
@@ -43,7 +55,6 @@ persistent_comment = true
 [github_action_config]
 handle_push_trigger = true
 push_commands = ["/review"]
-skip_commands = ["/skip"]
 
 # cf-aig-* headers are supplied by the workflow's LITELLM__EXTRA_HEADERS env
 # because this PR-Agent version treats [litellm].extra_headers as host-only

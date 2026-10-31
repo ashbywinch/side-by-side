@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { all_sizes } from '@/components/sizes';
-import { FilterRefs } from '@/pages/Index/Filter';
+import { FilterRefs } from '@/components/Index/Filter';
 import { computed, ref, type PropType } from 'vue';
 import type { BookIndexEntry } from '@/types/corpus';
 
