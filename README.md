@@ -46,7 +46,10 @@ Vitest + Testing Library + MSW.
 
 ## Releases
 
-Every merge to `main` builds, deploys and runs the smoke test automatically.
-Pull requests get a Cloudflare preview URL and the same smoke test. See
+Every merge to `main` builds and stages a green Worker version, smoke-tests
+it, then waits for approval in the `production` GitHub Environment. Approval
+promotes that exact version; production smoke runs after the switch and rolls
+back automatically on failure. Pull requests get a preview URL and the same
+smoke test without an approval gate. See
 [`docs/deployment.md`](docs/deployment.md) for setup, rollback, the chunk size
 knob and the R2 scale-out trigger.
