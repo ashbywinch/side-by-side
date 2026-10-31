@@ -11,8 +11,8 @@ generates the deployed corpus into `public/api/` (gitignored): one `meta.json`
 and a set of `chunk-NNNN.jsonl` files per book, 500 segments per chunk.
 `vite build` copies `public/` and the app into `dist/`, then
 `scripts/write-version.mjs` adds `dist/version.json` with the commit SHA.
-`wrangler deploy` uploads `dist/` as a new Worker version and switches
-production traffic to it atomically.
+`wrangler versions upload` uploads `dist/` as a new Worker version without
+switching traffic; `wrangler versions deploy` promotes it atomically.
 
 ## First-time setup
 
@@ -33,24 +33,38 @@ production traffic to it atomically.
 
    Store the token as `CF_API_TOKEN` in the GitHub repository secrets, and the
    account ID as `CF_ACCOUNT_ID` (the house names used by the other repos).
-4. Merge the release PR to `main`. The deploy job creates the `side-by-side`
-   Worker and the `sbs.blueumbrella.net` custom domain, and issues the
-   certificate. The first deploy has to create the Worker; PR previews are
-   skipped with a notice until it exists. Use the smoke test once DNS is live.
-   Do not run `wrangler deploy` ad hoc.
+4. A brand-new account needs a one-time bootstrap: create the `side-by-side`
+   Worker and the `sbs.blueumbrella.net` custom domain with an approved
+   `wrangler deploy` before the green-release workflow can stage versions.
+   This project is already bootstrapped; after that all releases use
+   `wrangler versions upload` and `wrangler versions deploy`. Do not run
+   `wrangler deploy` ad hoc.
 
 ## The normal release flow
 
-- Every push to `main` runs the full gate (lint, typecheck, coverage,
-  `check-corpus`, build), deploys, then runs `scripts/smoke.mjs`. A failed
-  smoke test fails the workflow.
-- Every same-repository PR runs the same gate, uploads a preview version
-  (`wrangler versions upload --preview-alias pr-<n>`), smoke-tests the preview
-  and comments its URL on the PR. Fork PRs skip previews because secrets are
-  unavailable to them.
-- Deploy is automatic. There is no manual approval step.
-- Tag announced releases (`v1.0.0`, …). `/version.json` always exposes the
-  exact deployed commit.
+Every push to `main` runs two jobs:
+
+1. **Verify, build and stage** — lint, typecheck, coverage, `check-corpus`,
+   build, then `wrangler versions upload --preview-alias green-<run-id>`. This
+   creates a **green** Worker version without switching production traffic.
+   The green version gets `scripts/smoke.mjs` against its preview URL. The
+   version ID and preview URL are written to the job summary.
+2. **Promote approved version** — gated by the `production` GitHub
+   Environment. The required reviewer (`ashbywinch`) must approve; the
+   environment is restricted to `main` and admins cannot bypass it. On
+   approval, CI runs
+   `wrangler versions deploy <version-id>@100% --name side-by-side --yes`,
+   smoke-tests production, and automatically rolls back with
+   `wrangler rollback` if that smoke fails.
+
+Production stays on the previous version until approval; the traffic switch is
+atomic at the Worker-version level. PRs run the same build and upload a preview
+version (`--preview-alias pr-<n>`), smoke-test it, and comment its URL. Fork PRs
+skip previews because secrets are unavailable to them.
+
+No `wrangler deploy` runs in the release path; no ad-hoc production command is
+a deployment. Tag announced releases (`v1.0.0`, …). `/version.json` always
+exposes the exact deployed commit.
 
 ## Smoke test
 
@@ -66,6 +80,9 @@ compression. The CLI retries for 5 minutes by default
 
 ## Rollback
 
+A failed production smoke automatically rolls back to the previous deployment.
+To roll back manually:
+
 ```sh
 npx wrangler deployments list
 npx wrangler rollback <version-id> --name side-by-side --message "reason"
@@ -78,9 +95,10 @@ SHA=$(curl -s https://sbs.blueumbrella.net/version.json | jq -r .sha)
 npm run smoke -- --base https://sbs.blueumbrella.net --sha "$SHA"
 ```
 
-To deploy an older commit instead, check it out locally and run
-`npm run deploy` (the dispatch button on `main` rebuilds `main`, not an old
-commit).
+To restore an older commit, open a revert PR and let the release process run,
+or promote the previously staged version with
+`npx wrangler versions deploy <version-id>@100% --name side-by-side --yes`.
+Do not run `wrangler deploy` ad hoc.
 
 ## Data pipeline
 
