@@ -196,7 +196,7 @@ jobs:
     timeout-minutes: 20
     environment: production
     permissions:
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -231,6 +231,31 @@ jobs:
         run: >
           node scripts/smoke.mjs --base https://sbs.blueumbrella.net
           --sha "$GITHUB_SHA" --attempts 12 --delay 5000
+
+      - name: Tag release and production
+        if: success()
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f -a production "$GITHUB_SHA" -m "Production deployment $GITHUB_SHA"
+          git push --force origin production
+          if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q .; then
+            TAG_NOTE="v$VERSION already existed; left in place"
+          else
+            if git rev-parse "v$VERSION" >/dev/null 2>&1; then git tag -d "v$VERSION"; fi
+            git tag -a "v$VERSION" "$GITHUB_SHA" -m "Release v$VERSION"
+            git push origin "v$VERSION"
+            TAG_NOTE="created v$VERSION"
+          fi
+          {
+            echo "### Production"
+            echo ""
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- Version: \`$VERSION\`"
+            echo "- \`production\` tag moved to this commit"
+            echo "- $TAG_NOTE"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Roll back on failed smoke
         if: failure() && steps.smoke.outcome == 'failure'

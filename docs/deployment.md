@@ -63,8 +63,39 @@ version (`--preview-alias pr-<n>`), smoke-test it, and comment its URL. Fork PRs
 skip previews because secrets are unavailable to them.
 
 No `wrangler deploy` runs in the release path; no ad-hoc production command is
-a deployment. Tag announced releases (`v1.0.0`, …). `/version.json` always
-exposes the exact deployed commit.
+a deployment. `/version.json` always exposes the exact deployed commit.
+
+After a successful production smoke, CI:
+
+- moves the annotated **`production`** tag to the deployed commit, so
+  `git rev-parse production` is always the live SHA;
+- creates **`v<package.version>`** once, if that tag does not already exist.
+  `v*` tags are immutable release markers and are never moved.
+
+## Releasing a semver version
+
+Do not create semver tags by hand. Run the Release workflow with the version
+supplied for the release:
+
+```sh
+gh workflow run release.yml --repo ashbywinch/side-by-side -f version=1.1.0
+```
+
+The workflow:
+
+1. validates that the version is strict `x.y.z`, greater than the version in
+   `package.json`, and not already tagged;
+2. bumps `package.json` and `package-lock.json`, commits
+   `chore(release): v<version>`, and pushes the bump to `main`;
+3. dispatches the gated `ci.yml` pipeline.
+
+CI then stages the green version, waits for the `production` approval, promotes
+it, smoke-tests production, and tags it. The version supplied here is the
+version that appears in `/version.json` and in the semver tag.
+
+The Release workflow's version-bump commit is a direct push to `main`; the
+production traffic switch remains gated. If `main` is protected later, use a
+release PR or a token allowed to push the bump.
 
 ## Smoke test
 
