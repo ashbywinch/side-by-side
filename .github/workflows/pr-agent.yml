@@ -21,6 +21,10 @@ jobs:
           OPENAI_BASE_URL: https://opencode.ai/zen/go/v1
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_AGENT_CONFIG_BRANCH: ${{ github.head_ref }}
+          # OpenCode Go requires a stable session id. PR-Agent ignores
+          # [litellm].extra_headers from repo settings, so supply it through
+          # Dynaconf's highest-precedence env layer instead.
+          LITELLM__EXTRA_HEADERS: '{"x-opencode-session": "pr-agent-ci"}'
 
       - name: Check review succeeded
         env:
