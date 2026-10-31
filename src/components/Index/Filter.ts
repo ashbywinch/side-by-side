@@ -1,8 +1,9 @@
 import { ref, Ref } from "vue";
+import { normaliseLevel, normaliseLevelFilter } from "./levels";
 
 export class Filter {
   constructor(level: string, size: string, author: string) {
-    this.level = level;
+    this.level = normaliseLevelFilter(level);
     this.size = size;
     this.author = author;
   }
@@ -16,8 +17,14 @@ export class FilterRefs {
   size: Ref<string> = ref("");
   author: Ref<string> = ref("");
   matches(level: string, size: string, author: string): boolean {
+    const wanted = normaliseLevelFilter(this.level.value);
+    const bookLevel = normaliseLevel(level);
+    const levelMatches =
+      !wanted ||
+      (wanted === "unrated" ? bookLevel === "" : bookLevel === wanted);
+
     return (
-      (!this.level.value || level == this.level.value) &&
+      levelMatches &&
       (!this.size.value || size == this.size.value) &&
       (!this.author.value || author == this.author.value)
     );

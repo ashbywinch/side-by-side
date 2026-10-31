@@ -22,8 +22,13 @@ function segment(text: string, translation: string) {
   return JSON.stringify({ title: "Book", author: "Author", start: 0, end: 1, text, translation });
 }
 
-function entry(title: string, author = "Author", translated = true) {
-  return JSON.stringify({ lang: "ru", title, author, translated });
+function entry(
+  title: string,
+  author = "Author",
+  translated = true,
+  extra: Record<string, unknown> = {},
+) {
+  return JSON.stringify({ lang: "ru", title, author, translated, ...extra });
 }
 
 afterEach(async () => {
@@ -146,5 +151,89 @@ describe("checkCorpus", () => {
     const result = await checkCorpus({ root });
 
     expect(result.errors.join("\n")).toMatch(/not marked translated/i);
+  });
+
+  it("fails on a numeric Vocab Level", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Book", "Author", true, {
+        "Word Count": 500,
+        "Vocab Level": 2,
+      })}\n`,
+      "ru/Author/Book.jsonl": `${segment("Привет", "Hello")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors.join("\n")).toMatch(/invalid Vocab Level/i);
+  });
+
+  it("fails on an unknown Vocab Level", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Book", "Author", true, {
+        "Word Count": 500,
+        "Vocab Level": "B3",
+      })}\n`,
+      "ru/Author/Book.jsonl": `${segment("Привет", "Hello")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors.join("\n")).toMatch(/invalid Vocab Level/i);
+  });
+
+  it("fails on a rated book below the analysis cutoff", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Book", "Author", true, {
+        "Word Count": 100,
+        "Vocab Level": "C2",
+      })}\n`,
+      "ru/Author/Book.jsonl": `${segment("Привет", "Hello")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors.join("\n")).toMatch(/must be empty below 250 words/i);
+  });
+
+  it("accepts an unrated book below the analysis cutoff", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Book", "Author", true, {
+        "Word Count": 100,
+        "Vocab Level": "",
+      })}\n`,
+      "ru/Author/Book.jsonl": `${segment("Привет", "Hello")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors).toEqual([]);
+  });
+
+  it("accepts a rated book at the analysis cutoff", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Book", "Author", true, {
+        "Word Count": 250,
+        "Vocab Level": "C2",
+      })}\n`,
+      "ru/Author/Book.jsonl": `${segment("Привет", "Hello")}\n`,
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors).toEqual([]);
+  });
+
+  it("fails on a book with no source segments", async () => {
+    const root = await makeFixture({
+      "ru/index.jsonl": `${entry("Empty", "Author", true, {
+        "Word Count": 0,
+        "Vocab Level": "",
+      })}\n`,
+      "ru/Author/Empty.jsonl": "\n",
+    });
+
+    const result = await checkCorpus({ root });
+
+    expect(result.errors.join("\n")).toMatch(/no source segments/i);
   });
 });

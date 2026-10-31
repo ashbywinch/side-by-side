@@ -33,8 +33,11 @@ bookshelf and sign-in journeys are the next phases.
   the footer shows “X of Y”.
 - Loading shows a quiet busy state without blanking the current page. A
   missing book or chunk shows a readable error, not a raw parse failure.
-- The index shows book cards with author, title, CEFR level, size, word count
-  and a translated badge.
+- The index shows book cards with author, title, CEFR level (or “Unrated”),
+  size, word count and a translated badge. The level filter offers the CEFR
+  levels present in the corpus, in order, plus “Unrated”. Books under 250
+  words are Unrated; the filter never shows `0`, `2`, or another numeric
+  artefact.
 
 ## Accessibility
 
@@ -62,5 +65,3 @@ bookshelf and sign-in journeys are the next phases.
 - **Google sign-in**: a single, optional sign-in entry; anonymous use is
   always available; first sign-in merges the local shelf; sign-out is clear
   and does not delete local reading.
-- **CEFR**: only A1–C2 in the level filter; unrated books are labelled
-  “Unrated”, never `0` or `2`.

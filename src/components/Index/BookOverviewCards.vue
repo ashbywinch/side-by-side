@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BookOverviewCard from "./BookOverviewCard.vue";
+import { levelLabel } from "./levels";
 import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 
@@ -14,7 +15,7 @@ defineProps({
         :lang="book.lang"
         :title="book.title" 
         :author="book.author" 
-        :level="book['Vocab Level'] ?? ''"
+        :level="levelLabel(book['Vocab Level'])"
         :words="book['Word Count']"
         :size="book.size ?? ''"
         :translated="book.translated === true || book.translated === 'true'" />

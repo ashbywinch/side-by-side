@@ -29,7 +29,7 @@ export async function runSmoke({
   base,
   sha,
   fetchImpl = fetch,
-  expectedBooks = 2148,
+  expectedBooks = 2147,
   expectedChunkSize = 500,
   book = DEFAULT_BOOK,
   attempts = 1,

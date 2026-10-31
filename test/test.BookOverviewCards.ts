@@ -8,9 +8,10 @@ import { render, screen } from "@testing-library/vue";
 
 createApp({});
 
-const booksJsonl = `{"title":"Test title","author":"Test author 1","Word Count":"20","size":"small","level":"A1","lang":"en"}
-{"title": "Test title 2", "author": "Test author 2", "Word Count": "20", "size": "medium", "level": "B2", "lang": "en"}
-{"title": "Test title 3", "author": "Test author 3", "Word Count": "20", "size": "large", "level": "C2", "lang": "en"}`;
+const booksJsonl = `{"title":"Test title","author":"Test author 1","Word Count":20,"size":"small","Vocab Level":"A1","lang":"en"}
+{"title": "Test title 2", "author": "Test author 2", "Word Count": 20, "size": "medium", "Vocab Level": "B2", "lang": "en"}
+{"title": "Test title 3", "author": "Test author 3", "Word Count": 20, "size": "large", "Vocab Level": "C2", "lang": "en"}
+{"title": "Test title 4", "author": "Test author 4", "Word Count": 20, "size": "small", "Vocab Level": 2, "lang": "en"}`;
 
 export const handlers = [
   http.get("api/books/en/index.jsonl", () => {
@@ -50,7 +51,7 @@ vi.mock("vue-router", async () => {
 });
 
 it("should load index", async () => {
-  render(IndexPage, {
+  const { container } = render(IndexPage, {
     props: {
       lang: "en",
     },
@@ -59,4 +60,6 @@ it("should load index", async () => {
 
   expect(await screen.queryByText("Test author 1")).toBeTruthy();
   expect(await screen.queryByText("Test title")).toBeTruthy();
+  expect(container.innerHTML).toContain('text="Unrated"');
+  expect(container.innerHTML).not.toContain('text="2"');
 });

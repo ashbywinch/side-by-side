@@ -1,6 +1,6 @@
 # PRD — Side by Side
 
-Status: released 1.0.0; bookshelf, accounts and CEFR cleanup are planned.
+Status: released 1.0.0; bookshelf and accounts are planned.
 
 ## JTBD
 
@@ -25,7 +25,9 @@ Status: released 1.0.0; bookshelf, accounts and CEFR cleanup are planned.
 - Move between pages without loading the whole book; resume from any page URL.
 - Keep the current page, scroll position and back/forward behaviour sane on
   desktop and mobile.
-- See only valid CEFR levels in the level filter; never numeric artefacts.
+- See only valid CEFR levels and “Unrated” in the level filter; never numeric
+  artefacts.
+- See “Unrated” rather than a guessed level for books under 250 words.
 - (Planned) Add books to a bookshelf and resume from a saved page.
 - (Planned) Sign in with Google and see the same bookshelf on every device.
 
