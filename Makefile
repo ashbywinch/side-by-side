@@ -5,7 +5,7 @@ SHELL := /bin/bash
 NPM := npm
 NODE := node
 
-.PHONY: help setup install-hooks dev data check-corpus lint lint-github typecheck check test coverage format clean dist smoke release
+.PHONY: help setup install-hooks dev data check-corpus lint typecheck check test coverage format clean dist smoke release
 
 help:
 	@printf '%s\n' \
@@ -15,8 +15,7 @@ help:
 	  '  make dev             build corpus + Vite on :8080' \
 	  '  make data            rebuild the chunked corpus in public/api' \
 	  '  make check-corpus    validate corpus parity and translations' \
-	  '  make lint            eslint (local)' \
-	  '  make lint-github     eslint with GitHub annotations' \
+	  '  make lint            eslint' \
 	  '  make typecheck       vue-tsc' \
 	  '  make check           lint + typecheck (pre-push gate)' \
 	  '  make test            check + tests with coverage' \
@@ -46,9 +45,6 @@ check-corpus:
 
 lint:
 	$(NPM) run lint
-
-lint-github:
-	$(NPM) run lint:github
 
 typecheck:
 	$(NPM) run typecheck

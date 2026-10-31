@@ -65,8 +65,8 @@ jobs:
       - name: Setup
         run: make setup
 
-      - name: Lint (GitHub annotations)
-        run: make lint-github
+      - name: Lint
+        run: make lint
 
       - name: Validate corpus
         run: make check-corpus
@@ -75,7 +75,7 @@ jobs:
         run: make test
 
       - name: Coverage summary
-        if: always()
+        if: success()
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
           filename: coverage/clover.xml
@@ -89,9 +89,10 @@ jobs:
           thresholds: '80 90'
 
       - name: Comment coverage
-        if: github.event_name == 'pull_request' && always()
+        if: github.event_name == 'pull_request' && success()
         uses: marocchino/sticky-pull-request-comment@6804b5ad49d19c10c9ae7cf5057352f7ff333f31 # v1.6.0
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: coverage
           path: code-coverage-results.md
 
