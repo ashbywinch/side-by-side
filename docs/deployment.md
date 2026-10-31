@@ -21,21 +21,23 @@ production traffic to it atomically.
    Worker.
 2. `npx wrangler login`, then `npx wrangler whoami`.
 3. Create an API token for CI with:
-   - Account → Workers Scripts: Edit
-   - Zone → Workers Routes: Edit (for the custom domain)
+   - **Account → Workers Scripts: Edit** — account-scoped, not zone-scoped
+   - **Zone → Workers Routes: Edit** (for the custom domain), scoped to
+     `blueumbrella.net`
    - Account Settings: Read
-   Store it as `CLOUDFLARE_API_TOKEN` in the GitHub repository secrets, and the
-   account ID as `CLOUDFLARE_ACCOUNT_ID`.
-4. First deploy, from a release branch:
 
-   ```sh
-   npm ci
-   npm run build
-   npx wrangler deploy
-   ```
+   A zone-scoped Workers Scripts grant is deprecated and cannot create an
+   account-level Worker; it fails deployment with
+   `No access to the specified resource`. Use the account-scoped permission,
+   or the **Edit Cloudflare Workers** template.
 
-   This creates the `side-by-side` Worker and the `sbs.blueumbrella.net` custom
-   domain, and issues the certificate. Use the smoke test once DNS is live.
+   Store the token as `CF_API_TOKEN` in the GitHub repository secrets, and the
+   account ID as `CF_ACCOUNT_ID` (the house names used by the other repos).
+4. Merge the release PR to `main`. The deploy job creates the `side-by-side`
+   Worker and the `sbs.blueumbrella.net` custom domain, and issues the
+   certificate. The first deploy has to create the Worker; PR previews are
+   skipped with a notice until it exists. Use the smoke test once DNS is live.
+   Do not run `wrangler deploy` ad hoc.
 
 ## The normal release flow
 
