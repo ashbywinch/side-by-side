@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import { useFetchIndexItems } from "./FetchIndex"
 import { useFilter } from './FilterIndex';
 import { Filter } from '@/components/Index/Filter';
@@ -15,7 +15,6 @@ import BookshelfSection from '@/components/Index/BookshelfSection.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from '@/components/PageSurround.vue';
 import { useBookshelf } from '@/components/Bookshelf/useBookshelf';
-import { layoutFor, rememberedVariant } from '@/pages/Dev/labVariant';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -26,16 +25,6 @@ const props = defineProps({
 })
 
 const bookshelf = useBookshelf()
-
-// The lab switch is dev-only: after a walker opens a book, the index they
-// return to must still show the presentation they were walked through.
-function labLayout() {
-  const variant = rememberedVariant()
-  return variant === null ? null : layoutFor(variant)
-}
-const remembered = import.meta.env.DEV ? labLayout() : null
-const layout = computed(() => props.shelfLayout ?? remembered?.shelfLayout ?? null)
-const portrait = computed(() => props.portrait || (remembered?.portrait ?? false))
 
 // Filters are collapsed by default: a results bar says how many books there are
 // and what is filtered. A phone opens them as a sheet; a desktop expands them
@@ -126,13 +115,13 @@ function currentFilter(): Filter {
 <template>
   <PageSurround :error="fetchItems.error.value">
     <BookshelfSection
-      v-if="layout === 'section'"
+      v-if="shelfLayout === 'section'"
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
       :portrait="portrait"
       :lang="lang" />
     <BookshelfRail
-      v-else-if="layout === 'rail'"
+      v-else-if="shelfLayout === 'rail'"
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
       :portrait="portrait" />

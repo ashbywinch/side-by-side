@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import { saveBookshelf, STORAGE_KEY } from "@/components/Bookshelf/bookshelfStorage";
@@ -8,7 +8,6 @@ import { layoutFor, rememberVariant, isLabVariant } from "./labVariant";
 import { shelfFor } from "./shelfFixtures";
 
 const route = useRoute();
-
 
 // `?shelf=none|reading|full|stale` sets the bookshelf before the app reads it.
 // A fresh browser context already starts empty; this is for comparing the
@@ -29,19 +28,14 @@ const props = defineProps({
 const layout = computed(() =>
   layoutFor(isLabVariant(props.variant) ? props.variant : "b"),
 );
-// Remember which concept this browser session is looking at, so that returning
-// to the site root — as a real reader does — stays inside the same build
-// instead of dropping to the shipped index (the dev-only guard in router.ts).
-if (typeof window !== "undefined") {
-  window.sessionStorage.setItem("lab-variant", props.variant)
-}
 
 const shelfLayout = computed(() => layout.value.shelfLayout);
 const portrait = computed(() => layout.value.portrait);
 
-// Opening a book leaves the lab route; the index they come back to must still
-// show the same presentation.
-onMounted(() => rememberVariant(props.variant));
+// Opening a book leaves the lab route; a reader who comes back through the
+// root or the home icon must land inside the same build, so the variant is
+// remembered before the first paint.
+rememberVariant(props.variant);
 </script>
 
 <template>

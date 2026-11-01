@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 import BookPage from "./pages/Book/BookPage.vue";
 import IndexPage from "./pages/Index/IndexPage.vue";
 import ShelfPage from "./pages/Shelf/ShelfPage.vue";
+import { rememberedVariant } from "./pages/Dev/labVariant";
 
 const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/ru/books" },
@@ -53,14 +54,15 @@ const router = createRouter({
   },
 });
 
-// A walk comparison must survive "leave the site and come back": the root and
-// the index link stay inside the concept this session was given. Dev only.
+// A walk comparison must survive "leave the site and come back": a reader who
+// returns to the root, or taps the home icon, stays inside the build they were
+// given. Dev only, and removed with the lab route.
 if (import.meta.env.DEV) {
   router.beforeEach((to) => {
-    const variant = window.sessionStorage.getItem("lab-variant");
-    if (!variant) return;
+    const variant = rememberedVariant();
+    if (variant === null) return;
     if (to.name === "Index") {
-      return { name: "Lab", params: { lang: "ru", variant } };
+      return { name: "Lab", params: { lang: to.params.lang ?? "ru", variant } };
     }
   });
 }
