@@ -27,14 +27,11 @@ function mountSheet(open = true) {
 }
 
 describe("FilterSheet", () => {
-  // The clipping that made these dropdowns unusable was the sheet's own
-  // scroller, not the library's teleport: the sheet no longer scrolls, so the
-  // app's autocompleting selects are used again — including on a phone.
-  it("uses the library's selects, so the author field autocompletes", () => {
+  it("carries the author autocomplete into the sheet", () => {
     const wrapper = mountSheet();
 
-    expect(wrapper.findAll("select")).toHaveLength(0);
-    expect(wrapper.findComponent({ name: "BookFilter" }).exists()).toBe(true);
+    expect(wrapper.find("#author-filter").exists()).toBe(true);
+    expect(wrapper.findAll("select")).toHaveLength(2);
   });
 
   it("shows the live count of the draft, not the applied filter", async () => {
