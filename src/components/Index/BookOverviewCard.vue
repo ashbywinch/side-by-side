@@ -69,24 +69,29 @@ const sizeColor: Record<string, string> = {
 </template>
 <style scoped>
 .va-card-title {
-  font-size: 1rem !important;
+  font-size: 1.2rem !important;
   font-weight: 300 !important;
   text-transform: none !important;
   padding-bottom: .3rem !important;
 }
 .va-card-content {
-  font-size: .85rem !important;
+  font-size: 1rem !important;
 }
 .va-badge * {
-  font-size: .7rem !important;
+  font-size: .8rem !important;
   text-transform: none !important;
 }
-/* Two pills side by side were wider than the card, which set the width of every
-   tile to the same value; stacked, the width follows the title and the author. */
+/* Stacked, so the width follows the title and the author; pinned to the card's
+   bottom edge, so every tile in a row carries its pills on one line. */
 .badges {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1.5rem;
   flex-direction: column;
   align-items: flex-start;
   gap: .3rem;
+  margin: 0;
 }
 div.row a:focus .va-card {
   border: 1px solid var(--va-primary);
@@ -104,9 +109,8 @@ div.row a:focus .va-card {
   /* The row stretches the card to its tallest neighbour; the bar stays on the
      card's bottom edge. */
   position: relative;
-  height: 100%;
-  padding-bottom: .25rem;
-  padding-bottom: 0;
+  /* Room for the pills, which sit on the card's bottom edge. */
+  padding-bottom: 5.25rem;
   hyphens: none;
   overflow-wrap: normal;
   word-break: normal;
@@ -114,6 +118,7 @@ div.row a:focus .va-card {
 /* The bar is the card's bottom edge. */
 a {
   display: flex;
+  align-items: stretch;
   min-width: 0;
 }
 .progress {
