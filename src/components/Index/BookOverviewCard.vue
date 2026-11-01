@@ -110,11 +110,35 @@ div.row a:focus .va-card {
   height: 100%;
   background: var(--va-primary);
 }
-/* Portrait: a book-shaped tile. Only the width and the type change — the
-   layout is the one the card has always had, so the pills sit where they
-   always sat, a fixed space below the author. */
+/* Portrait: a book-shaped tile of one height, so every tile in a row puts its
+   pills and its bar on the same lines. The height fits the tallest case in the
+   corpus — a three-line title with a two-line author — and the pills are pinned
+   above the bar rather than left to follow the text. */
 .item.portrait {
+  position: relative;
   width: 7rem;
+  height: 12rem;
+  overflow: hidden;
+}
+.item.portrait .va-card__content {
+  padding-bottom: 4.5rem;
+}
+.item.portrait .badges {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .4rem;
+  margin: 0;
+}
+.item.portrait .progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
 }
 .item.portrait .va-card-title {
   font-size: .95rem !important;
