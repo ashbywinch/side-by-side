@@ -22,16 +22,12 @@ function mountCard(props: Record<string, unknown> = {}) {
 }
 
 describe("BookOverviewCard", () => {
-  it("says how far the reader got, in words a person uses", () => {
-    const wrapper = mountCard({ progress: 0.26 });
-    expect(wrapper.text()).toContain("26% read");
-  });
-
-  // The bar alone, three pixels on an edge, reads as a rendering artefact.
-  it("keeps the bar and labels it as well", () => {
+  // Progress is a bar on the card's bottom edge and nothing else: no
+  // percentage, which would claim a precision our pagination does not have.
+  it("shows how far the reader got as a bar, without a number", () => {
     const wrapper = mountCard({ progress: 0.26 });
     expect(wrapper.find('[role="progressbar"]').attributes("aria-valuenow")).toBe("26");
-    expect(wrapper.text()).toContain("26% read");
+    expect(wrapper.text()).not.toContain("% read");
   });
 
   it("says nothing about progress for a book that has not been read", () => {
@@ -40,23 +36,23 @@ describe("BookOverviewCard", () => {
     expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
   });
 
-  it("marks a finished book without a percentage", () => {
-    const wrapper = mountCard({ progress: 1, finished: true });
-    expect(wrapper.text()).not.toContain("100% read");
-    expect(wrapper.text()).toContain("Finished");
+  it("shows a finished book as a full bar and no label", () => {
+    const wrapper = mountCard({ progress: 1 });
+    expect(wrapper.find('[role="progressbar"]').attributes("aria-valuenow")).toBe("100");
+    expect(wrapper.text()).not.toContain("Finished");
   });
 
   // A 7rem tile cannot hold "271975 words" without spilling out of the card.
   it("abbreviates the word count on the portrait tile", () => {
     const portrait = mountCard({ portrait: true });
-    expect(portrait.text()).toContain("272k words");
+    expect(portrait.html()).toContain('text="272k words"');
 
     const wide = mountCard();
-    expect(wide.text()).toContain("271975 words");
+    expect(wide.html()).toContain('text="271975 words"');
   });
 
   it("keeps the exact count on a portrait tile below a thousand words", () => {
     const wrapper = mountCard({ portrait: true, words: 517 });
-    expect(wrapper.text()).toContain("517 words");
+    expect(wrapper.html()).toContain('text="517 words"');
   });
 });

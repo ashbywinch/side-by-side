@@ -6,7 +6,7 @@ import { levelLabel } from "./levels";
 import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { BookshelfEntry } from "@/types/bookshelf";
-import { isFinished, progressFraction } from "@/components/Bookshelf/bookshelf";
+import { progressFraction } from "@/components/Bookshelf/bookshelf";
 
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required:true},
@@ -41,7 +41,6 @@ const cards = computed(() =>
         :words="book['Word Count']"
         :size="book.size ?? ''"
         :progress="entry ? progressFraction(entry) : null"
-        :finished="entry ? isFinished(entry) : false"
         :portrait="portrait" />
     </template>
   </div>

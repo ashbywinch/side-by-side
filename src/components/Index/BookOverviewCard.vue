@@ -4,6 +4,26 @@ import type { PropType } from "vue";
 
 import { levelColorFor } from "./levels";
 
+const rainbow = {
+  1: "#817",
+  2: "#a35",
+  3: "#c66",
+  4: "#e94",
+  5: "#ed0",
+  6: "#9d5",
+  7: "#4d8",
+  8: "#2cb",
+  9: "#0bc",
+  10: "#09c",
+  11: "#36b",
+  12: "#639",
+} as Record<number, string>
+const sizeColor: Record<string, string> = {
+  "small": rainbow[6],
+  "medium": rainbow[4],
+  "large": rainbow[2],
+}
+
 const props = defineProps({
   lang: { type:String, required:true},
   title: { type:String, required:true},
@@ -13,7 +33,6 @@ const props = defineProps({
   words: { type:Number, required:true},
   // Fraction read, or null when the reader has not read this book.
   progress: { type: Number as PropType<number | null>, default: null },
-  finished: { type:Boolean, default:false },
   // Vertical, book-like card rather than the flat one.
   portrait: { type:Boolean, default:false },
 })
@@ -42,16 +61,10 @@ const wordsLabel = computed(() => {
     <va-card-content>
       {{ author }}
       <div class="breath" />
-      <!-- One quiet line of metadata: level keeps its colour as a dot, and the
-           words and progress are subordinate to the title. -->
-      <p class="meta">
-        <span class="meta__item">
-          <span class="dot" :style="{ background: levelColorFor(level) }" aria-hidden="true" />{{ level }}
-        </span>
-        <span class="meta__item">{{ wordsLabel }}</span>
-        <span v-if="finished" class="meta__item meta__item--finished">Finished</span>
-        <span v-else-if="percent !== null" class="meta__item">{{ percent }}% read</span>
-      </p>
+      <div class="row va-spacing-x-2 badges">
+        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
+        <va-badge :text="wordsLabel" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
+      </div>
     </va-card-content>
     <span
       v-if="percent !== null"
@@ -100,56 +113,33 @@ a {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   min-height: 6.5rem;
+  padding-bottom: 0;
   padding-bottom: 0;
   overflow: hidden;
 }
-.item .va-card__content {
+.item :deep(.va-card__content) {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
-.meta {
-  display: flex;
+/* The pills sit on the card's bottom edge, level across a row. */
+.badges {
+  align-items: center;
   flex-wrap: wrap;
-  align-items: center;
-  gap: .1rem .35rem;
-  margin: auto 0 0;
-  padding-top: .5rem;
-  color: var(--va-text-secondary);
-  font-size: .72rem;
-  line-height: 1rem;
-}
-.meta__item {
-  display: inline-flex;
-  align-items: center;
   gap: .3rem;
-}
-.meta__item--finished {
-  color: var(--va-success, #2a8a4a);
-  font-weight: 500;
-}
-.dot {
-  width: .45rem;
-  height: .45rem;
-  border-radius: 50%;
-  display: inline-block;
+  margin-top: auto;
+  padding-top: .5rem;
 }
 .breath {
   height: .75rem;
 }
-.read--small {
-  font-size: .7rem;
-  margin-top: .15rem;
+.item.portrait .breath {
+  height: 0;
 }
-.read {
-  margin-top: .25rem;
-  color: var(--va-text-secondary);
-  font-size: .8rem !important;
-}
-.finished {
-  color: var(--va-success);
-  font-weight: 600;
+.item.portrait .va-card__content {
+  font-size: .8rem;
 }
 /* The progress bar is the card's bottom edge, not a widget inside it. */
 .progress {
@@ -166,9 +156,8 @@ a {
 /* Portrait: a book-shaped tile. Whitespace does the spacing; the badges and
    the bar sit on the bottom edge so ragged titles do not misalign the row. */
 .item.portrait {
-  display: flex;
-  flex-direction: column;
-  min-height: 9rem;
+  height: 12rem;
+  min-height: 12rem;
   padding-bottom: 0;
 }
 .item.portrait .va-card-title {
@@ -196,7 +185,6 @@ a {
   justify-content: space-between;
 }
 .item.portrait .badges {
-  margin-top: auto;
   flex-direction: column;
   align-items: flex-start;
   gap: .15rem;

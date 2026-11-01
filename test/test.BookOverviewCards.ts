@@ -60,8 +60,7 @@ it("should load index", async () => {
 
   expect(await screen.queryByText("Test author 1")).toBeTruthy();
   expect(await screen.queryByText("Test title")).toBeTruthy();
-  expect(container.textContent).toContain("Unrated");
-  expect(container.querySelectorAll(".dot").length).toBeGreaterThan(0);
+  expect(container.innerHTML).toContain('text="Unrated"');
 });
 
 it("collapses the filters behind a results bar until asked", async () => {

@@ -75,10 +75,10 @@ describe("BookOverviewCard", () => {
     expect(wrapper.find(".finished").exists()).toBe(false)
   })
 
-  it("marks a finished book with a full bar and a check", () => {
-    const wrapper = mountCard({ progress: 1, finished: true })
+  it("shows a finished book as a full bar", () => {
+    const wrapper = mountCard({ progress: 1 })
 
-    expect(wrapper.text()).toContain("Finished")
+    expect(wrapper.text()).not.toContain("Finished")
     expect(wrapper.find(".progress__fill").attributes("style")).toContain("100%")
   })
 })

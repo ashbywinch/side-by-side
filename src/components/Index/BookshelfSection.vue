@@ -4,7 +4,7 @@ import { computed } from "vue";
 import BookOverviewCard from "./BookOverviewCard.vue";
 import { levelLabel } from "./levels";
 import { shelfCards } from "./shelfCards";
-import { isFinished, progressFraction } from "@/components/Bookshelf/bookshelf";
+import { progressFraction } from "@/components/Bookshelf/bookshelf";
 import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { BookshelfEntry } from "@/types/bookshelf";
@@ -36,7 +36,6 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
         :words="book['Word Count']"
         :size="book.size ?? ''"
         :progress="progressFraction(entry)"
-        :finished="isFinished(entry)"
         :portrait="portrait" />
       <RouterLink
         v-if="cards.length > VISIBLE"
