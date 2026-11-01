@@ -112,9 +112,9 @@ async function loadPage() {
     // Reading forward moves the bookmark. Everything else is browsing.
     const storedPage = stored ? pageForPosition(stored.position, reader.perPage) : null
     const forwardTurn = previousPage > 0 && effective === previousPage + 1
-    if (!stored) {
-      bookshelf.touch(book.value, pageStart)
-    } else if (storedPage !== effective && forwardTurn) {
+    // Only an adjacent turn forward is reading. Jumping to page 90 from page 1
+    // (a stray pager click) must not put the book on the shelf at 99%.
+    if (forwardTurn && storedPage !== effective) {
       bookshelf.touch(book.value, pageStart)
     }
     resumed.value = false

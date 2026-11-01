@@ -8,6 +8,7 @@ import {
 } from "@/pages/Dev/labVariant";
 
 afterEach(() => {
+  window.sessionStorage.clear();
   window.localStorage.clear();
 });
 

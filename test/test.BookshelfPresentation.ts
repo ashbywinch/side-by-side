@@ -120,7 +120,7 @@ describe("BookshelfSection", () => {
     })
 
     expect(wrapper.findAll(".card")).toHaveLength(4)
-    expect(wrapper.find(".see-all").text()).toContain("See all 6 books")
+    expect(wrapper.find(".see-all").text()).toContain("See all 6")
   })
 
   it("hides the link when everything fits", () => {

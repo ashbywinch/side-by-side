@@ -122,9 +122,10 @@ div.row a:focus .va-card {
 .badges {
   align-items: center;
   margin-top: auto;
+  padding-top: .5rem;
 }
 .breath {
-  display: none;
+  height: .75rem;
 }
 .read {
   margin-top: .25rem;

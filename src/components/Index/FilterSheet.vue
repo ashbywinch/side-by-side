@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 import BookFilter from "./BookFilter.vue";
 import { FilterRefs } from "./Filter";
@@ -22,11 +22,15 @@ const props = defineProps({
 const emit = defineEmits(["apply", "close"])
 
 const draft = new FilterRefs()
+// A touch that dismisses the sheet can produce a second click on the page
+// underneath; ignore taps for a moment after opening.
+const openedAt = ref(0)
 
 watch(
   () => props.open,
   (open) => {
     if (!open) return
+    openedAt.value = Date.now()
     draft.level.value = props.filter.level.value
     draft.size.value = props.filter.size.value
     draft.author.value = props.filter.author.value
@@ -54,6 +58,11 @@ const active = computed(
   () => [draft.level.value, draft.size.value, draft.author.value].filter(Boolean).length,
 )
 
+function onBackdrop() {
+  if (Date.now() - openedAt.value < 300) return
+  emit("close")
+}
+
 function clear() {
   draft.level.value = ""
   draft.size.value = ""
@@ -71,7 +80,7 @@ function apply() {
 
 <template>
   <Teleport to="body">
-    <div v-if="open" class="backdrop" @click="emit('close')" />
+    <div v-if="open" class="backdrop" @click="onBackdrop" />
     <section
       v-if="open"
       class="sheet"

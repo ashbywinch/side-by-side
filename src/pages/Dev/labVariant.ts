@@ -16,7 +16,9 @@ export function isLabVariant(value: unknown): value is LabVariant {
 export function rememberVariant(variant: unknown): void {
   if (!isLabVariant(variant)) return;
   try {
-    window.localStorage.setItem(KEY, variant);
+    // Session, not local: a variant must not outlive the tab that chose it, or
+    // two comparison runs sharing a browser profile inherit each other.
+    window.sessionStorage.setItem(KEY, variant);
   } catch {
     // A blocked localStorage only costs the walker continuity.
   }
@@ -24,7 +26,7 @@ export function rememberVariant(variant: unknown): void {
 
 export function rememberedVariant(): LabVariant | null {
   try {
-    const value = window.localStorage.getItem(KEY);
+    const value = window.sessionStorage.getItem(KEY);
     return isLabVariant(value) ? value : null;
   } catch {
     return null;

@@ -41,15 +41,15 @@ export function isFinished(entry: BookshelfEntry): boolean {
 }
 
 /**
- * How far into the book the reader has got: the furthest of their bookmark and
- * the last translation they uncovered, not the place they happen to be looking
- * at. Scrolling back to re-read the start must not un-read the book.
+ * How far into the book the reader has got: the furthest segment they reached,
+ * not the place they happen to be looking at. Scrolling back to re-read the
+ * opening must not un-read the book.
  */
 export function progressFraction(entry: BookshelfEntry): number {
   if (isFinished(entry)) return 1;
   const segments = entry.book.segments;
   if (!Number.isFinite(segments) || segments <= 0) return 0;
-  const furthest = Math.max(entry.position, entry.revealedThrough ?? -1);
-  const behind = Math.min(Math.max(furthest + 1, 0), segments);
+  const reached = Math.max(entry.furthest ?? -1, entry.position);
+  const behind = Math.min(Math.max(reached + 1, 0), segments);
   return behind / segments;
 }

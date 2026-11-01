@@ -16,12 +16,29 @@ const props = defineProps({
 })
 
 const cards = computed(() => shelfCards(props.books, props.entries))
+
+/**
+ * A vertical wheel over a horizontal rail does nothing by default, so on a
+ * desktop the row looks stuck. Translate it, and only when the rail can
+ * actually move that way — otherwise the page keeps its scroll.
+ */
+function onWheel(event: WheelEvent) {
+  const rail = event.currentTarget as HTMLElement | null
+  if (!rail || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
+  const max = rail.scrollWidth - rail.clientWidth
+  if (max <= 0) return
+  const next = Math.min(Math.max(rail.scrollLeft + event.deltaY, 0), max)
+  if (next === rail.scrollLeft) return
+  rail.scrollLeft = next
+  event.preventDefault()
+}
 </script>
 
 <template>
   <section v-if="cards.length" class="shelf" aria-label="You are reading">
     <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
-    <ul class="rail" :class="{ 'rail--portrait': portrait }">
+    <div class="rail-wrap">
+      <ul class="rail" :class="{ 'rail--portrait': portrait }" @wheel="onWheel">
       <li v-for="{ book, entry } in cards" :key="book.author + ': ' + book.title" class="rail__item">
         <BookOverviewCard
           :lang="book.lang"
@@ -34,7 +51,8 @@ const cards = computed(() => shelfCards(props.books, props.entries))
           :finished="isFinished(entry)"
           :portrait="portrait" />
       </li>
-    </ul>
+      </ul>
+    </div>
   </section>
 </template>
 
@@ -46,6 +64,18 @@ const cards = computed(() => shelfCards(props.books, props.entries))
   font-size: 1rem;
   font-weight: 500;
   margin: 0 0 .5rem;
+}
+.rail-wrap {
+  position: relative;
+}
+.rail-wrap::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 2.5rem;
+  background: linear-gradient(to right, transparent, var(--va-background-primary, #fff));
+  pointer-events: none;
 }
 .rail {
   display: flex;

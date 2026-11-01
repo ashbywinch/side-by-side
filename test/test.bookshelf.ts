@@ -15,6 +15,7 @@ function entry(overrides: Partial<BookshelfEntry> = {}): BookshelfEntry {
   return {
     book: { lang: "ru", author: "Блок", title: "Двенадцать", segments: 100 },
     position: 0,
+    furthest: 0,
     revealedThrough: -1,
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
     ...overrides,
@@ -88,13 +89,8 @@ describe("bookshelf", () => {
   // start to re-read must not make the book look untouched.
   it("keeps progress at the furthest point reached", () => {
     const book = { ...entry().book, segments: 100 };
-    const read = entry({ position: 60, revealedThrough: 40, book });
-    expect(progressFraction(read)).toBe(0.61);
-
-    const scrolledBack = entry({ position: 2, revealedThrough: 40, book });
-    expect(progressFraction(scrolledBack)).toBe(0.41);
-
-    const revealedFurther = entry({ position: 2, revealedThrough: 80, book });
-    expect(progressFraction(revealedFurther)).toBe(0.81);
+    expect(progressFraction(entry({ position: 60, furthest: 60, book }))).toBe(0.61);
+    expect(progressFraction(entry({ position: 2, furthest: 60, book }))).toBe(0.61);
+    expect(progressFraction(entry({ position: 2, furthest: 2, book }))).toBe(0.03);
   });
 });

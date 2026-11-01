@@ -24,7 +24,15 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 
 <template>
   <section v-if="cards.length" class="shelf" aria-label="You are reading">
-    <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
+    <header class="shelf__head">
+      <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
+      <RouterLink
+        v-if="cards.length > VISIBLE"
+        class="see-all"
+        :to="{ name: 'Shelf', params: { lang } }">
+        See all {{ cards.length }}
+      </RouterLink>
+    </header>
     <div class="stack">
       <BookOverviewCard
         v-for="{ book, entry } in shown"
@@ -39,12 +47,6 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
         :finished="isFinished(entry)"
         :portrait="portrait" />
     </div>
-    <RouterLink
-      v-if="cards.length > VISIBLE"
-      class="see-all"
-      :to="{ name: 'Shelf', params: { lang } }">
-      See all {{ cards.length }} books
-    </RouterLink>
   </section>
 </template>
 
@@ -52,14 +54,21 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 .shelf {
   margin: .75rem 0 1.5rem;
 }
+.shelf__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .5rem;
+}
 .shelf__title {
   font-size: 1rem;
   font-weight: 500;
-  margin: 0 0 .5rem;
+  margin: 0;
 }
 .stack {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
   gap: .75rem;
   align-items: stretch;
 }
@@ -67,8 +76,10 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
   min-width: 0;
 }
 .see-all {
-  display: inline-block;
-  margin-top: .5rem;
-  font-size: .9rem;
+  font-size: .85rem;
+  white-space: nowrap;
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
 }
 </style>

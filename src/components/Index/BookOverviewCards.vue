@@ -54,7 +54,7 @@ const cards = computed(() =>
 .row {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-  gap: .75rem;
+  gap: 1rem;
   align-items: stretch;
 }
 .row--portrait {

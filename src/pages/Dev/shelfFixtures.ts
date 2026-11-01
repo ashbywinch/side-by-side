@@ -32,6 +32,7 @@ function entry(
   return {
     book: { ...book },
     position,
+    furthest: Math.max(position, 0),
     revealedThrough,
     updatedAt: new Date(updatedAt),
     ...(finishedAt ? { finishedAt: new Date(finishedAt) } : {}),
