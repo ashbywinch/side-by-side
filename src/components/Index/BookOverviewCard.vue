@@ -87,10 +87,10 @@ const sizeColor: Record<string, string> = {
   position: absolute;
   left: 1rem;
   right: 1rem;
-  bottom: 1.5rem;
+  bottom: .75rem;
   flex-direction: column;
   align-items: flex-start;
-  gap: .3rem;
+  gap: .25rem;
   margin: 0;
 }
 div.row a:focus .va-card {
@@ -113,7 +113,7 @@ div.row a:focus .va-card {
      card's bottom edge. */
   position: relative;
   /* Room for the pills, which sit on the card's bottom edge. */
-  padding-bottom: 5.25rem;
+  padding-bottom: 4.25rem;
   hyphens: none;
   overflow-wrap: normal;
   word-break: normal;
