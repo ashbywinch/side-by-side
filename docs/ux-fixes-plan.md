@@ -51,3 +51,38 @@ would otherwise have contaminated the comparison.
 Six walks, A/B/C at 390×844 and 1280×800, fresh profiles, empty shelves,
 transcripts and screenshots in `/tmp/ux-walkthrough/round1/<variant>/<viewport>/`.
 Results and the comparative analysis follow in this document.
+
+## Decision — round 1
+
+**Chosen: the section (A) drawn with the portrait card (C).** Three book tiles
+above the results bar, "See all N books" beside them, and the same tiles in the
+catalogue.
+
+Why: on R1 (one action back to the current book) A and B were equal — both walkers
+reported "You're reading…, tap, back at my exact place with my translations".
+They differed on R2 (reaching an older book): A's "See all" is a link that
+works; B's rail needed a horizontal gesture, and the overflow walk with eight
+books could not move it at all ("drag selects text, scroll gestures and the
+scrollbar do nothing… I saw five of the eight and gave up on the last three").
+C's tiles were kept because they halve the height the shelf costs on arrival
+(R4) and give three books per row on a phone instead of one.
+
+Rejected on evidence or on judgement: the wide-card rail (R2), and the portrait
+tiles' original 11rem shape, whose empty middle one walker read as a missing
+cover — at 6.5–7rem across three columns the gap no longer reads as a hole.
+
+## Coherence pass
+
+Checked against the built screens at 390 and 1280, not against intentions.
+
+| Check | Finding | Action |
+| --- | --- | --- |
+| Row alignment | Titles wrap to two or three lines, so cards in a row had ragged bottom edges; none of the progress bars lined up. | **Fixed** — the card's link takes the cell height; rows stretch. |
+| Progress legibility | Portrait tiles showed only the bar, with no number: the "unlabelled hairline" every walk complained about. | **Fixed** — "26%" above the bar; "✓ finished" in the same slot. |
+| Empty result | Filtering to nothing gave a blank white page (seen in two walks). | **Fixed** — "No books match these filters · Clear all". |
+| Tap targets | "See all" was 32px tall at the bottom edge of the phone. | **Fixed** — 44px on a phone, and beside the books rather than under four cards. |
+| Focus | Chips, "Clear all", "Filters" and "See all" had no visible focus ring. | **Fixed** — 2px primary outline, offset 2px. |
+| Spacing | Shelf gap 0.75rem, catalogue gap 0.5rem on a phone; three different gaps between shelf, results and grid. | **Fixed** — one 1rem rhythm (0.5rem between tiles on a phone). |
+| Header weight | The brand occupied a fifth of a phone screen. | **Fixed** — smaller mark and text on the smallest breakpoint. |
+| Colour semantics | Level and word-count pills are the only colour signal; "Unrated" and "C2" have no legend. | **Open** — a legend is a catalogue feature, not a fix. |
+| Ragged middles | Equal row heights leave whitespace under short titles. | **Accepted** — the alternative is ragged bars; the gap is deliberate space, not filler. |

@@ -130,6 +130,12 @@ const countLabel = computed(() =>
   font-weight: 500;
   cursor: pointer;
 }
+.filters:focus-visible,
+.chip:focus-visible,
+.clear-all:focus-visible {
+  outline: 2px solid var(--va-primary);
+  outline-offset: 2px;
+}
 .filters:hover,
 .filters[aria-expanded="true"] {
   border-color: var(--va-primary);

@@ -148,10 +148,30 @@ function currentFilter(): Filter {
       :filter="filter.filter"
       @apply="applySheetFilter"
       @close="filtersOpen = false" />
+    <p v-if="fetchItems.items.value.length > 0 && pagination.items.value.length === 0" class="empty">
+      No books match these filters.
+      <button type="button" class="empty__reset" @click="clearAllFilters">Clear all</button>
+    </p>
     <BookOverviewCards
+      v-else
       :books="pagination.items.value"
       :entries="bookshelf.entries.value"
       :portrait="portrait" />
     <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
+<style scoped>
+.empty {
+  padding: 2rem 0;
+  color: var(--va-text-secondary);
+}
+.empty__reset {
+  border: 0;
+  background: none;
+  padding: .25rem;
+  color: var(--va-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>

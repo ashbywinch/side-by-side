@@ -62,6 +62,10 @@ header span {
   max-width: 22ch;
   line-height: 1.25 !important;
 }
+.screen-xs .va-icon {
+  font-size: 2.25rem !important;
+  height: 2.25rem !important;
+}
 .screen-xs .brand__name {
   font-size: 1rem !important;
   max-width: 18ch;

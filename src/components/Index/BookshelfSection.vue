@@ -64,10 +64,20 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
   gap: .75rem;
   align-items: stretch;
 }
+.screen-xs .stack {
+  gap: .5rem;
+}
 .stack > * {
   min-width: 0;
 }
 /* Beside the books it summarises, not a screen away in a header. */
+.see-all:focus-visible {
+  outline: 2px solid var(--va-primary);
+  outline-offset: 2px;
+}
+.screen-xs .see-all {
+  min-height: 2.75rem;
+}
 .see-all {
   align-self: end;
   justify-self: start;
