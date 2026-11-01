@@ -11,6 +11,18 @@ export const BOOK_RATIO = 2 / 3;
  * apply it, and measure once more because a wider card wraps into fewer lines
  * and so gets shorter.
  */
+const GAP = 16;
+
+/**
+ * The width floor: a book's proportion of the row's height, but never so wide
+ * that two cards stop fitting side by side.
+ */
+export function cardFloor(height: number, availableWidth: number): number {
+  const bookish = Math.round(height * BOOK_RATIO);
+  const twoAcross = Math.floor((availableWidth - GAP) / 2);
+  return Math.max(0, Math.min(bookish, twoAcross));
+}
+
 export function useCardMinWidth(container: Ref<HTMLElement | null>) {
   const minWidth = ref(0);
   let observer: ResizeObserver | null = null;
@@ -31,7 +43,8 @@ export function useCardMinWidth(container: Ref<HTMLElement | null>) {
     for (let pass = 0; pass < 2; pass += 1) {
       const height = tallest();
       if (height <= 0) return;
-      minWidth.value = Math.round(height * BOOK_RATIO);
+      // A book proportion, but never so wide that a phone can only show one.
+      minWidth.value = cardFloor(height, container.value?.clientWidth ?? 0);
       await nextTick();
     }
   }

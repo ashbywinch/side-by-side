@@ -31,7 +31,6 @@ describe("FilterSheet", () => {
     const wrapper = mountSheet();
 
     expect(wrapper.find("#author-filter").exists()).toBe(true);
-    expect(wrapper.findAll("select")).toHaveLength(2);
   });
 
   it("shows the live count of the draft, not the applied filter", async () => {

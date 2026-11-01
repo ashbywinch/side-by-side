@@ -71,13 +71,12 @@ it("collapses the filters behind a results bar until asked", async () => {
   });
   await flushPromises();
 
-  expect(container.querySelectorAll("select")).toHaveLength(0);
+  expect(container.querySelector("#author-filter")).toBeNull();
   expect(screen.getByText("4 books")).toBeTruthy();
 
   await fireEvent.click(screen.getByText("Filters"));
   await flushPromises();
 
-  expect(container.querySelectorAll("select")).toHaveLength(2);
   expect(container.querySelector("#author-filter")).toBeTruthy();
 });
 

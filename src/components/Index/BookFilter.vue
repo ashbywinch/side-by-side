@@ -16,7 +16,7 @@ const emit = defineEmits(["update-filter-value"])
 
 const shadowLevel = ref(normaliseLevelFilter(props.filter.level.value))
 const shadowSize = ref(props.filter.size.value ?? "")
-const shadowAuthor = ref(props.filter.author.value)
+const shadowAuthor = ref(props.filter.author.value ?? "")
 
 // Keep the visible selection in sync with route changes (back/forward, links).
 watch(
@@ -64,8 +64,7 @@ function emitFilter() {
 function onAuthorInput() {
   open.value = true
   active.value = -1
-  // Typing is a search, not a filter: a half-typed surname is not an author, so
-  // applying it would empty the catalogue while the reader is still typing.
+  // Typing is a search, not a filter: a half-typed surname is not an author.
 }
 
 function choose(author: string) {
@@ -90,10 +89,8 @@ function onKeydown(event: KeyboardEvent) {
     active.value = Math.max(active.value - 1, 0)
     event.preventDefault()
   } else if (event.key === "Enter") {
-    if (open.value && active.value >= 0 && matches.value[active.value]) {
-      choose(matches.value[active.value])
-      event.preventDefault()
-    }
+    if (open.value && matches.value[active.value]) choose(matches.value[active.value])
+    event.preventDefault()
   } else if (event.key === "Escape") {
     open.value = false
     event.preventDefault()
@@ -101,33 +98,30 @@ function onKeydown(event: KeyboardEvent) {
 }
 </script>
 <template>
-  <nav class="row filters">
-    <label class="field">
-      <span class="field__label">Level</span>
-      <select v-model="shadowLevel" class="field__control" @change="emitFilter">
-        <option value="">Any level</option>
-        <option v-for="level in levels" :key="level.value" :value="level.value">
-          {{ level.text }}
-        </option>
-      </select>
-    </label>
-
-    <label class="field">
-      <span class="field__label">Size</span>
-      <select v-model="shadowSize" class="field__control" @change="emitFilter">
-        <option v-for="size in ['', ...sizes]" :key="size" :value="size">
-          {{ size || "Any size" }}
-        </option>
-      </select>
-    </label>
-
-    <div class="field field--author">
-      <label class="field__label" for="author-filter">Author</label>
-      <div class="combo">
+  <nav class="row">
+    <va-select
+      v-model="shadowLevel"
+      :options="levels"
+      text-by="text"
+      value-by="value"
+      label="Level"
+      placeholder="Any level"
+      clearable
+      @update:model-value="emitFilter" />
+    <va-select
+      v-model="shadowSize"
+      :options="sizes"
+      label="Size"
+      placeholder="Any size"
+      clearable
+      @update:model-value="emitFilter" />
+    <div class="author">
+      <label class="author__label" for="author-filter">Author</label>
+      <div class="author__control">
         <input
           id="author-filter"
           v-model="shadowAuthor"
-          class="field__control"
+          class="author__input"
           type="text"
           role="combobox"
           autocomplete="off"
@@ -142,20 +136,16 @@ function onKeydown(event: KeyboardEvent) {
         <button
           v-if="shadowAuthor"
           type="button"
-          class="combo__clear"
+          class="author__clear"
           aria-label="Clear author"
           @click="clearAuthor">×</button>
-        <ul
-          v-if="open && matches.length"
-          id="author-options"
-          class="combo__list"
-          role="listbox">
+        <ul v-if="open && matches.length" id="author-options" class="author__list" role="listbox">
           <li
             v-for="(author, index) in matches"
             :id="`author-option-${index}`"
             :key="author"
-            class="combo__option"
-            :class="{ 'combo__option--active': index === active }"
+            class="author__option"
+            :class="{ 'author__option--active': index === active }"
             role="option"
             :aria-selected="index === active"
             @mousedown.prevent="choose(author)">
@@ -168,49 +158,42 @@ function onKeydown(event: KeyboardEvent) {
 </template>
 
 <style scoped>
-.filters {
-  gap: 1rem;
-  align-items: flex-end;
-}
-.field {
+.author {
+  flex: 1 1 12rem;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: .25rem;
-  flex: 1 1 12rem;
-  min-width: 0;
 }
-.field__label {
+.author__label {
   font-size: .7rem;
   font-weight: 700;
   letter-spacing: .6px;
   text-transform: uppercase;
   color: var(--va-text-secondary);
 }
-.field__control {
+.author__control {
+  position: relative;
+}
+.author__input {
   width: 100%;
-  min-height: 2.5rem;
-  padding: .35rem .5rem;
+  height: 3rem;
+  padding: 0 2rem 0 .6rem;
   border: 1px solid var(--va-divider, rgb(128 128 128 / 35%));
   border-radius: .25rem;
   background: var(--va-background-primary, #fff);
   color: var(--va-text-primary);
   font: inherit;
-  font-size: .95rem;
+  font-size: 1rem;
 }
-.field__control:focus-visible {
+.author__input:focus-visible {
   outline: 2px solid var(--va-primary);
   outline-offset: 1px;
 }
-.field--author {
-  position: relative;
-}
-.combo {
-  position: relative;
-}
-.combo__clear {
+.author__clear {
   position: absolute;
   top: 50%;
-  right: .4rem;
+  right: .5rem;
   transform: translateY(-50%);
   border: 0;
   background: none;
@@ -219,7 +202,7 @@ function onKeydown(event: KeyboardEvent) {
   line-height: 1;
   cursor: pointer;
 }
-.combo__list {
+.author__list {
   position: absolute;
   z-index: 60;
   top: calc(100% + 2px);
@@ -235,13 +218,13 @@ function onKeydown(event: KeyboardEvent) {
   background: var(--va-background-primary, #fff);
   box-shadow: var(--va-box-shadow, 0 4px 8px rgb(0 0 0 / 15%));
 }
-.combo__option {
-  padding: .4rem .6rem;
+.author__option {
+  padding: .45rem .6rem;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: .95rem;
 }
-.combo__option:hover,
-.combo__option--active {
+.author__option:hover,
+.author__option--active {
   background: var(--va-background-element, rgb(0 0 0 / 6%));
 }
 </style>
