@@ -47,7 +47,6 @@ const sizeColor: Record<string, string> = {
     <va-card-title>{{ title }}</va-card-title>
     <va-card-content>
       {{ author }}
-      <br/><br/><br/>
       <div class="row va-spacing-x-2 badges">
         <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
         <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
