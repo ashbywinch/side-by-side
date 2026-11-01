@@ -19,9 +19,10 @@ import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   lang: { type:String, required:true},
-  // How the bookshelf is drawn above the catalogue. Chosen by walkthrough.
-  shelfLayout: { type:String, default:null },
-  portrait: { type:Boolean, default:false },
+  // How the bookshelf is drawn above the catalogue: a short row of book tiles
+  // with "See all" in its header — chosen by walkthrough, over a rail.
+  shelfLayout: { type:String, default:'section' },
+  portrait: { type:Boolean, default:true },
 })
 
 const bookshelf = useBookshelf()

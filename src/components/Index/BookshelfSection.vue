@@ -9,12 +9,12 @@ import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { BookshelfEntry } from "@/types/bookshelf";
 
-const VISIBLE = 4;
+const VISIBLE = 3;
 
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required: true },
   entries: { type: Array as PropType<BookshelfEntry[]>, default: () => [] },
-  portrait: { type: Boolean, default: false },
+  portrait: { type: Boolean, default: true },
   lang: { type: String, default: "ru" },
 })
 
@@ -24,15 +24,7 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 
 <template>
   <section v-if="cards.length" class="shelf" aria-label="You are reading">
-    <header class="shelf__head">
-      <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
-      <RouterLink
-        v-if="cards.length > VISIBLE"
-        class="see-all"
-        :to="{ name: 'Shelf', params: { lang } }">
-        See all {{ cards.length }}
-      </RouterLink>
-    </header>
+    <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
     <div class="stack">
       <BookOverviewCard
         v-for="{ book, entry } in shown"
@@ -46,40 +38,44 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
         :progress="progressFraction(entry)"
         :finished="isFinished(entry)"
         :portrait="portrait" />
+      <RouterLink
+        v-if="cards.length > VISIBLE"
+        class="see-all"
+        :to="{ name: 'Shelf', params: { lang } }">
+        See all {{ cards.length }} books
+      </RouterLink>
     </div>
   </section>
 </template>
 
 <style scoped>
 .shelf {
-  margin: .75rem 0 1.5rem;
-}
-.shelf__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: .5rem;
+  margin: .75rem 0 1rem;
 }
 .shelf__title {
   font-size: 1rem;
   font-weight: 500;
-  margin: 0;
+  margin: 0 0 .5rem;
 }
 .stack {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  grid-template-columns: repeat(auto-fill, 7rem);
+  justify-content: start;
   gap: .75rem;
   align-items: stretch;
 }
 .stack > * {
   min-width: 0;
 }
+/* Beside the books it summarises, not a screen away in a header. */
 .see-all {
-  font-size: .85rem;
-  white-space: nowrap;
-  min-height: 2rem;
+  align-self: end;
+  justify-self: start;
   display: inline-flex;
   align-items: center;
+  min-height: 2rem;
+  padding-left: .25rem;
+  font-size: .85rem;
+  white-space: nowrap;
 }
 </style>

@@ -64,11 +64,15 @@ const sizeColor: Record<string, string> = {
       <div class="row va-spacing-x-2 badges">
         <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
         <va-badge :text="wordsLabel" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
-        <span v-if="finished" class="finished" aria-label="Finished">✓</span>
+        <span v-if="finished && !portrait" class="finished" aria-label="Finished">✓</span>
       </div>
       <span v-if="percent !== null && !portrait && !finished" class="read">
         {{ percent }}% read
       </span>
+      <span v-else-if="percent !== null && portrait && !finished" class="read read--small">
+        {{ percent }}%
+      </span>
+      <span v-else-if="finished && portrait" class="read read--small finished" aria-label="Finished">✓ finished</span>
     </va-card-content>
     <span
       v-if="percent !== null"
@@ -101,6 +105,13 @@ const sizeColor: Record<string, string> = {
 div.row a:focus .va-card {
   border: 1px solid var(--va-primary);
 }
+/* The card's root is the link; it must take the cell's height so cards in a
+   row line up even when a title wraps. */
+a {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+}
 /* A card fills its grid cell. The badges and the progress edge sit on the
    bottom, so cards whose titles wrap to different heights still line up. */
 :deep(.va-card) {
@@ -126,6 +137,10 @@ div.row a:focus .va-card {
 }
 .breath {
   height: .75rem;
+}
+.read--small {
+  font-size: .7rem;
+  margin-top: .15rem;
 }
 .read {
   margin-top: .25rem;
@@ -153,7 +168,7 @@ div.row a:focus .va-card {
 .item.portrait {
   display: flex;
   flex-direction: column;
-  min-height: 11rem;
+  min-height: 9rem;
   padding-bottom: 0;
 }
 .item.portrait .va-card-title {
@@ -179,6 +194,10 @@ div.row a:focus .va-card {
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
+}
+.item.portrait :deep(.va-badge *) {
+  font-size: .65rem !important;
+  line-height: .95rem !important;
 }
 .item.portrait .badges {
   margin-top: auto;

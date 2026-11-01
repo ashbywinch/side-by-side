@@ -113,13 +113,13 @@ describe("BookshelfSection", () => {
   const books = Array.from({ length: 6 }, (_, index) => indexBook(`Книга ${index + 1}`))
   const entries = books.map((book) => shelfEntry(book))
 
-  it("shows four entries and a way to the rest", () => {
+  it("shows three entries and a way to the rest", () => {
     const wrapper = mount(BookshelfSection, {
       props: { books, entries },
       global: { stubs },
     })
 
-    expect(wrapper.findAll(".card")).toHaveLength(4)
+    expect(wrapper.findAll(".card")).toHaveLength(3)
     expect(wrapper.find(".see-all").text()).toContain("See all 6")
   })
 
