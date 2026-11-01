@@ -69,6 +69,28 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 .stack > * {
   min-width: 0;
 }
+/* The shelf is a curated row, not the catalogue: its tiles share one height and
+   the pills sit on the card's bottom edge, so the row lines up. The catalogue
+   keeps the card's own content-sized layout. */
+.stack :deep(.item) {
+  position: relative;
+  height: 11rem;
+  padding-bottom: 3.5rem;
+  overflow: hidden;
+}
+.stack :deep(.badges) {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1.25rem;
+  margin: 0;
+}
+.stack :deep(.progress) {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 /* Beside the books it summarises, not a screen away in a header. */
 .see-all:focus-visible {
   outline: 2px solid var(--va-primary);
