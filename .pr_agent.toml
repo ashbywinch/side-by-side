@@ -42,7 +42,9 @@ glob = [
 ]
 
 [pr_reviewer]
-publish_output_no_suggestions = false
+# A clean review must still be published: the CI check looks for a review
+# comment naming this commit, and silence reads as a failed review.
+publish_output_no_suggestions = true
 require_tests_review = true
 require_security_review = true
 require_estimate_effort_to_review = true

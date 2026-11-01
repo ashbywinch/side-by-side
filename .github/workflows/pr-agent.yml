@@ -42,23 +42,60 @@ jobs:
             echo "Manual trigger — skipping review check (no PR number)"
             exit 0
           fi
-          # Match bot comments that reference this commit SHA in their body.
-          # PR-Agent's persistent review includes the SHA: "Review updated until commit .../SHA"
-          # and code suggestions include: "<!-- SHA -->".
-          # This avoids race conditions from concurrent runs (unlike timestamp-based filtering).
-          THIS_RUN_CMTS=$(gh api "repos/${{ github.repository }}/issues/$PR_NUM/comments" --jq "[.[] | select(.user.login == \"github-actions[bot]\" and (.body | contains(\"$SHORT_SHA\")))]" 2>/dev/null || echo "[]")
-          echo "$THIS_RUN_CMTS" | jq -e 'length == 0' > /dev/null 2>&1 && NO_COMMENTS=true || NO_COMMENTS=false
-          if echo "$THIS_RUN_CMTS" | jq -e 'any(.[].body; test("PR Reviewer Guide|PR Code Suggestions"))' > /dev/null 2>&1; then
-            echo "Review check passed"
-          elif echo "$THIS_RUN_CMTS" | jq -e 'any(.[].body; test("failed"; "i"))' > /dev/null 2>&1; then
-            echo "::error::PR-Agent reported a failure:"
-            echo "$THIS_RUN_CMTS" | jq -r '.[].body'
+          # A human "/skip" comment opts this PR out of the AI review (config
+          # skip_commands in .pr_agent.toml): pr-agent then posts nothing, which
+          # must NOT fail the PR. Deliberate opt-out only. Only the PR author and
+          # users with write access may opt out — on a public repo an arbitrary
+          # commenter could otherwise disable the review gate. Anchored to the
+          # start of a line so a conversational mention does not opt the PR out.
+          if gh api --paginate "repos/${{ github.repository }}/issues/$PR_NUM/comments" \
+            --jq '[.[] | select(.user.login != "github-actions[bot]") | select(.user.login == "${{ github.event.pull_request.user.login }}" or .author_association == "OWNER" or .author_association == "MEMBER" or .author_association == "COLLABORATOR") | select(.body | test("(^|\\n)\\s*/skip(\\s|$)"; "i"))] | length' \
+            | grep -q '[1-9]'; then
+            echo "Review check passed — AI review skipped via /skip comment"
+            exit 0
+          fi
+          # All bot comments for this PR. --paginate with a per-page --jq filter
+          # concatenates page results (invalid JSON on multi-page PRs), so stream
+          # the matches and slurp them into one array. A failed API call must not
+          # look like "no review posted": retry, then fail with the real cause.
+          CMTS=""
+          for attempt in 1 2 3; do
+            if gh api --paginate "repos/${{ github.repository }}/issues/$PR_NUM/comments" \
+              --jq '.[] | select(.user.login == "github-actions[bot]")' > /tmp/raw_comments 2>/tmp/gh_api_err; then
+              CMTS=$(jq -s '.' < /tmp/raw_comments)
+              break
+            fi
+            [ "$attempt" -lt 3 ] && sleep 5
+          done
+          if [ -z "$CMTS" ]; then
+            echo "::error::comments API failed after 3 attempts: $(tail -c 500 /tmp/gh_api_err)"
             exit 1
-          elif [ "$NO_COMMENTS" = true ]; then
-            echo "::error::PR-Agent posted no comments for this commit — review was skipped or failed silently"
+          fi
+          # Scope to comments from THIS run: a comment names the head commit by
+          # full or short sha, token-bounded so an unrelated hex string cannot
+          # false-positive. Stale comments are excluded, so the failure and
+          # no-comments branches diagnose the current run correctly.
+          THIS=$(echo "$CMTS" | jq -c --arg full "$SHA" --arg short "$SHORT_SHA" \
+            '[.[] | select(.body | test("(^|[^0-9a-f])(" + $full + "|" + $short + ")([^0-9a-f]|$)"; "i"))]')
+          # The latest bot comment can legitimately carry NO sha: a review that
+          # found nothing posts "no code suggestions", and a standalone review
+          # (posted when the persistent one cannot be updated) carries none
+          # either. Both are pass states; treating them as "no review posted"
+          # failed every clean PR (the v1.1.0 release PR hit exactly this).
+          LAST=$(echo "$CMTS" | jq -c 'sort_by(.created_at) | last')
+          if echo "$THIS" | jq -e '[.[] | select(.body | test("PR Reviewer Guide|PR Code Suggestions"))] | length > 0' >/dev/null 2>&1; then
+            echo "Review check passed"
+          elif echo "$THIS" | jq -e '[.[] | select(.body | test("failed"; "i"))] | length > 0' >/dev/null 2>&1; then
+            echo "::error::PR-Agent reported a failure:"
+            echo "$THIS" | jq -r '.[].body'
+            exit 1
+          elif echo "$LAST" | jq -e '.body | test("PR Reviewer Guide|PR Code Suggestions|pr-agent:improve:no-suggestions")' >/dev/null 2>&1; then
+            echo "Review check passed (latest comment: standalone review or no-suggestions)"
+          elif [ "$(echo "$THIS" | jq 'length' 2>/dev/null || echo 0)" = "0" ]; then
+            echo "::error::PR-Agent posted no comments for commit $SHA — review was skipped or failed silently"
             exit 1
           else
-            echo "::error::PR-Agent comment found but did not match success or failure pattern"
-            echo "$THIS_RUN_CMTS" | jq -r '.[].body'
+            echo "::error::PR-Agent comment found for this commit but matched no known pattern"
+            echo "$THIS" | jq -r '.[].body'
             exit 1
           fi
