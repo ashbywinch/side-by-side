@@ -80,3 +80,23 @@ it("collapses the filters behind a results bar until asked", async () => {
 
   expect(container.querySelectorAll("va-select")).toHaveLength(3);
 });
+
+it("uses the same filter bar in every shelf layout", async () => {
+  const layouts: Array<[string, boolean]> = [
+    ["section", false],
+    ["rail", false],
+    ["rail", true],
+  ];
+  const bars: Array<string | null> = [];
+  for (const [shelfLayout, portrait] of layouts) {
+    const { container } = render(IndexPage, {
+      props: { lang: "en", shelfLayout, portrait },
+    });
+    await flushPromises();
+    bars.push(container.querySelector(".results-bar")?.outerHTML ?? null);
+  }
+
+  expect(bars[0]).toBeTruthy();
+  expect(bars[0]).toBe(bars[1]);
+  expect(bars[1]).toBe(bars[2]);
+});
