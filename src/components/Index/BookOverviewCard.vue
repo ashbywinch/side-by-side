@@ -97,24 +97,15 @@ const wordsLabel = computed(() => {
 div.row a:focus .va-card {
   border: 1px solid var(--va-primary);
 }
-/* The card's root is the link; it must take the cell's height so cards in a
-   row line up even when a title wraps. */
+/* The card's root is the link; it takes the cell's height so a row lines up. */
 a {
   display: flex;
-  height: 100%;
   min-width: 0;
-}
-/* A card fills its grid cell. The badges and the progress edge sit on the
-   bottom, so cards whose titles wrap to different heights still line up. */
-:deep(.va-card) {
-  min-height: 100%;
 }
 .item {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  min-height: 6.5rem;
   padding-bottom: 0;
   padding-bottom: 0;
   overflow: hidden;
@@ -124,19 +115,19 @@ a {
   flex-direction: column;
   flex: 1;
 }
-/* The pills sit on the card's bottom edge, level across a row. */
+/* Pinned to the card's bottom edge, so every tile in a row carries its pills at
+   the same height. */
 .badges {
   align-items: center;
   flex-wrap: wrap;
   gap: .3rem;
   margin-top: auto;
-  padding-top: .5rem;
 }
 .breath {
-  height: .75rem;
+  height: 1rem;
 }
 .item.portrait .breath {
-  height: 0;
+  height: 1rem;
 }
 .item.portrait .va-card__content {
   font-size: .8rem;
@@ -156,8 +147,8 @@ a {
 /* Portrait: a book-shaped tile. Whitespace does the spacing; the badges and
    the bar sit on the bottom edge so ragged titles do not misalign the row. */
 .item.portrait {
-  height: 12rem;
-  min-height: 12rem;
+  height: 11.5rem;
+  min-height: 11.5rem;
   padding-bottom: 0;
 }
 .item.portrait .va-card-title {
@@ -185,7 +176,11 @@ a {
   justify-content: space-between;
 }
 .item.portrait .badges {
+  /* A fixed block, bottom-aligned: with varible title lengths the pills would
+     otherwise start at different heights. */
+  min-height: 2.7rem;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: flex-start;
   gap: .15rem;
 }
