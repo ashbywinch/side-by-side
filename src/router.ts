@@ -1,14 +1,23 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import BookPage from "./pages/Book/BookPage.vue";
 import IndexPage from "./pages/Index/IndexPage.vue";
+import ShelfPage from "./pages/Shelf/ShelfPage.vue";
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/ru/books" },
   {
     path: "/:lang/books",
     name: "Index",
     component: IndexPage,
+    props: (route: { params: { lang: string } }) => ({
+      lang: route.params.lang,
+    }),
+  },
+  {
+    path: "/:lang/shelf",
+    name: "Shelf",
+    component: ShelfPage,
     props: (route: { params: { lang: string } }) => ({
       lang: route.params.lang,
     }),
@@ -20,6 +29,17 @@ const routes = [
     props: true,
   },
 ];
+
+// The bookshelf-presentation comparison runs against a dev-only switch; it is
+// removed once the walkthrough chooses a variant.
+if (import.meta.env.DEV) {
+  routes.push({
+    path: "/:lang/lab/:variant",
+    name: "Lab",
+    component: () => import("./pages/Dev/LayoutLab.vue"),
+    props: true,
+  });
+}
 
 const router = createRouter({
   history: createWebHistory(),

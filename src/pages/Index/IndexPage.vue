@@ -9,13 +9,21 @@ import { useIndexRouting } from './IndexPageRouting'
 
 import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
 import BookFilter from '@/components/Index/BookFilter.vue';
+import BookshelfRail from '@/components/Index/BookshelfRail.vue';
+import BookshelfSection from '@/components/Index/BookshelfSection.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from '@/components/PageSurround.vue';
+import { useBookshelf } from '@/components/Bookshelf/useBookshelf';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   lang: { type:String, required:true},
+  // How the bookshelf is drawn above the catalogue. Chosen by walkthrough.
+  shelfLayout: { type:String, default:null },
+  portrait: { type:Boolean, default:false },
 })
+
+const bookshelf = useBookshelf()
 
 const perPage = 24; 
 
@@ -66,8 +74,22 @@ function currentFilter(): Filter {
 </script>
 <template>
   <PageSurround :error="fetchItems.error.value">
+    <BookshelfSection
+      v-if="shelfLayout === 'section'"
+      :books="fetchItems.items.value"
+      :entries="bookshelf.entries.value"
+      :portrait="portrait"
+      :lang="lang" />
+    <BookshelfRail
+      v-else-if="shelfLayout === 'rail'"
+      :books="fetchItems.items.value"
+      :entries="bookshelf.entries.value"
+      :portrait="portrait" />
     <BookFilter class="nav" :books=fetchItems.items.value :filter="filter.filter" @update-filter-value="updateFilterValue"/>
-    <BookOverviewCards :books="pagination.items.value"/>
+    <BookOverviewCards
+      :books="pagination.items.value"
+      :entries="bookshelf.entries.value"
+      :portrait="portrait" />
     <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
