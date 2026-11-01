@@ -47,7 +47,8 @@ const cards = computed(() =>
    left the slack as a gutter beside it. */
 .row {
   gap: 1rem;
-  align-items: flex-start;
+  /* Widths stay content-driven; heights equalise within each wrapped row. */
+  align-items: stretch;
 }
 .row > * {
   flex: 0 0 auto;

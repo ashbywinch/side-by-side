@@ -59,7 +59,7 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 .stack {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 1rem;
 }
 .stack > * {

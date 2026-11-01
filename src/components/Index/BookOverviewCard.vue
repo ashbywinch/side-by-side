@@ -101,13 +101,26 @@ div.row a:focus .va-card {
      Words break at spaces only — no hyphenation. */
   width: min-content;
   max-width: 9rem;
+  /* The row stretches the card to its tallest neighbour; the bar stays on the
+     card's bottom edge. */
+  position: relative;
+  height: 100%;
+  padding-bottom: .25rem;
   padding-bottom: 0;
   hyphens: none;
   overflow-wrap: normal;
   word-break: normal;
 }
 /* The bar is the card's bottom edge. */
+a {
+  display: flex;
+  min-width: 0;
+}
 .progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: block;
   height: 4px;
   background: var(--va-background-element, rgb(0 0 0 / 8%));
