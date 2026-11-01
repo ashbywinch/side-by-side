@@ -82,12 +82,29 @@ bookshelf and sign-in journeys are the next phases.
 - Everything is local to the device, in versioned `localStorage`. Unavailable
   or corrupt storage degrades to an empty bookshelf rather than an error.
 
+## Bookshelf and filters (delivered)
+
+- **The shelf**: up to three book tiles above the results bar, ordered by
+  recency, with "See all N books" beside the heading. The same card is used in
+  the catalogue, so a book looks the same everywhere.
+- **The card**: a portrait tile whose width follows its wrapped text — title
+  and author wrap at spaces, never inside a word and never with a hyphen — and
+  whose height matches the rest of its row. Level and word-count pills keep
+  their palette colours on the card's bottom edge, with the progress bar below
+  them. Progress is a bar, never a percentage: pagination is arbitrary, so a
+  number would claim a precision the app does not have.
+- **The filters**: collapsed behind a results bar that states the count and
+  lists each active filter as a removable chip, with "Clear all". A phone opens
+  the filters as a sheet; a desktop expands them in place. Level and size are
+  listboxes; author is a type-to-search listbox — typing lists matches, and
+  only a chosen author filters. Choosing an author is the one thing that must
+  never silently do nothing.
+- **Removal**: the bookshelf page lists every entry and is the place to remove
+  one. Edit mode with undo is still to build.
+
 ## Planned UX
 
-- **Bookshelf on the index**: a horizontal rail or a vertical section above
-  the filters (chosen by UX walkthrough), progress on the cards of read books,
-  and a bookshelf page for removing entries, with undo. Removal is a soft
-  delete; nothing is ever hard-deleted.
 - **Google sign-in**: a single, optional sign-in entry; anonymous use is
   always available; first sign-in merges the local shelf; sign-out is clear
   and does not delete local reading.
+- **Removal from the shelf's own row**: edit mode with an undo toast.

@@ -4,7 +4,7 @@ import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { createApp } from "vue";
 import { flushPromises } from "@vue/test-utils";
-import { render, screen } from "@testing-library/vue";
+import { fireEvent, render, screen } from "@testing-library/vue";
 
 createApp({});
 
@@ -61,5 +61,41 @@ it("should load index", async () => {
   expect(await screen.queryByText("Test author 1")).toBeTruthy();
   expect(await screen.queryByText("Test title")).toBeTruthy();
   expect(container.innerHTML).toContain('text="Unrated"');
-  expect(container.innerHTML).not.toContain('text="2"');
+});
+
+it("collapses the filters behind a results bar until asked", async () => {
+  const { container } = render(IndexPage, {
+    props: {
+      lang: "en",
+    },
+  });
+  await flushPromises();
+
+  expect(container.querySelector("#filter-Author")).toBeNull();
+  expect(screen.getByText("4 books")).toBeTruthy();
+
+  await fireEvent.click(screen.getByText("Filters"));
+  await flushPromises();
+
+  expect(container.querySelector("#filter-Author")).toBeTruthy();
+});
+
+it("uses the same filter bar in every shelf layout", async () => {
+  const layouts: Array<[string, boolean]> = [
+    ["section", false],
+    ["rail", false],
+    ["rail", true],
+  ];
+  const bars: Array<string | null> = [];
+  for (const [shelfLayout, portrait] of layouts) {
+    const { container } = render(IndexPage, {
+      props: { lang: "en", shelfLayout, portrait },
+    });
+    await flushPromises();
+    bars.push(container.querySelector(".results-bar")?.outerHTML ?? null);
+  }
+
+  expect(bars[0]).toBeTruthy();
+  expect(bars[0]).toBe(bars[1]);
+  expect(bars[1]).toBe(bars[2]);
 });

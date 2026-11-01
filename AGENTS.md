@@ -39,6 +39,7 @@ Full runbook: `docs/releasing.md`. Hosting details: `docs/deployment.md`.
 | What is being built, in what order | `docs/PLAN.md` |
 | UX journeys and interaction spec | `docs/UX.md` |
 | UX standard | `docs/ux-standards.md` |
+| Bookshelf UX decisions and the walkthrough record | `docs/ux-fixes-plan.md` |
 | Coding standard (design principles, JS/TS conventions) | `docs/coding-standards.md` |
 | Testing standard | `docs/testing-standards.md` |
 | What good documentation is | `docs/writing-documentation.md` |

@@ -15,6 +15,7 @@ export interface LoadResult {
 interface StoredEntry {
   book: { lang: string; author: string; title: string; segments: number };
   position: number;
+  furthest: number;
   revealedThrough: number;
   updatedAt: string;
   finishedAt?: string;
@@ -74,10 +75,13 @@ function toEntry(value: unknown): BookshelfEntry | null {
 
   const finishedAt = date(value.finishedAt);
   const removedAt = date(value.removedAt);
+  const bounded = clampPosition(position, segments);
+  const furthest = clampPosition(index(value.furthest) ?? bounded, segments);
 
   return {
     book: { lang, author, title, segments },
-    position: clampPosition(position, segments),
+    position: bounded,
+    furthest: Math.max(furthest, bounded),
     revealedThrough: clampRevealedThrough(revealedThrough, segments),
     updatedAt,
     ...(finishedAt ? { finishedAt } : {}),
@@ -89,6 +93,7 @@ function toStored(entry: BookshelfEntry): StoredEntry {
   return {
     book: entry.book,
     position: entry.position,
+    furthest: entry.furthest,
     revealedThrough: entry.revealedThrough,
     updatedAt: entry.updatedAt.toISOString(),
     ...(entry.finishedAt ? { finishedAt: entry.finishedAt.toISOString() } : {}),

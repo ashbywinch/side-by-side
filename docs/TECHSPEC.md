@@ -11,6 +11,9 @@
 | `src/pages/Book` | Book route; maps a URL page to a chunk, resolves the bookmark, records reveals and position | Uses `useBookReader` and `useBookshelf` |
 | `src/components/Book` | Reader presentation, chunk math, JSONL fetching, the bookmark notice | Props/events; no routing |
 | `src/components/Bookshelf` | Bookmark store: pure position maths, versioned localStorage, reactive store | Consumes `meta.json` counts; provides entries to pages |
+| `src/components/Index/BookshelfSection` | The shelf: up to three tiles, "See all", recency order | Props: index entries + bookshelf entries |
+| `src/components/Index/BookOverviewCard` | The book tile, in the shelf and the catalogue: wrapped title/author, level and word pills, progress bar | Width `min-content`, row height shared through `useCardMinWidth` |
+| `src/components/Index/ResultsBar` + `FilterSheet` + `SelectField` | Results count, active-filter chips, and one listbox used by all three filters | Sheet on a phone, inline on a desktop |
 | `scripts/smoke.mjs` | Post-deploy end-to-end check | Reads the live site |
 | `.github/workflows` | Gates, green staging, production approval, promotion, tags | GitHub Actions |
 | `wrangler.jsonc` | Cloudflare Worker name, assets directory, custom domain | Deployment config |
