@@ -18,7 +18,7 @@ jobs:
       # GitHub API. A checkout of the PR head would let a branch ship a
       # pyproject.toml overriding [openai] api_base and receive the gateway
       # token. The config ref is pinned to main for the same reason.
-      - uses: the-pr-agent/pr-agent@b249e568e0c0fb6c674ace55fe95d02f62f8f3b3
+      - uses: the-pr-agent/pr-agent@c6a076d6f9fb59029341b0b4f5662ed522d11589
         id: pr-agent
         env:
           # Cloudflare AI Gateway, same route as houses/omp-config:
