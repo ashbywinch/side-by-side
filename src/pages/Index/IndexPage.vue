@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 import { useFetchIndexItems } from "./FetchIndex"
 import { useFilter } from './FilterIndex';
@@ -10,6 +10,7 @@ import { useIndexRouting } from './IndexPageRouting'
 import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
 import BookFilter from '@/components/Index/BookFilter.vue';
 import BookshelfRail from '@/components/Index/BookshelfRail.vue';
+import ResultsBar from '@/components/Index/ResultsBar.vue';
 import BookshelfSection from '@/components/Index/BookshelfSection.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from '@/components/PageSurround.vue';
@@ -24,6 +25,42 @@ const props = defineProps({
 })
 
 const bookshelf = useBookshelf()
+
+// Filters are collapsed by default: a results bar says how many books there are
+// and what is filtered. A phone opens them as a sheet; a desktop expands them
+// in place.
+const filtersOpen = ref(false)
+const narrow = ref(false)
+let media: MediaQueryList | null = null
+
+function onMediaChange() {
+  if (!media) return
+  narrow.value = media.matches
+  if (!narrow.value) filtersOpen.value = false
+}
+
+onMounted(() => {
+  if (typeof window.matchMedia !== "function") return
+  media = window.matchMedia("(max-width: 599px)")
+  onMediaChange()
+  media.addEventListener("change", onMediaChange)
+})
+
+onUnmounted(() => {
+  media?.removeEventListener("change", onMediaChange)
+})
+
+function clearFilterValue(key: "level" | "size" | "author") {
+  const next = currentFilter()
+  next[key] = ""
+  updateFilterValue(next)
+}
+
+function clearAllFilters() {
+  updateFilterValue(new Filter("", "", ""))
+}
+
+const resultCount = computed(() => filter.items.value.length.toLocaleString("en-GB"))
 
 const perPage = 24; 
 
@@ -85,7 +122,39 @@ function currentFilter(): Filter {
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
       :portrait="portrait" />
-    <BookFilter class="nav" :books=fetchItems.items.value :filter="filter.filter" @update-filter-value="updateFilterValue"/>
+    <ResultsBar
+      :count="filter.items.value.length"
+      :level="filter.filter.level.value"
+      :size="filter.filter.size.value"
+      :author="filter.filter.author.value"
+      :open="filtersOpen"
+      @toggle="filtersOpen = !filtersOpen"
+      @clear="clearFilterValue"
+      @clear-all="clearAllFilters" />
+    <BookFilter
+      v-if="filtersOpen && !narrow"
+      class="nav"
+      :books="fetchItems.items.value"
+      :filter="filter.filter"
+      @update-filter-value="updateFilterValue" />
+    <va-modal v-if="narrow" v-model="filtersOpen" hide-default-actions>
+      <div class="sheet">
+        <header class="sheet__head">
+          <h2 class="sheet__title">Filters</h2>
+          <button type="button" class="sheet__close" aria-label="Close filters" @click="filtersOpen = false">×</button>
+        </header>
+        <BookFilter
+          :books="fetchItems.items.value"
+          :filter="filter.filter"
+          @update-filter-value="updateFilterValue" />
+        <div class="sheet__actions">
+          <va-button preset="plain" @click="clearAllFilters">Clear all</va-button>
+          <va-button @click="filtersOpen = false">
+            Show {{ resultCount }} books
+          </va-button>
+        </div>
+      </div>
+    </va-modal>
     <BookOverviewCards
       :books="pagination.items.value"
       :entries="bookshelf.entries.value"
@@ -93,3 +162,49 @@ function currentFilter(): Filter {
     <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
+<style scoped>
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 70vh;
+}
+.sheet :deep(nav.row) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0;
+}
+.sheet :deep(.va-select) {
+  width: 100%;
+}
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sheet__title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.sheet__close {
+  border: 0;
+  background: none;
+  color: var(--va-text-secondary);
+  font-size: 1.6rem;
+  line-height: 1;
+  padding: .25rem .5rem;
+  cursor: pointer;
+}
+.sheet__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: auto;
+  padding-top: .75rem;
+  border-top: 1px solid var(--va-divider, rgb(128 128 128 / 20%));
+}
+</style>
