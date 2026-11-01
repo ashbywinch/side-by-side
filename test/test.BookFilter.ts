@@ -32,46 +32,8 @@ function mountFilter(books: BookIndexEntry[]) {
   });
 }
 
-describe("BookFilter native skin", () => {
-  it("renders real selects with the available levels", () => {
-    const wrapper = mount(BookFilter, {
-      props: { filter: new FilterRefs(), books: [book("C2"), book("")], native: true },
-    });
 
-    const selects = wrapper.findAll("select");
-    expect(selects).toHaveLength(2);
-    expect(selects[0].findAll("option").map((option) => option.text())).toEqual([
-      "Any level",
-      "C2",
-      "Unrated",
-    ]);
-  });
 
-  it("emits when a select or the author field changes", async () => {
-    const wrapper = mount(BookFilter, {
-      props: {
-        filter: new FilterRefs(),
-        books: [book("C2", "one"), book("", "two")],
-        native: true,
-      },
-    });
-
-    const [, size] = wrapper.findAll("select");
-    await size.setValue("small");
-    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
-      size: "small",
-    });
-
-    const author = wrapper.find('input[type="search"]');
-    await author.setValue("Author");
-    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
-      author: "Author",
-    });
-
-    expect(wrapper.findAll("datalist option").map((option) => option.attributes("value")))
-      .toEqual(["Author"]);
-  });
-});
 
 describe("BookFilter", () => {
   it("offers only valid levels in CEFR order plus Unrated", () => {

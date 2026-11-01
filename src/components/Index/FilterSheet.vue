@@ -94,7 +94,7 @@ function apply() {
         <button type="button" class="sheet__close" aria-label="Close filters" @click="emit('close')">×</button>
       </header>
 
-      <BookFilter :books="books" :filter="draft" native @update-filter-value="onUpdate" />
+      <BookFilter :books="books" :filter="draft" @update-filter-value="onUpdate" />
 
       <footer class="sheet__foot">
         <button type="button" class="clear" :disabled="active === 0" @click="clear">Clear all</button>

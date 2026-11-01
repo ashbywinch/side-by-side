@@ -16,7 +16,6 @@ import type { BookIndexEntry } from '@/types/corpus';
 const props = defineProps({
   filter: { type:FilterRefs, default:null},
   books: { type: Array as PropType<BookIndexEntry[]>, required:true},
-  native: { type: Boolean, default: false },
 })
 
 const shadowAuthor = ref(props.filter.author.value ?? "");
@@ -46,36 +45,8 @@ function doEmit()
 
 </script>
 <template>
-  <nav v-if="native" class="row row--native">
-    <label class="field">
-      <span class="field__label">Level</span>
-      <select v-model="shadowLevel" class="field__control" @change="doEmit">
-        <option value="">Any level</option>
-        <option v-for="level in levels" :key="level.value" :value="level.value">{{ level.text }}</option>
-      </select>
-    </label>
-    <label class="field">
-      <span class="field__label">Size</span>
-      <select v-model="shadowSize" class="field__control" @change="doEmit">
-        <option value="">Any size</option>
-        <option v-for="size in sizes" :key="size" :value="size">{{ size }}</option>
-      </select>
-    </label>
-    <label class="field">
-      <span class="field__label">Author</span>
-      <input
-        v-model="shadowAuthor"
-        class="field__control"
-        type="search"
-        list="filter-authors"
-        placeholder="Any author"
-        @input="doEmit" />
-      <datalist id="filter-authors">
-        <option v-for="author in authors" :key="author" :value="author" />
-      </datalist>
-    </label>
-  </nav>
-  <nav v-else class="row">
+
+  <nav class="row">
     <va-select v-model="shadowLevel" :options="levels" text-by="text" value-by="value" label="Level" placeholder="Any level" clearable @update:model-value="doEmit"></va-select>
     <va-select v-model="shadowSize" :options="sizes" label="Size" placeholder="Any size" clearable @update:model-value="doEmit"></va-select>
     <va-select v-model="shadowAuthor" :options="authors" label="Author" placeholder="Any author" clearable autocomplete highlight-matched-text  @update:model-value="doEmit"></va-select>
@@ -88,40 +59,6 @@ function doEmit()
 }
 nav {
   margin: 1rem 0;
-}
-.row--native {
-  display: flex;
-  flex-direction: column;
-  gap: .75rem;
-  margin: 0;
-}
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-}
-.field__label {
-  color: var(--va-text-secondary);
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-.field__control {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: .5rem .75rem;
-  border: 1px solid var(--va-divider, rgb(128 128 128 / 40%));
-  border-radius: .35rem;
-  background: var(--va-background-primary, #fff);
-  color: var(--va-text-primary, inherit);
-  font: inherit;
-  font-size: 1rem;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
 }
 .field__control[type="search"] {
   background-image: none;

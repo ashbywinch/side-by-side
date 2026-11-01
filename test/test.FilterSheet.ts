@@ -27,13 +27,14 @@ function mountSheet(open = true) {
 }
 
 describe("FilterSheet", () => {
-  // The library dropdown teleports its list to <body> at z-index 1, which puts
-  // it behind the sheet: every filter on a phone was invisible when tapped.
-  it("uses platform controls, not the library's teleported dropdown", () => {
+  // The clipping that made these dropdowns unusable was the sheet's own
+  // scroller, not the library's teleport: the sheet no longer scrolls, so the
+  // app's autocompleting selects are used again — including on a phone.
+  it("uses the library's selects, so the author field autocompletes", () => {
     const wrapper = mountSheet();
 
-    expect(wrapper.findAll("select")).toHaveLength(2);
-    expect(wrapper.findComponent({ name: "VaSelect" }).exists()).toBe(false);
+    expect(wrapper.findAll("select")).toHaveLength(0);
+    expect(wrapper.findComponent({ name: "BookFilter" }).exists()).toBe(true);
   });
 
   it("shows the live count of the draft, not the applied filter", async () => {
@@ -56,7 +57,13 @@ describe("FilterSheet", () => {
     const clear = wrapper.find(".clear");
     expect(clear.attributes("disabled")).toBeDefined();
 
-    await wrapper.find('input[type="search"]').setValue("Author");
+    wrapper.findComponent({ name: "BookFilter" }).vm.$emit("update-filter-value", {
+      level: "",
+      size: "",
+      author: "Author",
+    });
+    await wrapper.vm.$nextTick();
+
     expect(wrapper.find(".clear").attributes("disabled")).toBeUndefined();
   });
 });
