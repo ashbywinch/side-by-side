@@ -27,7 +27,9 @@ const elements: Array<HTMLElement | null> = []
 let ticking = false
 
 function restored(): number {
-  return Math.max(0, Math.min(props.revealedThrough - props.firstSegment + 1, props.cards.length))
+  const uncoveredOnThisPage = props.revealedThrough - props.firstSegment + 1
+  if (uncoveredOnThisPage <= 0) return 0
+  return Math.min(uncoveredOnThisPage, props.cards.length)
 }
 
 watch(

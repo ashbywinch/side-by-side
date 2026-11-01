@@ -156,6 +156,20 @@ describe("bookshelf store", () => {
     ]);
   });
 
+  it("empties itself when another tab clears storage", () => {
+    const events = new EventTarget();
+    const store = makeStore("2026-01-01T00:00:00.000Z", events);
+    store.touch(BOOK, 24);
+    store.flush();
+
+    window.localStorage.clear();
+    const cleared = new Event("storage");
+    Object.defineProperty(cleared, "key", { value: null });
+    events.dispatchEvent(cleared);
+
+    expect(store.entries.value).toHaveLength(0);
+  });
+
   it("persists on flush and reloads in a second tab", () => {
     const events = new EventTarget();
     const first = makeStore("2026-01-01T00:00:00.000Z", events);
