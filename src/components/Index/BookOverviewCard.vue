@@ -115,19 +115,22 @@ div.row a:focus .va-card {
   display: flex;
   flex-direction: column;
   width: 11rem;
-  min-height: 16rem;
+  min-height: 18rem;
   padding-bottom: 0;
 }
 .item.portrait .va-card-title {
   font-size: 1.3rem !important;
+  line-height: 1.5rem !important;
 }
 .item.portrait .breath {
   height: 0;
+  flex: 1 1 auto;
 }
 .item.portrait .va-card__content {
   display: flex;
   flex-direction: column;
   flex: 1;
+  justify-content: space-between;
 }
 .item.portrait .badges {
   margin-top: auto;

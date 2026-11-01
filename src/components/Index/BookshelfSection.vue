@@ -23,8 +23,8 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
 </script>
 
 <template>
-  <section v-if="cards.length" class="shelf" aria-label="Your books">
-    <h2 class="shelf__title">Your books</h2>
+  <section v-if="cards.length" class="shelf" aria-label="You are reading">
+    <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
     <div class="stack">
       <BookOverviewCard
         v-for="{ book, entry } in shown"
