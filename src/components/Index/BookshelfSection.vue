@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 import BookOverviewCard from "./BookOverviewCard.vue";
 import { levelLabel } from "./levels";
 import { shelfCards } from "./shelfCards";
 import { progressFraction } from "@/components/Bookshelf/bookshelf";
+import { useCardMinWidth } from "./useCardMinWidth";
 import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { BookshelfEntry } from "@/types/bookshelf";
@@ -19,6 +20,9 @@ const props = defineProps({
 
 const cards = computed(() => shelfCards(props.books, props.entries))
 const shown = computed(() => cards.value.slice(0, VISIBLE))
+
+const stack = ref<HTMLElement | null>(null)
+const minWidth = useCardMinWidth(stack)
 </script>
 
 <template>
@@ -32,7 +36,10 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
         See all {{ cards.length }} books
       </RouterLink>
     </h2>
-    <div class="stack">
+    <div
+      ref="stack"
+      class="stack"
+      :style="minWidth ? { '--card-min': `${minWidth}px` } : undefined">
       <BookOverviewCard
         v-for="{ book, entry } in shown"
         :key="book.author + ': ' + book.title"

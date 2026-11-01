@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 import BookOverviewCard from "./BookOverviewCard.vue";
 import { levelLabel } from "./levels";
@@ -7,6 +7,7 @@ import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { BookshelfEntry } from "@/types/bookshelf";
 import { progressFraction } from "@/components/Bookshelf/bookshelf";
+import { useCardMinWidth } from "./useCardMinWidth";
 
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required:true},
@@ -25,9 +26,16 @@ function entryFor(book: BookIndexEntry): BookshelfEntry | undefined {
 const cards = computed(() =>
   props.books.map((book) => ({ book, entry: entryFor(book) })),
 )
+
+// A floor that keeps the narrowest card looking like a book rather than a strip.
+const row = ref<HTMLElement | null>(null)
+const minWidth = useCardMinWidth(row)
 </script>
 <template>
-  <div class="row flex">
+  <div
+    ref="row"
+    class="row flex"
+    :style="minWidth ? { '--card-min': `${minWidth}px` } : undefined">
     <template v-for="{ book, entry } in cards" :key="book.author + ': ' + book.title">
       <BookOverviewCard
         :lang="book.lang"
