@@ -114,13 +114,23 @@ div.row a:focus .va-card {
 .item.portrait {
   display: flex;
   flex-direction: column;
-  width: 11rem;
-  min-height: 18rem;
+  width: 7rem;
+  min-height: 11rem;
   padding-bottom: 0;
 }
 .item.portrait .va-card-title {
-  font-size: 1.3rem !important;
-  line-height: 1.5rem !important;
+  font-size: .95rem !important;
+  line-height: 1.2rem !important;
+}
+.item.portrait .va-card__content {
+  font-size: .8rem !important;
+}
+.item.portrait :deep(.va-badge) {
+  max-width: 100%;
+}
+.item.portrait :deep(.va-badge *) {
+  font-size: .62rem !important;
+  line-height: 1rem !important;
 }
 .item.portrait .breath {
   height: 0;
@@ -136,6 +146,6 @@ div.row a:focus .va-card {
   margin-top: auto;
   flex-direction: column;
   align-items: flex-start;
-  gap: .25rem;
+  gap: .15rem;
 }
 </style>

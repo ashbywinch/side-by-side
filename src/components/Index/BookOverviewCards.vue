@@ -49,6 +49,6 @@ const cards = computed(() =>
 
 <style scoped>
 .row {
-  gap: 1rem;
+  gap: .75rem;
 }
 </style>
