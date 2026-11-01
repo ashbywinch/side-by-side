@@ -105,6 +105,9 @@ div.row a:focus .va-card {
      into it, so the width follows the text instead of being imposed on it.
      Words break at spaces only — no hyphenation. */
   width: min-content;
+  /* A floor so a two-word title with a small word count does not become a
+     sliver: at the row's height this still reads as a book rather than a strip. */
+  min-width: 7.5rem;
   max-width: 9rem;
   /* The row stretches the card to its tallest neighbour; the bar stays on the
      card's bottom edge. */
