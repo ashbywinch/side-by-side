@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 import { useFetchIndexItems } from "./FetchIndex"
 import { useFilter } from './FilterIndex';
@@ -11,6 +11,7 @@ import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
 import BookFilter from '@/components/Index/BookFilter.vue';
 import BookshelfRail from '@/components/Index/BookshelfRail.vue';
 import ResultsBar from '@/components/Index/ResultsBar.vue';
+import FilterSheet from '@/components/Index/FilterSheet.vue';
 import BookshelfSection from '@/components/Index/BookshelfSection.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import PageSurround from '@/components/PageSurround.vue';
@@ -60,7 +61,10 @@ function clearAllFilters() {
   updateFilterValue(new Filter("", "", ""))
 }
 
-const resultCount = computed(() => filter.items.value.length.toLocaleString("en-GB"))
+function applySheetFilter(value: { level: string; size: string; author: string }) {
+  updateFilterValue(new Filter(value.level, value.size, value.author))
+  filtersOpen.value = false
+}
 
 const perPage = 24; 
 
@@ -137,24 +141,13 @@ function currentFilter(): Filter {
       :books="fetchItems.items.value"
       :filter="filter.filter"
       @update-filter-value="updateFilterValue" />
-    <va-modal v-if="narrow" v-model="filtersOpen" hide-default-actions>
-      <div class="sheet">
-        <header class="sheet__head">
-          <h2 class="sheet__title">Filters</h2>
-          <button type="button" class="sheet__close" aria-label="Close filters" @click="filtersOpen = false">×</button>
-        </header>
-        <BookFilter
-          :books="fetchItems.items.value"
-          :filter="filter.filter"
-          @update-filter-value="updateFilterValue" />
-        <div class="sheet__actions">
-          <va-button preset="plain" @click="clearAllFilters">Clear all</va-button>
-          <va-button @click="filtersOpen = false">
-            Show {{ resultCount }} books
-          </va-button>
-        </div>
-      </div>
-    </va-modal>
+    <FilterSheet
+      v-if="narrow"
+      :open="filtersOpen"
+      :books="fetchItems.items.value"
+      :filter="filter.filter"
+      @apply="applySheetFilter"
+      @close="filtersOpen = false" />
     <BookOverviewCards
       :books="pagination.items.value"
       :entries="bookshelf.entries.value"
@@ -162,49 +155,3 @@ function currentFilter(): Filter {
     <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>
-<style scoped>
-.sheet {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-height: 70vh;
-}
-.sheet :deep(nav.row) {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-  margin: 0;
-}
-.sheet :deep(.va-select) {
-  width: 100%;
-}
-.sheet__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.sheet__title {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-.sheet__close {
-  border: 0;
-  background: none;
-  color: var(--va-text-secondary);
-  font-size: 1.6rem;
-  line-height: 1;
-  padding: .25rem .5rem;
-  cursor: pointer;
-}
-.sheet__actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: .5rem;
-  margin-top: auto;
-  padding-top: .75rem;
-  border-top: 1px solid var(--va-divider, rgb(128 128 128 / 20%));
-}
-</style>

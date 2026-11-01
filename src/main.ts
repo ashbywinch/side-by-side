@@ -20,7 +20,6 @@ import {
   VaNavbarItem,
   VaAlert,
   VaIcon,
-  VaModal,
 } from "vuestic-ui";
 import "vuestic-ui/css";
 
@@ -48,7 +47,6 @@ app.use(
       VaNavbarItem,
       VaAlert,
       VaIcon,
-      VaModal,
     },
     plugins: { VaDropdownPlugin },
   }),
