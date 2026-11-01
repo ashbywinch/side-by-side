@@ -106,4 +106,140 @@ describe("PageOfBook", () => {
     await wrapper.setProps({ page: 2 });
     expect(wrapper.findAll(".snippet")[0].text()).toBe("hidden");
   });
+
+  it("restores the translations the reader had already uncovered", () => {
+    const wrapper = mount(PageOfBook, {
+      props: {
+        title: "Book",
+        author: "Author",
+        cards: [
+          { text: "a", translation: "A" },
+          { text: "b", translation: "B" },
+          { text: "c", translation: "C" },
+        ],
+        page: 1,
+        numPages: 2,
+        revealedThrough: 1,
+      },
+      global: {
+        stubs: {
+          "va-card": { template: "<div><slot /></div>" },
+          "va-card-content": { template: "<div><slot /></div>" },
+          PageHeader: { template: "<header />" },
+          TextSnippet: {
+            props: ["text", "translation", "showTranslation"],
+            template: "<div class='snippet'>{{ showTranslation ? 'shown' : 'hidden' }}</div>",
+          },
+        },
+      },
+    });
+
+    expect(wrapper.findAll(".snippet").map((s) => s.text())).toEqual([
+      "shown",
+      "shown",
+      "hidden",
+    ]);
+  });
+
+  it("reports the segment the reader uncovered, in book coordinates", async () => {
+    const wrapper = mount(PageOfBook, {
+      props: {
+        title: "Book",
+        author: "Author",
+        cards: [
+          { text: "a", translation: "A" },
+          { text: "b", translation: "B" },
+        ],
+        page: 3,
+        numPages: 4,
+        firstSegment: 48,
+      },
+      global: {
+        stubs: {
+          "va-card": { template: "<div><slot /></div>" },
+          "va-card-content": { template: "<div><slot /></div>" },
+          PageHeader: { template: "<header />" },
+          TextSnippet: {
+            props: ["text", "translation", "showTranslation"],
+            emits: ["translation-clicked"],
+            template: `<button class="snippet" @click="$emit('translation-clicked')" />`,
+          },
+        },
+      },
+    });
+
+    await wrapper.findAll(".snippet")[1].trigger("click");
+
+    expect(wrapper.emitted("reveal")).toEqual([[49]]);
+  });
+
+  it("hides translations with Esc without un-reading them", async () => {
+    const wrapper = mount(PageOfBook, {
+      props: {
+        title: "Book",
+        author: "Author",
+        cards: [
+          { text: "a", translation: "A" },
+          { text: "b", translation: "B" },
+        ],
+        page: 1,
+        numPages: 1,
+        revealedThrough: 1,
+      },
+      global: {
+        stubs: {
+          "va-card": { template: "<div><slot /></div>" },
+          "va-card-content": { template: "<div><slot /></div>" },
+          PageHeader: { template: "<header />" },
+          TextSnippet: {
+            props: ["text", "translation", "showTranslation"],
+            template: "<div class='snippet'>{{ showTranslation ? 'shown' : 'hidden' }}</div>",
+          },
+        },
+      },
+    });
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findAll(".snippet").map((s) => s.text())).toEqual([
+      "hidden",
+      "hidden",
+    ]);
+    expect(wrapper.emitted("reveal")).toBeUndefined();
+  });
+
+  it("reveals the next translation with Ctrl+ArrowDown and reports it", async () => {
+    const wrapper = mount(PageOfBook, {
+      props: {
+        title: "Book",
+        author: "Author",
+        cards: [
+          { text: "a", translation: "A" },
+          { text: "b", translation: "B" },
+        ],
+        page: 1,
+        numPages: 1,
+      },
+      global: {
+        stubs: {
+          "va-card": { template: "<div><slot /></div>" },
+          "va-card-content": { template: "<div><slot /></div>" },
+          PageHeader: { template: "<header />" },
+          TextSnippet: {
+            props: ["text", "translation", "showTranslation"],
+            template: "<div class='snippet'>{{ showTranslation ? 'shown' : 'hidden' }}</div>",
+          },
+        },
+      },
+    });
+
+    window.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowDown", ctrlKey: true }),
+    );
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findAll(".snippet")[0].text()).toBe("shown");
+    expect(wrapper.emitted("reveal")).toEqual([[0]]);
+  });
 });

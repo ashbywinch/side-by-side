@@ -39,14 +39,30 @@ app passes its quality gates.
   contains only CEFR values and Unrated; every book renders; corpus check
   passes; smoke expects 2,147 books.
 
-## Phase 3 — Local bookshelf (issue #138)
+## Phase 3a — Bookshelf store and resume (delivered)
 
-- **Inputs**: reader page/segment state, `localStorage`.
-- **Outputs**: add/remove/finish books; resume from saved page; continue
-  reading; bookshelf survives reload.
-- **Operations**: read a book, close the browser, resume; mark finished.
-- **Quality gate**: progress survives reload and a chunk-size change; no
-  backend required; anonymous use works.
+- **Inputs**: the reader's reveals, page turns and scrolling; versioned
+  `localStorage`.
+- **Outputs**: a bookmark per book that survives reload; reveals restored on
+  return; a browse bar that offers the way back; automatic finish; a soft-delete
+  tombstone ready for sync.
+- **Operations**: read, leave, return to the same place; look back a page without
+  losing the bookmark; start a book again.
+- **Quality gate**: resume restores page, reveals and place on the page; a page
+  turn or reveal alone adds the book; looking back never moves the bookmark; no
+  backend is required.
+
+## Phase 3b — Bookshelf on the index (planned)
+
+- **Inputs**: the local bookshelf; the corpus index.
+- **Outputs**: the bookshelf above the filters (rail or section, chosen by UX
+  walkthrough), progress on the cards of read books, and a bookshelf page for
+  removal with undo.
+- **Operations**: see what you are reading, continue in one action, remove a
+  book, undo a removal.
+- **Quality gate**: the walkthrough confirms the requirements (one action back
+  to the current book, a short path to earlier ones, no extra effort to reach a
+  new book, progress visible without opening).
 
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)
 

@@ -13,8 +13,9 @@ bookshelf and sign-in journeys are the next phases.
    position, and URL stay in sync; a deep link opens the same page.
 4. **Mobile**: repeat 1–3 at phone width, including the translation reveal and
    pagination controls.
-5. **Return later** (planned): reopen the site, see the bookshelf, resume the
-   same book at the saved page.
+5. **Return later**: reopen the site, open the book you were reading, and land
+   on your bookmarked page with the same translations uncovered, at the same
+   place on the page; a bar offers the way back if you browse elsewhere.
 6. **Cross-device** (planned): sign in with Google on a second device and see
    the same shelf and positions.
 
@@ -58,10 +59,35 @@ bookshelf and sign-in journeys are the next phases.
 - An empty corpus/book: skip rather than render an empty card; the builder
   rejects blank-source cards.
 
+## Reading position and the bookshelf
+
+- A book joins the bookshelf when the reader first uncovers a translation, or
+  turns a page. There is no add control; a glance at page one adds nothing.
+- The bookmark is the segment at the top of the viewport, and resume restores
+  it with the translations the reader had already uncovered. Page numbers on
+  cards are not shown: pagination is arbitrary; the progress bar is the
+  signal.
+- **The bookmark moves only by reading.** A forward page turn from the
+  bookmarked page, a scroll while on it, or an explicit "Stay here" moves it.
+  Going back, or jumping to any page that is not the next one, is browsing:
+  the bookmark stays, a strip reports where it is with "Return" and "Stay
+  here", and leaving the book writes nothing.
+- Revealing translations never moves the bookmark, so checking an earlier
+  page cannot cost the reader their place.
+- Arriving at the bookmark shows a quiet line — "Picked up where you left
+  off · Start from the beginning" — which disappears on the first scroll, turn
+  or reveal.
+- Uncovering the last translation finishes the book; finishing is sticky, and
+  re-reading does not unfinish it.
+- Everything is local to the device, in versioned `localStorage`. Unavailable
+  or corrupt storage degrades to an empty bookshelf rather than an error.
+
 ## Planned UX
 
-- **Bookshelf**: “Continue reading” on the index, a shelf with currently
-  reading/finished, page progress, remove with confirmation.
+- **Bookshelf on the index**: a horizontal rail or a vertical section above
+  the filters (chosen by UX walkthrough), progress on the cards of read books,
+  and a bookshelf page for removing entries, with undo. Removal is a soft
+  delete; nothing is ever hard-deleted.
 - **Google sign-in**: a single, optional sign-in entry; anonymous use is
   always available; first sign-in merges the local shelf; sign-out is clear
   and does not delete local reading.

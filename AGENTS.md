@@ -97,5 +97,8 @@ Read the relevant doc before changing behavior.
   builder fail on it.
 - The reader fetches `meta.json` + one 500-segment chunk; do not reintroduce
   whole-book fetching.
+- Reading progress is local-only in `localStorage` (`sbs:bookshelf:v1`) behind
+  `useBookshelf`; components never touch storage directly. A bookmark moves
+  only by reading — browsing never writes.
 - Deployment is an assets-only Cloudflare Worker; adding auth/sync turns it
   into an assets + API Worker (see `docs/TECHSPEC.md`).
