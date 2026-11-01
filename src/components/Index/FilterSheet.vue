@@ -109,8 +109,7 @@ function apply() {
   inset-inline: 0;
   bottom: 0;
   z-index: 41;
-  max-height: 85vh;
-  overflow-y: auto;
+  max-height: 92vh;
   padding: .5rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
   border-radius: 1rem 1rem 0 0;
   background: var(--va-background-primary, #fff);
