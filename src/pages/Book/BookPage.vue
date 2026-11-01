@@ -245,6 +245,7 @@ function updatePageValue(newPage: number)
       :loading="reader.loading.value"
       :revealed-through="entry?.revealedThrough ?? -1"
       :first-segment="positionForPage(reader.page.value, reader.perPage)"
+      :show-translation-hint="(entry?.revealedThrough ?? -1) < 0"
       @reveal="onReveal"
       @position-change="onPositionChange"
     />
