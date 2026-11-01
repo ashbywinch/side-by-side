@@ -1,8 +1,10 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { flushPromises } from "@vue/test-utils";
-import { cleanup, render, screen } from "@testing-library/vue";
+import { cleanup, fireEvent, render, screen } from "@testing-library/vue";
+
+import { createBookshelf, resetBookshelf, useBookshelf } from "@/components/Bookshelf/useBookshelf";
 
 vi.mock("vue-router", async () => {
   const { reactive } = await import("vue");
@@ -77,6 +79,10 @@ function handlersFor(base: string, bookMeta = meta) {
 const server = setupServer(...handlersFor("api/books/en/Author/Book"));
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterAll(() => server.close());
+beforeEach(() => {
+  window.localStorage.clear();
+  resetBookshelf();
+});
 afterEach(async () => {
   cleanup();
   server.resetHandlers();
@@ -186,5 +192,224 @@ describe("BookPage", () => {
     await settle();
 
     expect(screen.queryByText(/not found/i)).toBeTruthy();
+  });
+
+  it("resumes at the saved page with the translations already uncovered", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    expect(screen.queryByText("s72")).toBeTruthy();
+    expect(screen.queryByText("Picked up where you left off")).toBeTruthy();
+    expect(screen.getByText("t72").className).not.toContain("masked");
+    expect(screen.getByText("t76").className).toContain("masked");
+  });
+
+  it("adds the book to the bookshelf when the reader turns a page", async () => {
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    const book = { lang: "en", author: "Author", title: "Book" };
+    expect(useBookshelf().entryFor(book)).toBeUndefined();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = { page: "2" };
+    await settle();
+
+    expect(useBookshelf().entryFor(book)?.position).toBe(24);
+  });
+
+  it("puts the book on the shelf when the reader uncovers a translation", async () => {
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    await fireEvent.click(screen.getByText("t0"));
+    await settle();
+
+    const entry = useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" });
+    expect(entry?.revealedThrough).toBe(0);
+  });
+
+  it("restores the place on the page when the URL already names it", async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 74);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = { page: "4" };
+
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    expect(screen.queryByText("s72")).toBeTruthy();
+    expect(scrollIntoView).toHaveBeenCalled();
+
+    delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
+  });
+
+  it("puts a fresh book at the top of the page", async () => {
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0 });
+    scrollTo.mockRestore();
+  });
+
+  it("keeps the bookmark while the reader looks at an earlier page", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, { props: { lang: "en", author: "Author", title: "Book" } });
+    await settle();
+
+    route.__route.query = { page: "3" };
+    await settle();
+
+    expect(
+      useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" })?.position,
+    ).toBe(72);
+    expect(screen.getByRole("status").textContent).toContain("Bookmark on page 4");
+  });
+
+  it("returns to the bookmark on request", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, { props: { lang: "en", author: "Author", title: "Book" } });
+    await settle();
+
+    route.__route.query = { page: "3" };
+    await settle();
+
+    await fireEvent.click(screen.getByText("Return"));
+    await settle();
+
+    expect(route.__route.query.page).toBe(4);
+    expect(screen.queryByText("s72")).toBeTruthy();
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("moves the bookmark when the reader chooses to stay", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, { props: { lang: "en", author: "Author", title: "Book" } });
+    await settle();
+
+    route.__route.query = { page: "3" };
+    await settle();
+    await fireEvent.click(screen.getByText("Stay here"));
+    await settle();
+
+    expect(
+      useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" })?.position,
+    ).toBe(48);
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("keeps the bookmark when the reader jumps forward past it", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, { props: { lang: "en", author: "Author", title: "Book" } });
+    await settle();
+
+    route.__route.query = { page: "6" };
+    await settle();
+
+    expect(
+      useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" })?.position,
+    ).toBe(72);
+  });
+
+  it("starts again from the beginning on request", async () => {
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 75, 72);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    await fireEvent.click(screen.getByText("Start from the beginning"));
+    await settle();
+
+    const entry = useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" });
+    expect(entry?.revealedThrough).toBe(-1);
+    expect(entry?.position).toBe(0);
+    expect(route.__route.query.page).toBe(1);
+    expect(screen.queryByText("s0")).toBeTruthy();
+    expect(screen.queryByText("s72")).toBeNull();
   });
 });

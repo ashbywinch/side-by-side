@@ -1,6 +1,6 @@
 # PRD — Side by Side
 
-Status: released 1.0.0; bookshelf and accounts are planned.
+Status: released 1.0.0; the bookshelf is local-only; accounts are planned.
 
 ## JTBD
 
@@ -28,7 +28,13 @@ Status: released 1.0.0; bookshelf and accounts are planned.
 - See only valid CEFR levels and “Unrated” in the level filter; never numeric
   artefacts.
 - See “Unrated” rather than a guessed level for books under 250 words.
-- (Planned) Add books to a bookshelf and resume from a saved page.
+- Add a book to your bookshelf by reading it, and resume at your bookmarked
+  page with the translations you had already uncovered, at the same place on
+  the page.
+- Look back a few pages to check something without losing your bookmark, and
+  return to it in one action.
+- (Planned) See the bookshelf on the index, with progress on the cards of
+  books you have read.
 - (Planned) Sign in with Google and see the same bookshelf on every device.
 
 ## Personas

@@ -24,7 +24,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
+    // A book restores its own viewport from the stored position; only history
+    // traversal (back/forward) gets the browser's remembered offset.
+    if (to.name === "Book") return savedPosition ?? false;
     if (savedPosition) return savedPosition;
     return { top: 0 };
   },
