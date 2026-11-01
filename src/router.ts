@@ -53,4 +53,16 @@ const router = createRouter({
   },
 });
 
+// A walk comparison must survive "leave the site and come back": the root and
+// the index link stay inside the concept this session was given. Dev only.
+if (import.meta.env.DEV) {
+  router.beforeEach((to) => {
+    const variant = window.sessionStorage.getItem("lab-variant");
+    if (!variant) return;
+    if (to.name === "Index") {
+      return { name: "Lab", params: { lang: "ru", variant } };
+    }
+  });
+}
+
 export default router;

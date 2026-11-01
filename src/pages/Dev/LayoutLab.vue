@@ -9,6 +9,7 @@ import { shelfFor } from "./shelfFixtures";
 
 const route = useRoute();
 
+
 // `?shelf=none|reading|full|stale` sets the bookshelf before the app reads it.
 // A fresh browser context already starts empty; this is for comparing the
 // variants with the identical shelf, and for resetting between looks.
@@ -28,6 +29,13 @@ const props = defineProps({
 const layout = computed(() =>
   layoutFor(isLabVariant(props.variant) ? props.variant : "b"),
 );
+// Remember which concept this browser session is looking at, so that returning
+// to the site root — as a real reader does — stays inside the same build
+// instead of dropping to the shipped index (the dev-only guard in router.ts).
+if (typeof window !== "undefined") {
+  window.sessionStorage.setItem("lab-variant", props.variant)
+}
+
 const shelfLayout = computed(() => layout.value.shelfLayout);
 const portrait = computed(() => layout.value.portrait);
 
