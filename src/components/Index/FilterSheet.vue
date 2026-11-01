@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 
 import BookFilter from "./BookFilter.vue";
 import { FilterRefs } from "./Filter";
@@ -25,12 +25,16 @@ const draft = new FilterRefs()
 // A touch that dismisses the sheet can produce a second click on the page
 // underneath; ignore taps for a moment after opening.
 const openedAt = ref(0)
+const sheet = ref<HTMLElement | null>(null)
 
 watch(
   () => props.open,
   (open) => {
     if (!open) return
     openedAt.value = Date.now()
+    // Move focus into the sheet: it is a dialog, and a keyboard user should not
+    // have to tab through the page behind it.
+    void nextTick(() => sheet.value?.focus())
     draft.level.value = props.filter.level.value
     draft.size.value = props.filter.size.value
     draft.author.value = props.filter.author.value
@@ -83,7 +87,9 @@ function apply() {
     <div v-if="open" class="backdrop" @click="onBackdrop" />
     <section
       v-if="open"
+      ref="sheet"
       class="sheet"
+      tabindex="-1"
       role="dialog"
       aria-modal="true"
       aria-label="Filters"
@@ -112,6 +118,9 @@ function apply() {
   inset: 0;
   background: rgb(0 0 0 / 35%);
   z-index: 40;
+}
+.sheet:focus {
+  outline: none;
 }
 .sheet {
   position: fixed;
