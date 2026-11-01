@@ -43,20 +43,20 @@ describe("BookOverviewCard", () => {
   it("marks a finished book without a percentage", () => {
     const wrapper = mountCard({ progress: 1, finished: true });
     expect(wrapper.text()).not.toContain("100% read");
-    expect(wrapper.find('[aria-label="Finished"]').exists()).toBe(true);
+    expect(wrapper.text()).toContain("Finished");
   });
 
   // A 7rem tile cannot hold "271975 words" without spilling out of the card.
   it("abbreviates the word count on the portrait tile", () => {
     const portrait = mountCard({ portrait: true });
-    expect(portrait.html()).toContain('text="272k words"');
+    expect(portrait.text()).toContain("272k words");
 
     const wide = mountCard();
-    expect(wide.html()).toContain('text="271975 words"');
+    expect(wide.text()).toContain("271975 words");
   });
 
   it("keeps the exact count on a portrait tile below a thousand words", () => {
     const wrapper = mountCard({ portrait: true, words: 517 });
-    expect(wrapper.html()).toContain('text="517 words"');
+    expect(wrapper.text()).toContain("517 words");
   });
 });

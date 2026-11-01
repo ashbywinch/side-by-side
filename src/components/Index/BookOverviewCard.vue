@@ -34,25 +34,6 @@ const wordsLabel = computed(() => {
   return `${thousands < 10 ? thousands.toFixed(1) : Math.round(thousands)}k words`
 })
 
-const rainbow = {
-  1: "#817",
-  2: "#a35",
-  3: "#c66",
-  4: "#e94",
-  5: "#ed0",
-  6: "#9d5",
-  7: "#4d8",
-  8: "#2cb",
-  9: "#0bc",
-  10: "#09c",
-  11: "#36b",
-  12: "#639",
-} as Record<number, string>
-const sizeColor: Record<string, string> = {
-  "small": rainbow[6],
-  "medium": rainbow[4],
-  "large": rainbow[2]
-}
 </script>
 <template>
   <RouterLink :to="{name:'Book',params:{lang: lang, author:author, title:title}}">
@@ -61,18 +42,16 @@ const sizeColor: Record<string, string> = {
     <va-card-content>
       {{ author }}
       <div class="breath" />
-      <div class="row va-spacing-x-2 badges">
-        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
-        <va-badge :text="wordsLabel" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
-        <span v-if="finished && !portrait" class="finished" aria-label="Finished">✓</span>
-      </div>
-      <span v-if="percent !== null && !portrait && !finished" class="read">
-        {{ percent }}% read
-      </span>
-      <span v-else-if="percent !== null && portrait && !finished" class="read read--small">
-        {{ percent }}%
-      </span>
-      <span v-else-if="finished && portrait" class="read read--small finished" aria-label="Finished">✓ finished</span>
+      <!-- One quiet line of metadata: level keeps its colour as a dot, and the
+           words and progress are subordinate to the title. -->
+      <p class="meta">
+        <span class="meta__item">
+          <span class="dot" :style="{ background: levelColorFor(level) }" aria-hidden="true" />{{ level }}
+        </span>
+        <span class="meta__item">{{ wordsLabel }}</span>
+        <span v-if="finished" class="meta__item meta__item--finished">Finished</span>
+        <span v-else-if="percent !== null" class="meta__item">{{ percent }}% read</span>
+      </p>
     </va-card-content>
     <span
       v-if="percent !== null"
@@ -130,10 +109,31 @@ a {
   flex-direction: column;
   flex: 1;
 }
-.badges {
+.meta {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  margin-top: auto;
+  gap: .1rem .35rem;
+  margin: auto 0 0;
   padding-top: .5rem;
+  color: var(--va-text-secondary);
+  font-size: .72rem;
+  line-height: 1rem;
+}
+.meta__item {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.meta__item--finished {
+  color: var(--va-success, #2a8a4a);
+  font-weight: 500;
+}
+.dot {
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  display: inline-block;
 }
 .breath {
   height: .75rem;
@@ -194,10 +194,6 @@ a {
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
-}
-.item.portrait :deep(.va-badge *) {
-  font-size: .65rem !important;
-  line-height: .95rem !important;
 }
 .item.portrait .badges {
   margin-top: auto;

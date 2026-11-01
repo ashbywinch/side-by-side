@@ -78,7 +78,7 @@ describe("BookOverviewCard", () => {
   it("marks a finished book with a full bar and a check", () => {
     const wrapper = mountCard({ progress: 1, finished: true })
 
-    expect(wrapper.find(".finished").attributes("aria-label")).toBe("Finished")
+    expect(wrapper.text()).toContain("Finished")
     expect(wrapper.find(".progress__fill").attributes("style")).toContain("100%")
   })
 })
