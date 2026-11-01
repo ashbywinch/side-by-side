@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   clampPosition,
+  clampRevealedThrough,
   isRevealed,
   nextRevealedThrough,
   pageForPosition,
   positionForPage,
+  revealedOnPage,
   topSegment,
 } from "@/components/Bookshelf/position";
 
@@ -34,6 +36,28 @@ describe("position", () => {
     expect(clampPosition(-2, 100)).toBe(0);
     expect(clampPosition(3, 0)).toBe(0);
     expect(clampPosition(Number.NaN, 10)).toBe(0);
+  });
+
+  it("clamps the reveal mark, allowing nothing uncovered", () => {
+    expect(clampRevealedThrough(150, 100)).toBe(99);
+    expect(clampRevealedThrough(-5, 100)).toBe(-1);
+    expect(clampRevealedThrough(-1, 100)).toBe(-1);
+    expect(clampRevealedThrough(3, 0)).toBe(-1);
+    expect(clampRevealedThrough(Number.NaN, 10)).toBe(-1);
+    // Non-finite means corrupt, and "nothing uncovered" is the safe reading.
+    expect(clampRevealedThrough(Number.POSITIVE_INFINITY, 10)).toBe(-1);
+  });
+
+  it("counts the uncovered cards on a page, clamped to the page", () => {
+    expect(revealedOnPage(-1, 0, 24)).toBe(0);
+    expect(revealedOnPage(0, 0, 24)).toBe(1);
+    expect(revealedOnPage(23, 0, 24)).toBe(24);
+    expect(revealedOnPage(24, 24, 24)).toBe(1);
+    expect(revealedOnPage(30, 24, 24)).toBe(7);
+    expect(revealedOnPage(1, 48, 24)).toBe(0);
+    expect(revealedOnPage(999, 48, 24)).toBe(24);
+    expect(revealedOnPage(Number.NaN, 0, 24)).toBe(0);
+    expect(revealedOnPage(5, 0, 0)).toBe(0);
   });
 
   it("reveals a segment at or before the high-water mark", () => {

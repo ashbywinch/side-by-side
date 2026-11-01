@@ -32,6 +32,33 @@ export function clampPosition(position: number, segments: number): number {
   return Math.min(Math.max(wanted, 0), length - 1);
 }
 
+/**
+ * Keep the reveal mark inside a book, allowing -1 for "nothing uncovered".
+ * Non-numeric input (corrupt storage) becomes -1 rather than poisoning
+ * comparisons with NaN.
+ */
+export function clampRevealedThrough(revealedThrough: number, segments: number): number {
+  const length = wholeNumber(segments, 0);
+  if (length <= 0) return -1;
+  const wanted = wholeNumber(revealedThrough, -1);
+  return Math.min(Math.max(wanted, -1), length - 1);
+}
+
+/**
+ * How many cards on a page are uncovered: those at or before the mark, clamped
+ * to the cards the page actually has.
+ */
+export function revealedOnPage(
+  revealedThrough: number,
+  firstSegment: number,
+  count: number,
+): number {
+  const first = wholeNumber(firstSegment, 0);
+  const total = wholeNumber(count, 0);
+  const uncovered = wholeNumber(revealedThrough, -1) - first + 1;
+  return Math.min(Math.max(uncovered, 0), total);
+}
+
 /** A translation is uncovered when its segment is at or before the mark. */
 export function isRevealed(revealedThrough: number, segment: number): boolean {
   return wholeNumber(segment, 0) <= revealedThrough;

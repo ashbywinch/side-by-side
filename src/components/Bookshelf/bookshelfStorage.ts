@@ -1,7 +1,7 @@
 import type { Bookshelf, BookshelfEntry } from "@/types/bookshelf";
 import { BOOKSHELF_VERSION } from "@/types/bookshelf";
 
-import { clampPosition } from "./position";
+import { clampPosition, clampRevealedThrough } from "./position";
 
 
 export const STORAGE_KEY = "sbs:bookshelf:v1";
@@ -72,14 +72,13 @@ function toEntry(value: unknown): BookshelfEntry | null {
     return null;
   }
 
-  const highest = segments > 0 ? segments - 1 : -1;
   const finishedAt = date(value.finishedAt);
   const removedAt = date(value.removedAt);
 
   return {
     book: { lang, author, title, segments },
     position: clampPosition(position, segments),
-    revealedThrough: Math.min(Math.max(revealedThrough, -1), highest),
+    revealedThrough: clampRevealedThrough(revealedThrough, segments),
     updatedAt,
     ...(finishedAt ? { finishedAt } : {}),
     ...(removedAt ? { removedAt } : {}),

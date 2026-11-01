@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageHeader from '@/components/Book/PageHeader.vue';
 import TextSnippet from '@/components/Book/TextSnippet.vue';
-import { topSegment } from '@/components/Bookshelf/position';
+import { revealedOnPage, topSegment } from '@/components/Bookshelf/position';
 import type { BookSegment } from '@/components/Book/useBookReader';
 import { onMounted, onUnmounted, ref, watch, type PropType } from 'vue';
 
@@ -27,9 +27,7 @@ const elements: Array<HTMLElement | null> = []
 let ticking = false
 
 function restored(): number {
-  const uncoveredOnThisPage = props.revealedThrough - props.firstSegment + 1
-  if (uncoveredOnThisPage <= 0) return 0
-  return Math.min(uncoveredOnThisPage, props.cards.length)
+  return revealedOnPage(props.revealedThrough, props.firstSegment, props.cards.length)
 }
 
 watch(
