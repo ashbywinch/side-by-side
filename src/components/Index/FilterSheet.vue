@@ -85,7 +85,7 @@ function apply() {
         <button type="button" class="sheet__close" aria-label="Close filters" @click="emit('close')">×</button>
       </header>
 
-      <BookFilter :books="books" :filter="draft" @update-filter-value="onUpdate" />
+      <BookFilter :books="books" :filter="draft" native @update-filter-value="onUpdate" />
 
       <footer class="sheet__foot">
         <button type="button" class="clear" :disabled="active === 0" @click="clear">Clear all</button>
@@ -110,6 +110,7 @@ function apply() {
   bottom: 0;
   z-index: 41;
   max-height: 92vh;
+  overflow-y: auto;
   padding: .5rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
   border-radius: 1rem 1rem 0 0;
   background: var(--va-background-primary, #fff);

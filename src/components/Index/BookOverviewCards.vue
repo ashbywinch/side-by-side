@@ -31,7 +31,7 @@ const cards = computed(() =>
 )
 </script>
 <template>
-  <div class="row flex">
+  <div class="row" :class="{ 'row--portrait': portrait }">
     <template v-for="{ book, entry } in cards" :key="book.author + ': ' + book.title">
       <BookOverviewCard
         :lang="book.lang"
@@ -48,7 +48,19 @@ const cards = computed(() =>
 </template>
 
 <style scoped>
+/* Every card is the same width: the catalogue is a grid, not a row of
+   content-sized boxes, so a long title cannot make one card wider than its
+   neighbour and push the word count off the edge. */
 .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
   gap: .75rem;
+  align-items: stretch;
+}
+.row--portrait {
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+}
+.row > * {
+  min-width: 0;
 }
 </style>

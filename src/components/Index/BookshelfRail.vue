@@ -21,7 +21,7 @@ const cards = computed(() => shelfCards(props.books, props.entries))
 <template>
   <section v-if="cards.length" class="shelf" aria-label="You are reading">
     <h2 class="shelf__title">You&rsquo;re reading&hellip;</h2>
-    <ul class="rail">
+    <ul class="rail" :class="{ 'rail--portrait': portrait }">
       <li v-for="{ book, entry } in cards" :key="book.author + ': ' + book.title" class="rail__item">
         <BookOverviewCard
           :lang="book.lang"
@@ -58,7 +58,17 @@ const cards = computed(() => shelfCards(props.books, props.entries))
   scrollbar-width: thin;
 }
 .rail__item {
+  display: flex;
   flex: 0 0 auto;
+  width: 14rem;
   scroll-snap-align: start;
+}
+.rail__item :deep(a) {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+.rail--portrait .rail__item {
+  width: 7rem;
 }
 </style>

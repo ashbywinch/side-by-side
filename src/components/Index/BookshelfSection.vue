@@ -58,9 +58,13 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
   margin: 0 0 .5rem;
 }
 .stack {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: .75rem;
+  align-items: stretch;
+}
+.stack > * {
+  min-width: 0;
 }
 .see-all {
   display: inline-block;

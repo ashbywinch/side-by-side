@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 import { saveBookshelf, STORAGE_KEY } from "@/components/Bookshelf/bookshelfStorage";
 import IndexPage from "@/pages/Index/IndexPage.vue";
+import { layoutFor, rememberVariant, isLabVariant } from "./labVariant";
 import { shelfFor } from "./shelfFixtures";
 
 const route = useRoute();
@@ -24,8 +25,15 @@ const props = defineProps({
   variant: { type: String, required: true },
 })
 
-const shelfLayout = computed(() => (props.variant === "a" ? "section" : "rail"));
-const portrait = computed(() => props.variant === "c");
+const layout = computed(() =>
+  layoutFor(isLabVariant(props.variant) ? props.variant : "b"),
+);
+const shelfLayout = computed(() => layout.value.shelfLayout);
+const portrait = computed(() => layout.value.portrait);
+
+// Opening a book leaves the lab route; the index they come back to must still
+// show the same presentation.
+onMounted(() => rememberVariant(props.variant));
 </script>
 
 <template>

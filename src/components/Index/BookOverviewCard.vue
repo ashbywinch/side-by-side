@@ -24,6 +24,16 @@ const percent = computed(() =>
     : Math.round(Math.min(Math.max(props.progress, 0), 1) * 100),
 )
 
+/**
+ * A 7rem tile cannot hold "271975 words", so the portrait card abbreviates:
+ * the magnitude is what matters when choosing, not the last three digits.
+ */
+const wordsLabel = computed(() => {
+  if (!props.portrait || props.words < 1000) return `${props.words} words`
+  const thousands = props.words / 1000
+  return `${thousands < 10 ? thousands.toFixed(1) : Math.round(thousands)}k words`
+})
+
 const rainbow = {
   1: "#817",
   2: "#a35",
@@ -53,9 +63,12 @@ const sizeColor: Record<string, string> = {
       <div class="breath" />
       <div class="row va-spacing-x-2 badges">
         <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
-        <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
+        <va-badge :text="wordsLabel" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
         <span v-if="finished" class="finished" aria-label="Finished">✓</span>
       </div>
+      <span v-if="percent !== null && !portrait && !finished" class="read">
+        {{ percent }}% read
+      </span>
     </va-card-content>
     <span
       v-if="percent !== null"
@@ -88,11 +101,35 @@ const sizeColor: Record<string, string> = {
 div.row a:focus .va-card {
   border: 1px solid var(--va-primary);
 }
+/* A card fills its grid cell. The badges and the progress edge sit on the
+   bottom, so cards whose titles wrap to different heights still line up. */
+:deep(.va-card) {
+  min-height: 100%;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 6.5rem;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.item .va-card__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .badges {
   align-items: center;
+  margin-top: auto;
 }
 .breath {
-  height: 4rem;
+  display: none;
+}
+.read {
+  margin-top: .25rem;
+  color: var(--va-text-secondary);
+  font-size: .8rem !important;
 }
 .finished {
   color: var(--va-success);
@@ -101,8 +138,9 @@ div.row a:focus .va-card {
 /* The progress bar is the card's bottom edge, not a widget inside it. */
 .progress {
   display: block;
-  height: 3px;
-  background: var(--va-shadow);
+  height: 4px;
+  margin-top: .5rem;
+  background: var(--va-background-element, rgb(0 0 0 / 8%));
 }
 .progress__fill {
   display: block;
@@ -114,7 +152,6 @@ div.row a:focus .va-card {
 .item.portrait {
   display: flex;
   flex-direction: column;
-  width: 7rem;
   min-height: 11rem;
   padding-bottom: 0;
 }
