@@ -61,7 +61,7 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
   grid-template-columns: repeat(auto-fill, 7rem);
   justify-content: start;
   gap: .75rem;
-  align-items: stretch;
+  align-items: start;
 }
 .screen-xs .stack {
   gap: .5rem;
