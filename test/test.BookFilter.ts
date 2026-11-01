@@ -1,84 +1,100 @@
 import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref } from "vue";
-import { VaDropdownPlugin, VaSelect, createVuesticEssential } from "vuestic-ui";
 
 import BookFilter from "@/components/Index/BookFilter.vue";
 import { Filter, FilterRefs } from "@/components/Index/Filter";
 import { useFilter } from "@/pages/Index/FilterIndex";
 import type { BookIndexEntry } from "@/types/corpus";
 
-function book(level: unknown, title = "Title"): BookIndexEntry {
+function book(level: unknown, title = "Title", author = "Author"): BookIndexEntry {
   return {
     lang: "ru",
     title,
-    author: "Author",
+    author,
     "Word Count": 100,
     "Vocab Level": level as string,
   };
 }
 
 function mountFilter(books: BookIndexEntry[]) {
-  return mount(BookFilter, {
-    props: { filter: new FilterRefs(), books },
-    global: {
-      plugins: [
-        createVuesticEssential({
-          components: { VaSelect },
-          plugins: { VaDropdownPlugin },
-        }),
-      ],
-    },
-  });
+  return mount(BookFilter, { props: { filter: new FilterRefs(), books } });
+}
+
+async function chooseOption(
+  wrapper: ReturnType<typeof mountFilter>,
+  label: string,
+  option: string,
+) {
+  await wrapper.find(`#filter-${label}`).trigger("click");
+  const item = wrapper
+    .findAll(".list__option")
+    .find((candidate) => candidate.text() === option);
+  if (!item) throw new Error(`no ${option} in the ${label} list`);
+  await item.trigger("mousedown");
 }
 
 describe("BookFilter", () => {
-  it("offers only valid levels in CEFR order plus Unrated", () => {
+  it("offers only valid levels in CEFR order plus Unrated", async () => {
+    const wrapper = mountFilter([book("C2"), book("C1"), book(""), book(2), book("B3")]);
+    await wrapper.find("#filter-Level").trigger("click");
+
+    // "Any level" is the empty state, cleared with the field's ×, not a row.
+    expect(wrapper.findAll(".list__option").map((option) => option.text())).toEqual([
+      "C1",
+      "C2",
+      "Unrated",
+    ]);
+  });
+
+  it("emits the level and the size when chosen", async () => {
+    const wrapper = mountFilter([book("C2")]);
+    await chooseOption(wrapper, "Level", "C2");
+    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
+      level: "C2",
+    });
+
+    await chooseOption(wrapper, "Size", "small");
+    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
+      size: "small",
+    });
+  });
+
+  // The library select never drew its list, so the reader had no suggestions at
+  // all. Typing now lists matches, and only a chosen author filters.
+  it("suggests authors as the reader types, and applies the one they pick", async () => {
     const wrapper = mountFilter([
-      book("C2"),
-      book("C1"),
-      book(""),
-      book(2),
-      book("B3"),
+      book("C2", "one", "Антон Чехов"),
+      book("C2", "two", "Лев Толстой"),
     ]);
 
-    const options = wrapper.findComponent(VaSelect).props("options") as Array<{
-      text: string;
-      value: string;
-    }>;
-
-    expect(options).toEqual([
-      { text: "C1", value: "C1" },
-      { text: "C2", value: "C2" },
-      { text: "Unrated", value: "unrated" },
+    await wrapper.find("#filter-Author").setValue("Чех");
+    expect(wrapper.findAll(".list__option").map((option) => option.text())).toEqual([
+      "Антон Чехов",
     ]);
-    expect(options.some((option) => option.value === "0" || option.value === "2")).toBe(
-      false,
-    );
-  });
+    expect(wrapper.emitted("update-filter-value")).toBeUndefined();
 
-  it("emits the Unrated sentinel when it is selected", async () => {
-    const wrapper = mountFilter([book("C2"), book("")]);
-    const select = wrapper.findComponent(VaSelect);
-
-    await select.setValue("unrated");
-    await wrapper.vm.$nextTick();
+    await wrapper.find(".list__option").trigger("mousedown");
 
     expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
-      level: "unrated",
+      author: "Антон Чехов",
     });
+    expect(wrapper.findAll(".list__option")).toHaveLength(0);
   });
 
-  it("emits no filter when the level is cleared", async () => {
-    const wrapper = mountFilter([book("C2"), book("")]);
-    const select = wrapper.findComponent(VaSelect);
+  it("sorts the suggestions by surname", async () => {
+    const wrapper = mountFilter([
+      book("C2", "one", "Лев Толстой"),
+      book("C2", "two", "Антон Чехов"),
+    ]);
 
-    await select.setValue(null);
-    await wrapper.vm.$nextTick();
+    await wrapper.find("#filter-Author").setValue("о");
 
-    expect(wrapper.emitted("update-filter-value")?.at(-1)?.[0]).toMatchObject({
-      level: "",
-    });
+    // Surnames: Толстой before Чехов (Т before Ч).
+    expect(wrapper.findAll(".list__option").map((option) => option.text())).toEqual([
+      "Лев Толстой",
+      "Антон Чехов",
+    ]);
   });
 
   it("filters the displayed books through the emitted filter", async () => {
@@ -102,25 +118,14 @@ describe("BookFilter", () => {
       },
     });
 
-    const wrapper = mount(Harness, {
-      global: {
-        plugins: [
-          createVuesticEssential({
-            components: { VaSelect },
-            plugins: { VaDropdownPlugin },
-          }),
-        ],
-      },
-    });
-
-    expect(wrapper.findAll("li").map((item) => item.text())).toEqual([
-      "c2",
-      "unrated",
-    ]);
-
-    await wrapper.findComponent(VaSelect).setValue("unrated");
+    const wrapper = mount(Harness);
+    await wrapper.find("#filter-Level").trigger("click");
+    const level = wrapper
+      .findAll(".list__option")
+      .find((option) => option.text() === "C2");
+    await level?.trigger("mousedown");
     await nextTick();
 
-    expect(wrapper.findAll("li").map((item) => item.text())).toEqual(["unrated"]);
+    expect(wrapper.findAll("li").map((item) => item.text())).toEqual(["c2"]);
   });
 });

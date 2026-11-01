@@ -153,7 +153,14 @@ function apply() {
   padding: .25rem .5rem;
   cursor: pointer;
 }
-/* The three controls stack, at their natural height. */
+/* The three controls stack, at their natural height: `flex: 1` is for the row
+   layout on a desktop, and would stretch each field down the whole sheet. */
+.sheet :deep(.field) {
+  flex: 0 0 auto;
+}
+.sheet :deep(.filters) {
+  align-items: stretch;
+}
 .sheet :deep(nav.row) {
   display: flex;
   flex-direction: column;

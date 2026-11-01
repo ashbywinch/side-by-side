@@ -30,7 +30,7 @@ describe("FilterSheet", () => {
   it("carries the author autocomplete into the sheet", () => {
     const wrapper = mountSheet();
 
-    expect(wrapper.find("#author-filter").exists()).toBe(true);
+    expect(wrapper.find("#filter-Author").exists()).toBe(true);
   });
 
   it("shows the live count of the draft, not the applied filter", async () => {

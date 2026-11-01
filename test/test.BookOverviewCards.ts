@@ -71,13 +71,13 @@ it("collapses the filters behind a results bar until asked", async () => {
   });
   await flushPromises();
 
-  expect(container.querySelector("#author-filter")).toBeNull();
+  expect(container.querySelector("#filter-Author")).toBeNull();
   expect(screen.getByText("4 books")).toBeTruthy();
 
   await fireEvent.click(screen.getByText("Filters"));
   await flushPromises();
 
-  expect(container.querySelector("#author-filter")).toBeTruthy();
+  expect(container.querySelector("#filter-Author")).toBeTruthy();
 });
 
 it("uses the same filter bar in every shelf layout", async () => {
