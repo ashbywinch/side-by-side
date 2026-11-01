@@ -46,14 +46,14 @@ const countLabel = computed(() =>
       </li>
     </ul>
 
-    <va-button
+    <button
+      type="button"
       class="filters"
-      size="small"
-      preset="plain"
       :aria-expanded="open"
       @click="$emit('toggle')">
+      <va-icon name="filter_list" size="18px" />
       Filters<span v-if="chips.length" class="filters__count">{{ chips.length }}</span>
-    </va-button>
+    </button>
   </div>
 </template>
 
@@ -115,7 +115,25 @@ const countLabel = computed(() =>
   cursor: pointer;
 }
 .filters {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 2.25rem;
   margin-left: auto;
+  padding: .25rem .8rem;
+  border: 1px solid var(--va-divider, rgb(128 128 128 / 35%));
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--va-text-primary);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.filters:hover,
+.filters[aria-expanded="true"] {
+  border-color: var(--va-primary);
+  color: var(--va-primary);
 }
 .filters__count {
   display: inline-flex;

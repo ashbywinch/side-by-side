@@ -3,18 +3,10 @@ import { mount } from "@vue/test-utils";
 
 import ResultsBar from "@/components/Index/ResultsBar.vue";
 
-const stubs = {
-  "va-button": {
-    props: ["preset", "size"],
-    emits: ["click"],
-    template: `<button class="filters-button" @click="$emit('click')"><slot /></button>`,
-  },
-}
-
 function mountBar(props: Record<string, unknown> = {}) {
   return mount(ResultsBar, {
     props: { count: 2147, ...props },
-    global: { stubs },
+    global: {},
   })
 }
 
@@ -24,7 +16,7 @@ describe("ResultsBar", () => {
 
     expect(wrapper.find(".count").text()).toBe("2,147 books")
     expect(wrapper.findAll(".chip")).toHaveLength(0)
-    expect(wrapper.find(".filters-button").attributes("aria-expanded")).toBe("false")
+    expect(wrapper.find(".filters").attributes("aria-expanded")).toBe("false")
   })
 
   it("says one book in the singular", () => {
@@ -53,6 +45,6 @@ describe("ResultsBar", () => {
   })
 
   it("reports that the panel is open", () => {
-    expect(mountBar({ open: true }).find(".filters-button").attributes("aria-expanded")).toBe("true")
+    expect(mountBar({ open: true }).find(".filters").attributes("aria-expanded")).toBe("true")
   })
 })
