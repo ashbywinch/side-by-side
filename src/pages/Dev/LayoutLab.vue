@@ -30,7 +30,6 @@ const layout = computed(() =>
 );
 
 const shelfLayout = computed(() => layout.value.shelfLayout);
-const portrait = computed(() => layout.value.portrait);
 
 // Opening a book leaves the lab route; a reader who comes back through the
 // root or the home icon must land inside the same build, so the variant is
@@ -39,5 +38,5 @@ rememberVariant(props.variant);
 </script>
 
 <template>
-  <IndexPage :lang="lang" :shelf-layout="shelfLayout" :portrait="portrait" />
+  <IndexPage :lang="lang" :shelf-layout="shelfLayout" />
 </template>

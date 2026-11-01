@@ -22,7 +22,6 @@ const props = defineProps({
   // How the bookshelf is drawn above the catalogue: a short row of book tiles
   // with "See all" in its header — chosen by walkthrough, over a rail.
   shelfLayout: { type:String, default:'section' },
-  portrait: { type:Boolean, default:true },
 })
 
 const bookshelf = useBookshelf()
@@ -119,13 +118,12 @@ function currentFilter(): Filter {
       v-if="shelfLayout === 'section'"
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
-      :portrait="portrait"
       :lang="lang" />
     <BookshelfRail
       v-else-if="shelfLayout === 'rail'"
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
-      :portrait="portrait" />
+ />
     <ResultsBar
       :count="filter.items.value.length"
       :level="filter.filter.level.value"
@@ -155,8 +153,7 @@ function currentFilter(): Filter {
     <BookOverviewCards
       v-else
       :books="pagination.items.value"
-      :entries="bookshelf.entries.value"
-      :portrait="portrait" />
+      :entries="bookshelf.entries.value" />
     <SimplePagination :page="pagination.page.value" :pages="pagination.numPages.value" :visible-pages="1" @update-page-value="updatePageValue"/>
   </PageSurround>
 </template>

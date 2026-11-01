@@ -11,27 +11,23 @@ import { progressFraction } from "@/components/Bookshelf/bookshelf";
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required:true},
   entries: { type: Array as PropType<BookshelfEntry[]>, default: () => [] },
-  portrait: { type: Boolean, default: false },
 })
 
 function entryFor(book: BookIndexEntry): BookshelfEntry | undefined {
   return props.entries.find(
     (entry) =>
-     entry.book.lang === book.lang &&
+      entry.book.lang === book.lang &&
       entry.book.author === book.author &&
       entry.book.title === book.title,
   )
 }
 
 const cards = computed(() =>
-  props.books.map((book) => ({
-    book,
-    entry: entryFor(book),
-  })),
+  props.books.map((book) => ({ book, entry: entryFor(book) })),
 )
 </script>
 <template>
-  <div class="row" :class="{ 'row--portrait': portrait }">
+  <div class="row flex">
     <template v-for="{ book, entry } in cards" :key="book.author + ': ' + book.title">
       <BookOverviewCard
         :lang="book.lang"
@@ -40,33 +36,21 @@ const cards = computed(() =>
         :level="levelLabel(book['Vocab Level'])"
         :words="book['Word Count']"
         :size="book.size ?? ''"
-        :progress="entry ? progressFraction(entry) : null"
-        :portrait="portrait" />
+        :progress="entry ? progressFraction(entry) : null" />
     </template>
   </div>
 </template>
 
 <style scoped>
-/* Every card is the same width: the catalogue is a grid, not a row of
-   content-sized boxes, so a long title cannot make one card wider than its
-   neighbour and push the word count off the edge. */
+/* Each card is only as wide as its own content: the link is not allowed to
+   grow and fill the row, which otherwise gave every card the same width and
+   left the slack as a gutter beside it. */
 .row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
   gap: 1rem;
-  align-items: start;
-}
-.row--portrait {
-  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  gap: .5rem;
-}
-@media (width >= 600px) {
-  .row--portrait {
-    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
-    gap: 1rem;
-  }
+  align-items: flex-start;
 }
 .row > * {
+  flex: 0 0 auto;
   min-width: 0;
 }
 </style>

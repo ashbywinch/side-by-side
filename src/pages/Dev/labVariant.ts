@@ -35,10 +35,6 @@ export function rememberedVariant(): LabVariant | null {
 
 export function layoutFor(variant: LabVariant): {
   shelfLayout: "section" | "rail";
-  portrait: boolean;
 } {
-  return {
-    shelfLayout: variant === "a" ? "section" : "rail",
-    portrait: variant === "c",
-  };
+  return { shelfLayout: variant === "a" ? "section" : "rail" };
 }

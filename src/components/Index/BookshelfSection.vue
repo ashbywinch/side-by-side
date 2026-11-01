@@ -14,7 +14,6 @@ const VISIBLE = 3;
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required: true },
   entries: { type: Array as PropType<BookshelfEntry[]>, default: () => [] },
-  portrait: { type: Boolean, default: true },
   lang: { type: String, default: "ru" },
 })
 
@@ -43,8 +42,7 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
         :level="levelLabel(book['Vocab Level'])"
         :words="book['Word Count']"
         :size="book.size ?? ''"
-        :progress="progressFraction(entry)"
-        :portrait="portrait" />
+        :progress="progressFraction(entry)" />
     </div>
   </section>
 </template>
@@ -59,14 +57,14 @@ const shown = computed(() => cards.value.slice(0, VISIBLE))
   margin: 0 0 .5rem;
 }
 .stack {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 7rem);
-  justify-content: start;
-  gap: .75rem;
-  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
 }
-.screen-xs .stack {
-  gap: .5rem;
+.stack > * {
+  flex: 0 0 auto;
+  min-width: 0;
 }
 .stack > * {
   min-width: 0;

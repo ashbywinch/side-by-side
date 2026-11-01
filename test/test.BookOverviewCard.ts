@@ -42,17 +42,9 @@ describe("BookOverviewCard", () => {
     expect(wrapper.text()).not.toContain("Finished");
   });
 
-  // A 7rem tile cannot hold "271975 words" without spilling out of the card.
-  it("abbreviates the word count on the portrait tile", () => {
-    const portrait = mountCard({ portrait: true });
-    expect(portrait.html()).toContain('text="272k words"');
-
-    const wide = mountCard();
-    expect(wide.html()).toContain('text="271975 words"');
-  });
-
-  it("keeps the exact count on a portrait tile below a thousand words", () => {
-    const wrapper = mountCard({ portrait: true, words: 517 });
-    expect(wrapper.html()).toContain('text="517 words"');
+  // The count is the number a reader uses to judge length, so it is exact.
+  it("shows the exact word count", () => {
+    expect(mountCard().html()).toContain('text="271975 words"');
+    expect(mountCard({ words: 517 }).html()).toContain('text="517 words"');
   });
 });

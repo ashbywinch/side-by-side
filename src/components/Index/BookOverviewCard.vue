@@ -13,8 +13,6 @@ const props = defineProps({
   words: { type:Number, required:true},
   // Fraction read, or null when the reader has not read this book.
   progress: { type: Number as PropType<number | null>, default: null },
-  // Vertical, book-like card rather than the flat one.
-  portrait: { type:Boolean, default:false },
 })
 
 const percent = computed(() =>
@@ -22,15 +20,6 @@ const percent = computed(() =>
     ? null
     : Math.round(Math.min(Math.max(props.progress, 0), 1) * 100),
 )
-
-// Same abbreviation the portrait tile has always used: 7rem cannot hold
-// "271975 words" without spilling.
-const wordsLabel = computed(() => {
-  if (!props.portrait) return `${props.words} words`
-  if (props.words < 1000) return `${props.words} words`
-  const thousands = props.words / 1000
-  return `${thousands < 10 ? thousands.toFixed(1) : Math.round(thousands)}k words`
-})
 
 const rainbow = {
   1: "#817",
@@ -54,14 +43,14 @@ const sizeColor: Record<string, string> = {
 </script>
 <template>
   <RouterLink :to="{name:'Book',params:{lang: lang, author:author, title:title}}">
-  <va-card class="item" :class="{ portrait }">
+  <va-card class="item">
     <va-card-title>{{ title }}</va-card-title>
     <va-card-content>
       {{ author }}
       <br/><br/><br/>
       <div class="row va-spacing-x-2 badges">
         <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
-        <va-badge :text="wordsLabel" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
+        <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
       </div>
     </va-card-content>
     <span
@@ -80,26 +69,44 @@ const sizeColor: Record<string, string> = {
 </template>
 <style scoped>
 .va-card-title {
-  font-size:1.2rem !important;
+  font-size: 1rem !important;
   font-weight: 300 !important;
   text-transform: none !important;
   padding-bottom: .3rem !important;
 }
 .va-card-content {
-  font-size: 1rem !important;
+  font-size: .85rem !important;
 }
 .va-badge * {
-  font-size: 1rem !important;
+  font-size: .7rem !important;
   text-transform: none !important;
+}
+/* Two pills side by side were wider than the card, which set the width of every
+   tile to the same value; stacked, the width follows the title and the author. */
+.badges {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .3rem;
 }
 div.row a:focus .va-card {
   border: 1px solid var(--va-primary);
 }
-/* The bar is the card's bottom edge, not a widget inside it. */
+/* Portrait is a consequence of wrapping, not of a width we impose: the card is
+   content-sized with a ceiling, so a long title and a long name wrap into a
+   taller, narrower tile. Words break at spaces only — never inside a word, and
+   never with a hyphen. */
 .item {
+  /* min-content: the card is as wide as its longest line and the title wraps
+     into it, so the width follows the text instead of being imposed on it.
+     Words break at spaces only — no hyphenation. */
+  width: min-content;
+  max-width: 9rem;
   padding-bottom: 0;
-  overflow: hidden;
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
 }
+/* The bar is the card's bottom edge. */
 .progress {
   display: block;
   height: 4px;
@@ -109,46 +116,5 @@ div.row a:focus .va-card {
   display: block;
   height: 100%;
   background: var(--va-primary);
-}
-/* Portrait: a book-shaped tile of one height, so every tile in a row puts its
-   pills and its bar on the same lines. The height fits the tallest case in the
-   corpus — a three-line title with a two-line author — and the pills are pinned
-   above the bar rather than left to follow the text. */
-.item.portrait {
-  position: relative;
-  width: 7rem;
-  height: 12rem;
-  overflow: hidden;
-}
-.item.portrait .va-card__content {
-  padding-bottom: 4.5rem;
-}
-.item.portrait .badges {
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1.5rem;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: .4rem;
-  margin: 0;
-}
-.item.portrait .progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0;
-}
-.item.portrait .va-card-title {
-  font-size: .95rem !important;
-  line-height: 1.2rem !important;
-}
-.item.portrait .va-card__content {
-  font-size: .8rem !important;
-}
-.item.portrait :deep(.va-badge *) {
-  font-size: .62rem !important;
-  line-height: 1rem !important;
 }
 </style>

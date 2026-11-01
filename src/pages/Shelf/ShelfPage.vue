@@ -32,7 +32,7 @@ const shelf = computed(() =>
       v-else
       :books="shelf"
       :entries="bookshelf.entries.value"
-      portrait />
+      />
   </PageSurround>
 </template>
 

@@ -14,9 +14,9 @@ afterEach(() => {
 
 describe("lab variant", () => {
   it("maps each variant to one presentation, and only presentation", () => {
-    expect(layoutFor("a")).toEqual({ shelfLayout: "section", portrait: false });
-    expect(layoutFor("b")).toEqual({ shelfLayout: "rail", portrait: false });
-    expect(layoutFor("c")).toEqual({ shelfLayout: "rail", portrait: true });
+    expect(layoutFor("a")).toEqual({ shelfLayout: "section" });
+    expect(layoutFor("b")).toEqual({ shelfLayout: "rail" });
+    expect(layoutFor("c")).toEqual({ shelfLayout: "rail" });
   });
 
   it("only knows the three variants", () => {
