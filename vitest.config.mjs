@@ -21,8 +21,6 @@ export default defineConfig({
         "**/dist/**",
         "test/**",
         "**/*.d.ts",
-        // Dev-only comparison harness: deleted once a variant is chosen.
-        "src/pages/Dev/**",
       ],
       thresholds: {
         lines: 78,

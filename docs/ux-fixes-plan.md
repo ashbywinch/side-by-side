@@ -86,3 +86,19 @@ Checked against the built screens at 390 and 1280, not against intentions.
 | Header weight | The brand occupied a fifth of a phone screen. | **Fixed** — smaller mark and text on the smallest breakpoint. |
 | Colour semantics | Level and word-count pills are the only colour signal; "Unrated" and "C2" have no legend. | **Open** — a legend is a catalogue feature, not a fix. |
 | Ragged middles | Equal row heights leave whitespace under short titles. | **Accepted** — the alternative is ragged bars; the gap is deliberate space, not filler. |
+
+## Round 2 — cards and filters
+
+- **The shelf is a short row of book tiles, "See all" beside the heading.** A
+  rail lost on the same evidence that picked the section: with eight books the
+  row could not be scrolled, and the walker gave up on three of them.
+- **The card's width follows its text.** `width: min-content` wraps the title
+  into the card instead of imposing a width on it; words never break inside a
+  word. Caps below the author's natural width collapse every card to one width.
+- **One height per row**, from a floor measured as two-thirds of the row's
+  height, so the narrowest card still reads as a book and two fit a phone.
+- **One listbox for all three filters.** The design system's select draws no
+  list inside the sheet (its options were clipped by the sheet's scroller, and
+  its type-to-search has no input to type into). Level, size and author share a
+  control we draw; the author filters only when an author is chosen, because a
+  half-typed surname emptied the catalogue.

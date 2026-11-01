@@ -8,7 +8,6 @@ import { useIndexRouting } from './IndexPageRouting'
 
 import BookOverviewCards from '@/components/Index/BookOverviewCards.vue';
 import BookFilter from '@/components/Index/BookFilter.vue';
-import BookshelfRail from '@/components/Index/BookshelfRail.vue';
 import ResultsBar from '@/components/Index/ResultsBar.vue';
 import FilterSheet from '@/components/Index/FilterSheet.vue';
 import BookshelfSection from '@/components/Index/BookshelfSection.vue';
@@ -115,15 +114,9 @@ function currentFilter(): Filter {
 <template>
   <PageSurround :error="fetchItems.error.value">
     <BookshelfSection
-      v-if="shelfLayout === 'section'"
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
       :lang="lang" />
-    <BookshelfRail
-      v-else-if="shelfLayout === 'rail'"
-      :books="fetchItems.items.value"
-      :entries="bookshelf.entries.value"
- />
     <ResultsBar
       :count="filter.items.value.length"
       :level="filter.filter.level.value"

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import BookOverviewCard from "@/components/Index/BookOverviewCard.vue";
-import BookshelfRail from "@/components/Index/BookshelfRail.vue";
 import BookshelfSection from "@/components/Index/BookshelfSection.vue";
 import { shelfCards } from "@/components/Index/shelfCards";
 import type { BookIndexEntry } from "@/types/corpus";
@@ -80,32 +79,6 @@ describe("BookOverviewCard", () => {
 
     expect(wrapper.text()).not.toContain("Finished")
     expect(wrapper.find(".progress__fill").attributes("style")).toContain("100%")
-  })
-})
-
-describe("BookshelfRail", () => {
-  const books = [indexBook("Первая"), indexBook("Вторая"), indexBook("Третья")]
-  const entries = books.map((book) => shelfEntry(book))
-
-  it("draws every entry, most recent first, in a scrollable row", () => {
-    const wrapper = mount(BookshelfRail, {
-      props: { books, entries },
-      global: { stubs },
-    })
-
-    const titles = wrapper.findAll(".rail__item").map((item) => item.text())
-    expect(titles[0]).toContain("Первая")
-    expect(titles[2]).toContain("Третья")
-    expect(wrapper.find(".rail").exists()).toBe(true)
-  })
-
-  it("draws nothing when the bookshelf is empty", () => {
-    const wrapper = mount(BookshelfRail, {
-      props: { books, entries: [] },
-      global: { stubs },
-    })
-
-    expect(wrapper.find("section").exists()).toBe(false)
   })
 })
 
