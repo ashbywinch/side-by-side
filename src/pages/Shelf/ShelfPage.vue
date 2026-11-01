@@ -23,7 +23,7 @@ const shelf = computed(() =>
 <template>
   <PageSurround :error="fetchItems.error.value">
     <h1 class="title">You&rsquo;re reading&hellip;</h1>
-    <p v-if="bookshelf.entries.value.length === 0" class="empty">
+    <p v-if="!fetchItems.is_loading.value && bookshelf.entries.value.length === 0" class="empty">
       Nothing here yet. A book joins your bookshelf when you reveal a translation
       or turn a page in it.
       <RouterLink :to="{ name: 'Index', params: { lang } }">Browse the library</RouterLink>.

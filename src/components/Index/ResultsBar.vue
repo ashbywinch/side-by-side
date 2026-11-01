@@ -31,7 +31,7 @@ const countLabel = computed(() =>
 
 <template>
   <div class="results-bar">
-    <span class="count">{{ countLabel }}</span>
+    <span class="count" role="status" aria-live="polite">{{ countLabel }}</span>
 
     <ul v-if="chips.length" class="chips">
       <li v-for="chip in chips" :key="chip.key">

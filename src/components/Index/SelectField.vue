@@ -70,18 +70,23 @@ function onInput() {
 }
 
 function onKeydown(event: KeyboardEvent) {
+  const last = shown.value.length - 1
   if (event.key === "ArrowDown") {
     open.value = true
-    active.value = Math.min(active.value + 1, shown.value.length - 1)
+    active.value = Math.min(active.value + 1, last)
     event.preventDefault()
   } else if (event.key === "ArrowUp") {
-    active.value = Math.max(active.value - 1, 0)
+    open.value = true
+    active.value = active.value <= 0 ? 0 : active.value - 1
     event.preventDefault()
   } else if (event.key === "Enter") {
-    if (open.value && shown.value[active.value]) choose(shown.value[active.value])
-    event.preventDefault()
+    if (open.value && active.value >= 0 && shown.value[active.value]) {
+      choose(shown.value[active.value])
+      event.preventDefault()
+    }
   } else if (event.key === "Escape") {
     open.value = false
+    active.value = -1
     event.preventDefault()
   }
 }

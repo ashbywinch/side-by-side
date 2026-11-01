@@ -1,4 +1,4 @@
-import { nextTick, onBeforeUnmount, onMounted, ref, type Ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, type Ref } from "vue";
 
 const CARD = ".item";
 /** A book is about two-thirds as wide as it is tall. */
@@ -38,14 +38,26 @@ export function useCardMinWidth(container: Ref<HTMLElement | null>) {
     );
   }
 
+  function nextFrame(): Promise<void> {
+    return new Promise((resolve) => {
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(() => resolve());
+      } else {
+        setTimeout(resolve, 0);
+      }
+    });
+  }
+
   async function settle() {
-    // First pass: the tall, narrow layout. Second: after widening.
+    // First pass: the tall, narrow layout. Second: after widening — and after
+    // the browser has painted the wider cards, or the re-measure reads the old
+    // wrapped height.
     for (let pass = 0; pass < 2; pass += 1) {
       const height = tallest();
       if (height <= 0) return;
       // A book proportion, but never so wide that a phone can only show one.
       minWidth.value = cardFloor(height, container.value?.clientWidth ?? 0);
-      await nextTick();
+      await nextFrame();
     }
   }
 

@@ -99,7 +99,7 @@ function apply() {
       <footer class="sheet__foot">
         <button type="button" class="clear" :disabled="active === 0" @click="clear">Clear all</button>
         <va-button size="small" @click="apply">
-          Show {{ count.toLocaleString("en-GB") }} books
+          <span aria-live="polite">Show {{ count.toLocaleString("en-GB") }} books</span>
         </va-button>
       </footer>
     </section>
