@@ -83,4 +83,18 @@ describe("bookshelf", () => {
       ),
     ).toBe(1);
   });
+
+  // "How far did I get" is not "where am I looking": scrolling back to the
+  // start to re-read must not make the book look untouched.
+  it("keeps progress at the furthest point reached", () => {
+    const book = { ...entry().book, segments: 100 };
+    const read = entry({ position: 60, revealedThrough: 40, book });
+    expect(progressFraction(read)).toBe(0.61);
+
+    const scrolledBack = entry({ position: 2, revealedThrough: 40, book });
+    expect(progressFraction(scrolledBack)).toBe(0.41);
+
+    const revealedFurther = entry({ position: 2, revealedThrough: 80, book });
+    expect(progressFraction(revealedFurther)).toBe(0.81);
+  });
 });
