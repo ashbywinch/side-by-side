@@ -11,7 +11,7 @@
 | `src/pages/Book` | Book route; maps a URL page to a chunk, resolves the bookmark, records reveals and position | Uses `useBookReader` and `useBookshelf` |
 | `src/components/Book` | Reader presentation, chunk math, JSONL fetching, the bookmark notice | Props/events; no routing |
 | `src/components/Bookshelf` | Bookmark store: pure position maths, versioned localStorage, reactive store | Consumes `meta.json` counts; provides entries to pages |
-| `src/components/Index/BookshelfSection` | The inline shelf: three tiles, twelve-book expansion, collapse at both ends, Edit/Done and removal, recency order | Props: index entries + bookshelf entries; emits remove/restore to the page, which writes through `useBookshelf` |
+| `src/components/Index/BookshelfSection` | The inline shelf: a preview row (two rows on a phone), twelve-book expansion, collapse at both ends, Edit/Done and removal, recency order | Props: index entries + bookshelf entries; emits remove/restore to the page, which writes through `useBookshelf` |
 | `src/components/Index/BookOverviewCard` | The book tile, in the shelf and the catalogue: wrapped title/author, level and word pills, progress bar | Width `min-content`, row height shared through `useCardMinWidth` |
 | `src/components/Index/ResultsBar` + `FilterSheet` + `SelectField` | Results count, active-filter chips, and one listbox used by all three filters | Sheet on a phone, inline on a desktop |
 | `scripts/smoke.mjs` | Post-deploy end-to-end check | Reads the live site |

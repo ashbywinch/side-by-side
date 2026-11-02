@@ -96,25 +96,26 @@ delivered; sign-in and cross-device sync are the next phase.
 The shelf, the card and the filters are delivered, including the inline
 expansion and edit mode.
 
-- **The shelf**: up to three book tiles above the results bar, ordered by
-  recency, with "See all N books" beside the heading. The same card is used in
-  the catalogue, so a book looks the same everywhere.
+- **The shelf**: a preview of roughly one row of book tiles above the results
+  bar (two rows on a phone), ordered by recency, with "See all N books" beside
+  the heading. The same card is used in the catalogue, so a book looks the same
+  everywhere.
 - **Expansion is inline.** "See all N books" expands the shelf in place, twelve
   books at a time ("Show 12 more"), with "Show less" at the heading and after
-  the last row so the collapse is reachable from either end. There is no
-  separate shelf page. Expanding from the heading brings it to the top of the
-  viewport; collapsing returns there; both moves are brief and respect
+  the last row so the collapse is reachable from either end. Collapsing returns
+  to the preview row. There is no separate shelf page. Expanding from the
+  heading brings it to the top of the viewport; both moves are brief and respect
   `prefers-reduced-motion`. The URL does not change.
 - **Edit mode**: "Edit" beside the heading becomes "Done". The tiles stop
   navigating; the only action on a tile is its remove control. The level and
   word-count pills stay exactly where they are.
-- **The remove control**: a 48px target with a 36px visible disc at the tile's
-  bottom-right, 12px in from the card's edges. The disc is the palette's
+- **The remove control**: on the right, just below the author line, inside the
+  card. It is a 48px target with a 36px visible disc; the disc is the palette's
   standard grey (`--va-secondary`), its glyph is `--va-text-inverted` (white in
   the light preset, near-black in the dark one), and the close icon is 18px. A
   2px primary focus ring sits on the disc, not on the invisible target. The
-  control is labelled "Remove <title> from your shelf". The badge may overlap a
-  pill on narrow cards; this is accepted for now.
+  control is labelled "Remove <title> from your shelf". The level and
+  word-count pills stay on the card's bottom edge.
 - **Undo**: a removal is immediate and reversible. A bottom toast — one at a
   time, no timer, living for the whole edit session — names the removed book
   and offers "Undo". Undo pops the session stack (last removal first) and puts

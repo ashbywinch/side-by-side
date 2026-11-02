@@ -106,21 +106,20 @@ Checked against the built screens at 390 and 1280, not against intentions.
 ## Round 3 — the inline shelf and removal (decided, built)
 
 - **One shelf, expanded in place.** The separate shelf page is deleted and
-  `/shelf` no longer exists. The shelf shows three tiles; "See all N
-  books" reveals twelve at a time, with "Show less" at the heading and after
-  the last row. Expanding and collapsing anchor the heading at the top of the
+  `/shelf` no longer exists. The shelf previews roughly one row (two rows on a
+  phone); "See all N books" reveals twelve at a time, with "Show less" at the
+  heading and after the last row, returning to the preview. Expanding and collapsing anchor the heading at the top of the
   viewport, so the control is never left behind; the URL does not change.
   Progressive disclosure is the pattern (NN/g), the state-changing trigger and
   `aria-expanded` follow PatternFly and Deque, and the mirrored collapse
   control follows the load-more convention for long lists.
 - **Edit mode, not per-card controls.** "Edit" becomes "Done"; tiles stop
   navigating and expose only a remove control. The control is a 48px target
-  with a 36px disc at the tile's bottom-right, 12px in from the edges, in the
-  palette's standard grey (`--va-secondary`); the glyph is
-  `--va-text-inverted`, 18px. 48px meets Material's 48dp, Apple's 44pt and the
-  repo's ≥44px rule; 36px keeps the disc from dominating the card. The level
-  and word-count pills are left exactly where they are; the badge may overlap
-  one on narrow cards, and that is accepted for now.
+  with a 36px disc on the right, just below the author line, in the palette's
+  standard grey (`--va-secondary`); the glyph is `--va-text-inverted`, 18px.
+  48px meets Material's 48dp, Apple's 44pt and the repo's ≥44px rule; 36px keeps
+  the disc from dominating the card. The level and word-count pills are left
+  exactly where they are; the badge sits above them, under the author.
 - **Undo is a session-long toast.** Removal is immediate; a bottom toast names
   the book and offers "Undo" for the whole edit session, with no timer. It is
   built with Vuestic's `useToast` (`duration: 0`, `position="bottom-center"`,

@@ -55,8 +55,9 @@ app passes its quality gates.
 ## Phase 3b — Bookshelf on the index (built, walkthrough pending)
 
 - **Inputs**: the local bookshelf; the corpus index.
-- **Outputs**: a row of book tiles above the results bar that expands in place
-  twelve books at a time, with a collapse control at both ends; the same
+- **Outputs**: a preview row of book tiles above the results bar (two rows on a
+  phone) that expands in place twelve books at a time, with a collapse control
+  at both ends; the same
   portrait card in the catalogue; progress as a bar on the read books; and
   filters that collapse behind a results bar (a sheet on a phone). The separate
   shelf page is deleted.

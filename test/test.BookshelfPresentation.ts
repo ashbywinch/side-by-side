@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 
@@ -88,15 +88,40 @@ describe("BookshelfSection", () => {
   const books = Array.from({ length: 20 }, (_, index) => indexBook(`Книга ${index + 1}`))
   const entries = books.map((book) => shelfEntry(book))
 
-  it("shows three entries and a way to the rest", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it("shows one preview row on a desktop and a way to the rest", () => {
     const wrapper = mount(BookshelfSection, {
       props: { books, entries },
       global: { stubs },
     })
 
-    expect(wrapper.findAll(".card")).toHaveLength(3)
+    expect(wrapper.findAll(".card")).toHaveLength(6)
     expect(wrapper.find(".shelf__toggle").text()).toContain("See all 20")
     expect(wrapper.find(".shelf__toggle").attributes("aria-expanded")).toBe("false")
+  })
+
+  it("shows two preview rows on a phone", () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: true,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }))
+
+    const wrapper = mount(BookshelfSection, {
+      props: { books, entries },
+      global: { stubs },
+    })
+
+    expect(wrapper.findAll(".card")).toHaveLength(4)
+    expect(wrapper.find(".shelf__toggle").text()).toContain("See all 20")
   })
 
   it("hides the toggle when everything fits", () => {
@@ -109,7 +134,7 @@ describe("BookshelfSection", () => {
     expect(wrapper.find(".shelf__toggle").exists()).toBe(false)
   })
 
-  it("expands twelve at a time and collapses back to three", async () => {
+  it("expands twelve at a time and collapses back to the preview", async () => {
     const wrapper = mount(BookshelfSection, {
       props: { books, entries },
       global: { stubs },
@@ -131,7 +156,7 @@ describe("BookshelfSection", () => {
 
     await wrapper.find(".shelf__collapse").trigger("click")
 
-    expect(wrapper.findAll(".card")).toHaveLength(3)
+    expect(wrapper.findAll(".card")).toHaveLength(6)
     expect(wrapper.find(".shelf__toggle").attributes("aria-expanded")).toBe("false")
   })
 
@@ -145,7 +170,7 @@ describe("BookshelfSection", () => {
     await toggle.trigger("click")
     await toggle.trigger("click")
 
-    expect(wrapper.findAll(".card")).toHaveLength(3)
+    expect(wrapper.findAll(".card")).toHaveLength(6)
     expect(wrapper.find(".shelf__foot").exists()).toBe(false)
   })
 
@@ -188,6 +213,9 @@ describe("BookshelfSection", () => {
       author: "Author",
       title: "Книга 1",
     })
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(
+      "Remove Книга 1 from your shelf",
+    )
 
     wrapper.unmount()
   })

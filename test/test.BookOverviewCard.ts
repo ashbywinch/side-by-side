@@ -59,4 +59,18 @@ describe("BookOverviewCard", () => {
     );
     expect(wrapper.find(".remove__disc").exists()).toBe(true);
   });
+
+  it("puts the remove control under the author, inside the card", () => {
+    const wrapper = mountCard({ editing: true });
+    const row = wrapper.find(".remove-row");
+
+    expect(row.exists()).toBe(true);
+    expect(row.find(".remove").exists()).toBe(true);
+    expect(row.element.previousSibling?.textContent).toContain("Лев Толстой");
+    expect(row.element.nextElementSibling?.classList.contains("badges")).toBe(true);
+  });
+
+  it("shows no remove control outside edit mode", () => {
+    expect(mountCard().find(".remove-row").exists()).toBe(false);
+  });
 });

@@ -11,8 +11,8 @@ import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
 import type { Book, BookshelfEntry } from "@/types/bookshelf";
 
-const VISIBLE = 3;
 const STEP = 12;
+const PHONE_QUERY = "(max-width: 599px)";
 
 type ShelfBook = Pick<Book, "lang" | "author" | "title">;
 
@@ -27,24 +27,47 @@ const emit = defineEmits<{
 }>()
 
 const cards = computed(() => shelfCards(props.books, props.entries))
-const limit = ref(VISIBLE)
-const shown = computed(() => cards.value.slice(0, limit.value))
-const expanded = computed(
-  () => cards.value.length > VISIBLE && limit.value > VISIBLE,
+
+// The collapsed shelf is a preview: roughly one row on a desktop, two rows on a
+// phone. The expanded shelf starts at a page of twelve and grows by twelve.
+const phoneQuery =
+  typeof window !== "undefined" ? window.matchMedia?.(PHONE_QUERY) : undefined
+const phone = ref(phoneQuery?.matches ?? false)
+
+function onPhoneChange(event: MediaQueryListEvent): void {
+  phone.value = event.matches
+}
+
+phoneQuery?.addEventListener?.("change", onPhoneChange)
+
+const preview = computed(() => (phone.value ? 4 : 6))
+const expanded = ref(false)
+const limit = ref(STEP)
+const isExpanded = computed(
+  () => expanded.value && cards.value.length > preview.value,
+)
+const shown = computed(() =>
+  cards.value.slice(
+    0,
+    isExpanded.value ? Math.max(limit.value, preview.value) : preview.value,
+  ),
 )
 const remaining = computed(() =>
   Math.max(cards.value.length - shown.value.length, 0),
 )
 const nextStep = computed(() => Math.min(STEP, remaining.value))
 
-// If removals shrink the shelf below the preview size, forget the expansion;
+// If removals shrink the shelf to the preview size, forget the expansion;
 // restoring a book must not silently re-expand a shelf the reader collapsed.
 watch(
   () => cards.value.length,
   (count) => {
-    if (count <= VISIBLE) limit.value = VISIBLE
+    if (count <= preview.value) expanded.value = false
   },
 )
+watch(preview, (count) => {
+  if (cards.value.length <= count) expanded.value = false
+})
 
 const stack = ref<HTMLElement | null>(null)
 const section = ref<HTMLElement | null>(null)
@@ -55,7 +78,7 @@ const editToggle = ref<HTMLButtonElement | null>(null)
 const minWidth = useCardMinWidth(stack)
 
 const editing = ref(false)
-const removed = ref<Array<{ book: ShelfBook; index: number }>>([])
+const removed = ref<ShelfBook[]>([])
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
@@ -69,11 +92,12 @@ function scrollToShelf(): void {
 }
 
 function toggle(): void {
-  if (expanded.value) {
+  if (isExpanded.value) {
     collapse()
     return
   }
-  limit.value = Math.min(cards.value.length, STEP)
+  expanded.value = true
+  limit.value = Math.min(cards.value.length, Math.max(STEP, preview.value))
   void nextTick(scrollToShelf)
 }
 
@@ -88,7 +112,8 @@ function showMore(): void {
 }
 
 function collapse(): void {
-  limit.value = VISIBLE
+  expanded.value = false
+  limit.value = STEP
   void nextTick(() => {
     headerToggle.value?.focus()
     scrollToShelf()
@@ -108,7 +133,7 @@ const toast = useToast()
 let toastId: string | null = null
 
 function toastContent() {
-  const title = removed.value[removed.value.length - 1]?.book.title ?? ""
+  const title = removed.value[removed.value.length - 1]?.title ?? ""
   return h("div", { class: "undo" }, [
     h("span", { class: "undo__text" }, `Removed \u201c${title}\u201d`),
     h(
@@ -165,9 +190,10 @@ function onRemove(book: BookIndexEntry, index: number): void {
     author: book.author,
     title: book.title,
   }
-  removed.value.push({ book: identity, index })
+  removed.value.push(identity)
   emit("remove", identity)
   showToast()
+  // After the parent removes the card, the same index is the next book.
   void nextTick(() => focusRemove(index))
 }
 
@@ -177,9 +203,24 @@ function undo(): void {
     closeToast()
     return
   }
-  emit("restore", last.book)
+  emit("restore", last)
   if (!removed.value.length) closeToast()
-  void nextTick(() => focusRemove(last.index))
+  // The restored book's position is not the removal index: find it by identity.
+  void nextTick(() => focusBook(last))
+}
+
+function focusBook(book: ShelfBook): void {
+  const index = shown.value.findIndex(
+    (card) =>
+      card.book.lang === book.lang &&
+      card.book.author === book.author &&
+      card.book.title === book.title,
+  )
+  if (index >= 0) {
+    focusRemove(index)
+    return
+  }
+  editToggle.value?.focus()
 }
 
 function focusRemove(index: number): void {
@@ -192,6 +233,7 @@ function focusRemove(index: number): void {
 }
 
 onUnmounted(closeToast)
+onUnmounted(() => phoneQuery?.removeEventListener?.("change", onPhoneChange))
 </script>
 
 <template>
@@ -205,14 +247,14 @@ onUnmounted(closeToast)
       <h2 id="shelf-title" class="shelf__title">You&rsquo;re reading&hellip;</h2>
       <div class="shelf__actions">
         <button
-          v-if="cards.length > VISIBLE"
+          v-if="cards.length > preview"
           ref="headerToggle"
           type="button"
           class="text-action shelf__toggle"
-          :aria-expanded="expanded"
+          :aria-expanded="isExpanded"
           aria-controls="shelf-grid"
           @click="toggle">
-          {{ expanded ? "Show less" : `See all ${cards.length} books` }}
+          {{ isExpanded ? "Show less" : `See all ${cards.length} books` }}
         </button>
         <button
           v-if="cards.length > 0 || editing"
@@ -246,7 +288,7 @@ onUnmounted(closeToast)
         @remove="onRemove(book, index)" />
     </div>
 
-    <div v-if="expanded" class="shelf__foot">
+    <div v-if="isExpanded" class="shelf__foot">
       <button
         v-if="remaining > 0"
         type="button"
