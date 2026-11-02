@@ -140,7 +140,7 @@ edit mode below are in build.
   listboxes; author is a type-to-search listbox — typing lists matches, and
   only a chosen author filters. Choosing an author is the one thing that must
   never silently do nothing.
-- **The separate shelf page is retired**; `/shelf` redirects to the index.
+- **The separate shelf page is deleted**; `/shelf` no longer exists.
 
 ## Planned UX
 

@@ -83,7 +83,7 @@ describe("BookOverviewCard", () => {
 })
 
 describe("BookshelfSection", () => {
-  const books = Array.from({ length: 6 }, (_, index) => indexBook(`Книга ${index + 1}`))
+  const books = Array.from({ length: 20 }, (_, index) => indexBook(`Книга ${index + 1}`))
   const entries = books.map((book) => shelfEntry(book))
 
   it("shows three entries and a way to the rest", () => {
@@ -93,16 +93,57 @@ describe("BookshelfSection", () => {
     })
 
     expect(wrapper.findAll(".card")).toHaveLength(3)
-    expect(wrapper.find(".see-all").text()).toContain("See all 6")
+    expect(wrapper.find(".shelf__toggle").text()).toContain("See all 20")
+    expect(wrapper.find(".shelf__toggle").attributes("aria-expanded")).toBe("false")
   })
 
-  it("hides the link when everything fits", () => {
+  it("hides the toggle when everything fits", () => {
     const wrapper = mount(BookshelfSection, {
       props: { books, entries: entries.slice(0, 3) },
       global: { stubs },
     })
 
     expect(wrapper.findAll(".card")).toHaveLength(3)
-    expect(wrapper.find(".see-all").exists()).toBe(false)
+    expect(wrapper.find(".shelf__toggle").exists()).toBe(false)
+  })
+
+  it("expands twelve at a time and collapses back to three", async () => {
+    const wrapper = mount(BookshelfSection, {
+      props: { books, entries },
+      global: { stubs },
+    })
+    const toggle = wrapper.find(".shelf__toggle")
+
+    await toggle.trigger("click")
+
+    expect(wrapper.findAll(".card")).toHaveLength(12)
+    expect(toggle.attributes("aria-expanded")).toBe("true")
+    expect(toggle.text()).toBe("Show less")
+    expect(wrapper.find(".shelf__more").text()).toBe("Show 8 more")
+
+    await wrapper.find(".shelf__more").trigger("click")
+
+    expect(wrapper.findAll(".card")).toHaveLength(20)
+    expect(wrapper.find(".shelf__more").exists()).toBe(false)
+    expect(wrapper.find(".shelf__collapse").exists()).toBe(true)
+
+    await wrapper.find(".shelf__collapse").trigger("click")
+
+    expect(wrapper.findAll(".card")).toHaveLength(3)
+    expect(wrapper.find(".shelf__toggle").attributes("aria-expanded")).toBe("false")
+  })
+
+  it("collapses from the heading as well as the foot", async () => {
+    const wrapper = mount(BookshelfSection, {
+      props: { books, entries },
+      global: { stubs },
+    })
+    const toggle = wrapper.find(".shelf__toggle")
+
+    await toggle.trigger("click")
+    await toggle.trigger("click")
+
+    expect(wrapper.findAll(".card")).toHaveLength(3)
+    expect(wrapper.find(".shelf__foot").exists()).toBe(false)
   })
 })

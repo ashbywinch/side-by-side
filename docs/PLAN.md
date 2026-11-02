@@ -59,7 +59,7 @@ app passes its quality gates.
   twelve books at a time, with a collapse control at both ends; the same
   portrait card in the catalogue; progress as a bar on the read books; and
   filters that collapse behind a results bar (a sheet on a phone). The separate
-  shelf page is retired.
+  shelf page is deleted.
 - **Operations**: see what you are reading, continue in one action, reach an
   older book through the inline expansion, filter by level, size or author.
 - **Quality gate**: two cards across a phone; a card's row shares one height;

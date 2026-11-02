@@ -105,8 +105,8 @@ Checked against the built screens at 390 and 1280, not against intentions.
 
 ## Round 3 — the inline shelf and removal (decided, in build)
 
-- **One shelf, expanded in place.** The separate shelf page is retired and
-  `/shelf` redirects to the index. The shelf shows three tiles; "See all N
+- **One shelf, expanded in place.** The separate shelf page is deleted and
+  `/shelf` no longer exists. The shelf shows three tiles; "See all N
   books" reveals twelve at a time, with "Show less" at the heading and after
   the last row. Expanding and collapsing anchor the heading at the top of the
   viewport, so the control is never left behind; the URL does not change.

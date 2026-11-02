@@ -115,8 +115,7 @@ function currentFilter(): Filter {
   <PageSurround :error="fetchItems.error.value">
     <BookshelfSection
       :books="fetchItems.items.value"
-      :entries="bookshelf.entries.value"
-      :lang="lang" />
+      :entries="bookshelf.entries.value" />
     <ResultsBar
       :count="filter.items.value.length"
       :level="filter.filter.level.value"
