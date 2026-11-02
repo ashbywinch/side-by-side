@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 
 import BookPage from "./pages/Book/BookPage.vue";
 import IndexPage from "./pages/Index/IndexPage.vue";
-import ShelfPage from "./pages/Shelf/ShelfPage.vue";
 
 const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/ru/books" },
@@ -10,14 +9,6 @@ const routes: RouteRecordRaw[] = [
     path: "/:lang/books",
     name: "Index",
     component: IndexPage,
-    props: (route: { params: { lang: string } }) => ({
-      lang: route.params.lang,
-    }),
-  },
-  {
-    path: "/:lang/shelf",
-    name: "Shelf",
-    component: ShelfPage,
     props: (route: { params: { lang: string } }) => ({
       lang: route.params.lang,
     }),

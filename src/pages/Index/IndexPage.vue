@@ -25,6 +25,14 @@ const props = defineProps({
 
 const bookshelf = useBookshelf()
 
+function removeFromShelf(book: { lang: string; author: string; title: string }) {
+  bookshelf.remove(book)
+}
+
+function restoreToShelf(book: { lang: string; author: string; title: string }) {
+  bookshelf.restore(book)
+}
+
 // Filters are collapsed by default: a results bar says how many books there are
 // and what is filtered. A phone opens them as a sheet; a desktop expands them
 // in place.
@@ -116,7 +124,8 @@ function currentFilter(): Filter {
     <BookshelfSection
       :books="fetchItems.items.value"
       :entries="bookshelf.entries.value"
-      :lang="lang" />
+      @remove="removeFromShelf"
+      @restore="restoreToShelf" />
     <ResultsBar
       :count="filter.items.value.length"
       :level="filter.filter.level.value"

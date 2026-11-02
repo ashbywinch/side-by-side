@@ -52,18 +52,21 @@ app passes its quality gates.
   turn or reveal alone adds the book; looking back never moves the bookmark; no
   backend is required.
 
-## Phase 3b — Bookshelf on the index (delivered, except removal)
+## Phase 3b — Bookshelf on the index (built, walkthrough pending)
 
 - **Inputs**: the local bookshelf; the corpus index.
-- **Outputs**: a row of book tiles above the results bar with "See all", the
-  same portrait card in the catalogue, progress as a bar on the read books, a
-  bookshelf page listing every entry, and filters that collapse behind a results
-  bar (a sheet on a phone).
+- **Outputs**: a preview row of book tiles above the results bar (two rows on a
+  phone) that expands in place twelve books at a time, with a collapse control
+  at both ends; the same
+  portrait card in the catalogue; progress as a bar on the read books; and
+  filters that collapse behind a results bar (a sheet on a phone). The separate
+  shelf page is deleted.
 - **Operations**: see what you are reading, continue in one action, reach an
-  older book through "See all", filter by level, size or author.
+  older book through the inline expansion, filter by level, size or author.
 - **Quality gate**: two cards across a phone; a card's row shares one height;
-  typing an author lists matches; every filter's list is visible when opened.
-- **Remaining**: edit mode with removal and undo.
+  typing an author lists matches; every filter's list is visible when opened;
+  expanding and collapsing keep the reader's place.
+- **Remaining**: the phone and desktop walkthrough before release.
 
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)
 

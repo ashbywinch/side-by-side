@@ -1,10 +1,13 @@
 import type { BookIndexEntry } from "@/types/corpus";
-import type { BookshelfEntry } from "@/types/bookshelf";
+import type { Book, BookshelfEntry } from "@/types/bookshelf";
 
 export interface ShelfCard {
   book: BookIndexEntry;
   entry: BookshelfEntry;
 }
+
+/** A book's identity on the shelf; the corpus has no ids. */
+export type ShelfBook = Pick<Book, "lang" | "author" | "title">;
 
 function key(book: { lang: string; author: string; title: string }): string {
   return [book.lang, book.author, book.title].join("\u001f");
