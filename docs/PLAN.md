@@ -55,14 +55,16 @@ app passes its quality gates.
 ## Phase 3b — Bookshelf on the index (delivered, except removal)
 
 - **Inputs**: the local bookshelf; the corpus index.
-- **Outputs**: a row of book tiles above the results bar with "See all", the
-  same portrait card in the catalogue, progress as a bar on the read books, a
-  bookshelf page listing every entry, and filters that collapse behind a results
-  bar (a sheet on a phone).
+- **Outputs**: a row of book tiles above the results bar that expands in place
+  twelve books at a time, with a collapse control at both ends; the same
+  portrait card in the catalogue; progress as a bar on the read books; and
+  filters that collapse behind a results bar (a sheet on a phone). The separate
+  shelf page is retired.
 - **Operations**: see what you are reading, continue in one action, reach an
-  older book through "See all", filter by level, size or author.
+  older book through the inline expansion, filter by level, size or author.
 - **Quality gate**: two cards across a phone; a card's row shares one height;
-  typing an author lists matches; every filter's list is visible when opened.
+  typing an author lists matches; every filter's list is visible when opened;
+  expanding and collapsing keep the reader's place.
 - **Remaining**: edit mode with removal and undo.
 
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)

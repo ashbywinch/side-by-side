@@ -101,5 +101,7 @@ Read the relevant doc before changing behavior.
 - Reading progress is local-only in `localStorage` (`sbs:bookshelf:v1`) behind
   `useBookshelf`; components never touch storage directly. A bookmark moves
   only by reading — browsing never writes.
+- The shelf lives on the index and expands in place; there is no separate shelf
+  page. Removal is a tombstone with a session-long undo toast.
 - Deployment is an assets-only Cloudflare Worker; adding auth/sync turns it
   into an assets + API Worker (see `docs/TECHSPEC.md`).

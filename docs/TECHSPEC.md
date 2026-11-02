@@ -11,7 +11,7 @@
 | `src/pages/Book` | Book route; maps a URL page to a chunk, resolves the bookmark, records reveals and position | Uses `useBookReader` and `useBookshelf` |
 | `src/components/Book` | Reader presentation, chunk math, JSONL fetching, the bookmark notice | Props/events; no routing |
 | `src/components/Bookshelf` | Bookmark store: pure position maths, versioned localStorage, reactive store | Consumes `meta.json` counts; provides entries to pages |
-| `src/components/Index/BookshelfSection` | The shelf: up to three tiles, "See all", recency order | Props: index entries + bookshelf entries |
+| `src/components/Index/BookshelfSection` | The inline shelf: three tiles, twelve-book expansion, collapse at both ends, Edit/Done and removal, recency order | Props: index entries + bookshelf entries; uses `useBookshelf` for remove/restore |
 | `src/components/Index/BookOverviewCard` | The book tile, in the shelf and the catalogue: wrapped title/author, level and word pills, progress bar | Width `min-content`, row height shared through `useCardMinWidth` |
 | `src/components/Index/ResultsBar` + `FilterSheet` + `SelectField` | Results count, active-filter chips, and one listbox used by all three filters | Sheet on a phone, inline on a desktop |
 | `scripts/smoke.mjs` | Post-deploy end-to-end check | Reads the live site |
@@ -102,7 +102,12 @@ import `src/`. `test/test.architecture.ts` enforces these boundaries.
   page.
 - **Entries are tombstones, never deletions** (PRD control requirement): a
   removed book keeps its entry with `removedAt`, so undo restores it exactly
-  and a second device cannot resurrect it once sync exists.
+  and a second device cannot resurrect it once sync exists. The shelf's remove
+  control is a bottom-right badge with a 48px target and a 36px disc; its undo
+  is a session-long toast, not a timer.
+- **The shelf is inline** (PRD shelf requirement): the index shows three tiles
+  and expands them in place twelve at a time; there is no separate shelf page.
+  The expansion is UI state, not a route, so Back never fights the collapse.
 - **Anonymous use must keep working forever** (PRD access constraint): the
   bookshelf is local-first, and a future account layer merges into it rather
   than replacing it.

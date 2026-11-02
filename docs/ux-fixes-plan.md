@@ -102,3 +102,33 @@ Checked against the built screens at 390 and 1280, not against intentions.
   its type-to-search has no input to type into). Level, size and author share a
   control we draw; the author filters only when an author is chosen, because a
   half-typed surname emptied the catalogue.
+
+## Round 3 — the inline shelf and removal (decided, in build)
+
+- **One shelf, expanded in place.** The separate shelf page is retired and
+  `/shelf` redirects to the index. The shelf shows three tiles; "See all N
+  books" reveals twelve at a time, with "Show less" at the heading and after
+  the last row. Expanding and collapsing anchor the heading at the top of the
+  viewport, so the control is never left behind; the URL does not change.
+  Progressive disclosure is the pattern (NN/g), the state-changing trigger and
+  `aria-expanded` follow PatternFly and Deque, and the mirrored collapse
+  control follows the load-more convention for long lists.
+- **Edit mode, not per-card controls.** "Edit" becomes "Done"; tiles stop
+  navigating and expose only a remove control. The control is a 48px target
+  with a 36px disc at the tile's bottom-right, 12px in from the edges, in the
+  palette's standard grey (`--va-secondary`); the glyph is
+  `--va-text-inverted`, 18px. 48px meets Material's 48dp, Apple's 44pt and the
+  repo's ≥44px rule; 36px keeps the disc from dominating the card. The level
+  and word-count pills are left exactly where they are; the badge may overlap
+  one on narrow cards, and that is accepted for now.
+- **Undo is a session-long toast.** Removal is immediate; a bottom toast names
+  the book and offers "Undo" for the whole edit session, with no timer. It is
+  built with Vuestic's `useToast` (`duration: 0`, `role="status"`,
+  `position="bottom-center"`) and a stack: Undo restores the last removal, the
+  toast moves to the previous one, and Done closes it. Material's rule that a
+  snackbar with an action stays until acted on or dismissed is the reference.
+- **Removal stays a tombstone.** Progress is kept, the book returns to its
+  recency position on undo, and re-reading restores it; there is no
+  confirmation dialog.
+- **Empty while editing.** The last removal leaves the section, its empty
+  message and the undo bar in place until Done.

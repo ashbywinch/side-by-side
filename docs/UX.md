@@ -1,7 +1,7 @@
 # UX — Side by Side
 
-Written against `docs/PRD.md`. The current release covers the reader; the
-bookshelf and sign-in journeys are the next phases.
+Written against `docs/PRD.md`. The reader and the local bookshelf are
+delivered; sign-in and cross-device sync are the next phase.
 
 ## Journeys to usability-test
 
@@ -18,6 +18,8 @@ bookshelf and sign-in journeys are the next phases.
    place on the page; a bar offers the way back if you browse elsewhere.
 6. **Cross-device** (planned): sign in with Google on a second device and see
    the same shelf and positions.
+7. **Manage the shelf**: expand it in place, reach an older book, remove one in
+   edit mode, and undo the removal.
 
 ## Reader interaction spec
 
@@ -50,6 +52,11 @@ bookshelf and sign-in journeys are the next phases.
 - Colour is not the only signal for level/size/translated state.
 - Body text has a readable line length on desktop and a comfortable single
   column on mobile.
+- The shelf's expand/collapse control exposes `aria-expanded` and `aria-controls`
+  and changes its label with the state.
+- A removal is announced in a polite live region; focus moves to the next remove
+  control (or Done), and the undo action is keyboard reachable.
+- The remove control's target is 48px even though its visible disc is 36px.
 
 ## Empty, error and edge states
 
@@ -58,6 +65,8 @@ bookshelf and sign-in journeys are the next phases.
 - A page beyond the end: clamp to the last page and replace the URL.
 - An empty corpus/book: skip rather than render an empty card; the builder
   rejects blank-source cards.
+- The last book is removed while editing: keep the shelf section, its empty
+  message and the undo bar on screen until Done.
 
 ## Reading position and the bookshelf
 
@@ -82,11 +91,43 @@ bookshelf and sign-in journeys are the next phases.
 - Everything is local to the device, in versioned `localStorage`. Unavailable
   or corrupt storage degrades to an empty bookshelf rather than an error.
 
-## Bookshelf and filters (delivered)
+## Bookshelf and filters
+
+The shelf, the card and the filters are delivered. The inline expansion and
+edit mode below are in build.
 
 - **The shelf**: up to three book tiles above the results bar, ordered by
   recency, with "See all N books" beside the heading. The same card is used in
   the catalogue, so a book looks the same everywhere.
+- **Expansion is inline.** "See all N books" expands the shelf in place, twelve
+  books at a time ("Show 12 more"), with "Show less" at the heading and after
+  the last row so the collapse is reachable from either end. There is no
+  separate shelf page. Expanding from the heading brings it to the top of the
+  viewport; collapsing returns there; both moves are brief and respect
+  `prefers-reduced-motion`. The URL does not change.
+- **Edit mode**: "Edit" beside the heading becomes "Done". The tiles stop
+  navigating; the only action on a tile is its remove control. The level and
+  word-count pills stay exactly where they are.
+- **The remove control**: a 48px target with a 36px visible disc at the tile's
+  bottom-right, 12px in from the card's edges. The disc is the palette's
+  standard grey (`--va-secondary`), its glyph is `--va-text-inverted` (white in
+  the light preset, near-black in the dark one), and the close icon is 18px. A
+  2px primary focus ring sits on the disc, not on the invisible target. The
+  control is labelled "Remove <title> from your shelf". The badge may overlap a
+  pill on narrow cards; this is accepted for now.
+- **Undo**: a removal is immediate and reversible. A bottom toast — one at a
+  time, no timer, living for the whole edit session — names the removed book
+  and offers "Undo". Undo pops the session stack (last removal first) and puts
+  the book back in its recency position; the toast then names the previous
+  removal, and closes when the stack is empty or Done is pressed. The toast is
+  a polite status region and never takes focus. On Done the toast closes and
+  the removals stand.
+- **Removal is not deletion**: the entry keeps its progress and becomes a
+  tombstone; reading the book again brings it back. There is no confirmation
+  dialog.
+- **Empty while editing**: removing the last book keeps the section on screen
+  with an empty message and the undo bar until Done; only then does the shelf
+  disappear.
 - **The card**: a portrait tile whose width follows its wrapped text — title
   and author wrap at spaces, never inside a word and never with a hyphen — and
   whose height matches the rest of its row. Level and word-count pills keep
@@ -99,12 +140,10 @@ bookshelf and sign-in journeys are the next phases.
   listboxes; author is a type-to-search listbox — typing lists matches, and
   only a chosen author filters. Choosing an author is the one thing that must
   never silently do nothing.
-- **Removal**: the bookshelf page lists every entry and is the place to remove
-  one. Edit mode with undo is still to build.
+- **The separate shelf page is retired**; `/shelf` redirects to the index.
 
 ## Planned UX
 
 - **Google sign-in**: a single, optional sign-in entry; anonymous use is
   always available; first sign-in merges the local shelf; sign-out is clear
   and does not delete local reading.
-- **Removal from the shelf's own row**: edit mode with an undo toast.
