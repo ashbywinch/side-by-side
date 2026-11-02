@@ -93,8 +93,8 @@ delivered; sign-in and cross-device sync are the next phase.
 
 ## Bookshelf and filters
 
-The shelf, the card and the filters are delivered. The inline expansion and
-edit mode below are in build.
+The shelf, the card and the filters are delivered, including the inline
+expansion and edit mode.
 
 - **The shelf**: up to three book tiles above the results bar, ordered by
   recency, with "See all N books" beside the heading. The same card is used in
@@ -120,8 +120,8 @@ edit mode below are in build.
   and offers "Undo". Undo pops the session stack (last removal first) and puts
   the book back in its recency position; the toast then names the previous
   removal, and closes when the stack is empty or Done is pressed. The toast is
-  a polite status region and never takes focus. On Done the toast closes and
-  the removals stand.
+  a polite live region and never takes focus. On Done the toast closes and the
+  removals stand.
 - **Removal is not deletion**: the entry keeps its progress and becomes a
   tombstone; reading the book again brings it back. There is no confirmation
   dialog.

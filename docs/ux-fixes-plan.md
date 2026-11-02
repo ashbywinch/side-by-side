@@ -103,7 +103,7 @@ Checked against the built screens at 390 and 1280, not against intentions.
   control we draw; the author filters only when an author is chosen, because a
   half-typed surname emptied the catalogue.
 
-## Round 3 — the inline shelf and removal (decided, in build)
+## Round 3 — the inline shelf and removal (decided, built)
 
 - **One shelf, expanded in place.** The separate shelf page is deleted and
   `/shelf` no longer exists. The shelf shows three tiles; "See all N
@@ -123,8 +123,8 @@ Checked against the built screens at 390 and 1280, not against intentions.
   one on narrow cards, and that is accepted for now.
 - **Undo is a session-long toast.** Removal is immediate; a bottom toast names
   the book and offers "Undo" for the whole edit session, with no timer. It is
-  built with Vuestic's `useToast` (`duration: 0`, `role="status"`,
-  `position="bottom-center"`) and a stack: Undo restores the last removal, the
+  built with Vuestic's `useToast` (`duration: 0`, `position="bottom-center"`,
+  a polite live region) and a stack: Undo restores the last removal, the
   toast moves to the previous one, and Done closes it. Material's rule that a
   snackbar with an action stays until acted on or dismissed is the reference.
 - **Removal stays a tombstone.** Progress is kept, the book returns to its

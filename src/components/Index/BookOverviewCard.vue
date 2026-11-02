@@ -13,7 +13,11 @@ const props = defineProps({
   words: { type:Number, required:true},
   // Fraction read, or null when the reader has not read this book.
   progress: { type: Number as PropType<number | null>, default: null },
+  // Edit mode: the tile stops navigating and offers only a remove control.
+  editing: { type: Boolean, default: false },
 })
+
+const emit = defineEmits<{ remove: [] }>()
 
 const percent = computed(() =>
   props.progress === null
@@ -42,29 +46,43 @@ const sizeColor: Record<string, string> = {
 }
 </script>
 <template>
-  <RouterLink :to="{name:'Book',params:{lang: lang, author:author, title:title}}">
-  <va-card class="item">
-    <va-card-title>{{ title }}</va-card-title>
-    <va-card-content>
-      {{ author }}
-      <div class="row va-spacing-x-2 badges">
-        <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
-        <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
-      </div>
-    </va-card-content>
-    <span
-      v-if="percent !== null"
-      class="progress"
-      role="progressbar"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      :aria-valuenow="percent"
-      :aria-label="`${percent}% read`"
-    >
-      <span class="progress__fill" :style="{ width: `${percent}%` }" />
-    </span>
-  </va-card>
-  </RouterLink>
+  <component
+    :is="editing ? 'div' : 'RouterLink'"
+    v-bind="editing ? {} : { to: { name: 'Book', params: { lang: lang, author: author, title: title } } }"
+    class="tile">
+    <va-card class="item">
+      <va-card-title>{{ title }}</va-card-title>
+      <va-card-content>
+        {{ author }}
+        <div class="row va-spacing-x-2 badges">
+          <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
+          <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
+        </div>
+      </va-card-content>
+      <span
+        v-if="percent !== null"
+        class="progress"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        :aria-valuenow="percent"
+        :aria-label="`${percent}% read`"
+      >
+        <span class="progress__fill" :style="{ width: `${percent}%` }" />
+      </span>
+    </va-card>
+
+    <button
+      v-if="editing"
+      type="button"
+      class="remove"
+      :aria-label="`Remove ${title} from your shelf`"
+      @click="emit('remove')">
+      <span class="remove__disc" aria-hidden="true">
+        <va-icon name="close" size="18px" />
+      </span>
+    </button>
+  </component>
 </template>
 <style scoped>
 .va-card-title {
@@ -92,7 +110,13 @@ const sizeColor: Record<string, string> = {
   gap: .25rem;
   margin: 0;
 }
-div.row a:focus .va-card {
+.tile {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+.tile:focus .va-card {
   border: 1px solid var(--va-primary);
 }
 /* Portrait is a consequence of wrapping, not of a width we impose: the card is
@@ -120,11 +144,6 @@ div.row a:focus .va-card {
   word-break: normal;
 }
 /* The bar is the card's bottom edge. */
-a {
-  display: flex;
-  align-items: stretch;
-  min-width: 0;
-}
 .progress {
   position: absolute;
   left: 0;
@@ -138,5 +157,44 @@ a {
   display: block;
   height: 100%;
   background: var(--va-primary);
+}
+/* A 48px target with a 36px disc: the finger gets the platform minimum, the
+   card gets a quiet badge. It sits 12px in from the card's edges, inside the
+   tile, so it belongs to this book and not the gutter. */
+.remove {
+  position: absolute;
+  right: .75rem;
+  bottom: .75rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.remove__disc {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--va-secondary);
+  color: var(--va-text-inverted);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+}
+.remove:hover .remove__disc {
+  filter: brightness(.92);
+}
+.remove:focus-visible {
+  outline: none;
+}
+.remove:focus-visible .remove__disc {
+  outline: 2px solid var(--va-primary);
+  outline-offset: 2px;
 }
 </style>

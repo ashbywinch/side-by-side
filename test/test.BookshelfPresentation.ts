@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 
 import BookOverviewCard from "@/components/Index/BookOverviewCard.vue";
@@ -13,6 +14,7 @@ const stubs = {
   "va-card-title": { template: "<div><slot /></div>" },
   "va-card-content": { template: "<div><slot /></div>" },
   "va-badge": { props: ["text"], template: "<span class='badge'>{{ text }}</span>" },
+  "va-icon": { props: ["name", "size"], template: "<span class='icon' />" },
 }
 
 function indexBook(title: string, author = "Author"): BookIndexEntry {
@@ -145,5 +147,103 @@ describe("BookshelfSection", () => {
 
     expect(wrapper.findAll(".card")).toHaveLength(3)
     expect(wrapper.find(".shelf__foot").exists()).toBe(false)
+  })
+
+  it("switches to edit mode, removes, and undoes through the toast", async () => {
+    const wrapper = mount(BookshelfSection, {
+      props: { books, entries },
+      global: { stubs },
+      attachTo: document.body,
+    })
+
+    await wrapper.find(".shelf__edit").trigger("click")
+
+    expect(wrapper.find(".shelf__edit").text()).toBe("Done")
+    expect(wrapper.find(".tile").element.tagName).toBe("DIV")
+    expect(wrapper.find("a").exists()).toBe(false)
+
+    const remove = wrapper.findAll(".remove")[0]
+    expect(remove.attributes("aria-label")).toBe("Remove Книга 1 from your shelf")
+
+    await remove.trigger("click")
+    await nextTick()
+
+    expect(wrapper.emitted("remove")?.[0]?.[0]).toEqual({
+      lang: "ru",
+      author: "Author",
+      title: "Книга 1",
+    })
+
+    const toast = [...document.querySelectorAll(".shelf-undo-toast")].at(-1)
+    expect(toast?.getAttribute("aria-live")).toBe("polite")
+    expect(toast?.textContent).toContain("Removed")
+    expect(toast?.textContent).toContain("Книга 1")
+    expect(toast?.textContent).toContain("Undo")
+
+    toast?.querySelector<HTMLButtonElement>(".undo__action")?.click()
+    await nextTick()
+
+    expect(wrapper.emitted("restore")?.[0]?.[0]).toEqual({
+      lang: "ru",
+      author: "Author",
+      title: "Книга 1",
+    })
+
+    wrapper.unmount()
+  })
+
+  it("keeps the shelf and its undo bar when the last book is removed", async () => {
+    const wrapper = mount(BookshelfSection, {
+      props: { books: [books[0]], entries: [entries[0]] },
+      global: { stubs },
+      attachTo: document.body,
+    })
+
+    await wrapper.find(".shelf__edit").trigger("click")
+    await wrapper.find(".remove").trigger("click")
+    await wrapper.setProps({ entries: [] })
+    await nextTick()
+
+    expect(wrapper.find(".shelf").exists()).toBe(true)
+    expect(wrapper.find(".shelf__empty").text()).toContain("Your shelf is empty")
+    expect(wrapper.find(".shelf__edit").text()).toBe("Done")
+    expect(wrapper.find(".shelf--undo").exists()).toBe(true)
+    expect([...document.querySelectorAll(".shelf-undo-toast")].at(-1)?.textContent).toContain("Removed")
+
+    await wrapper.find(".shelf__edit").trigger("click")
+
+    expect(wrapper.find(".shelf").exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it("keeps the latest removal in the toast and unwinds the stack", async () => {
+    const wrapper = mount(BookshelfSection, {
+      props: { books, entries },
+      global: { stubs },
+      attachTo: document.body,
+    })
+
+    await wrapper.find(".shelf__edit").trigger("click")
+    const buttons = wrapper.findAll(".remove")
+
+    await buttons[0].trigger("click")
+    await buttons[1].trigger("click")
+    await nextTick()
+
+    const latest = [...document.querySelectorAll(".shelf-undo-toast")].at(-1)
+    expect(latest?.textContent).toContain("Книга 2")
+
+    latest?.querySelector<HTMLButtonElement>(".undo__action")?.click()
+    await nextTick()
+    expect(latest?.textContent).toContain("Книга 1")
+
+    latest?.querySelector<HTMLButtonElement>(".undo__action")?.click()
+    await nextTick()
+
+    const restores = wrapper.emitted("restore")
+    expect(restores?.[0]?.[0]).toMatchObject({ title: "Книга 2" })
+    expect(restores?.[1]?.[0]).toMatchObject({ title: "Книга 1" })
+
+    wrapper.unmount()
   })
 })

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from "vue";
+import { computed, h, nextTick, onUnmounted, ref, watch } from "vue";
+import { useToast, type ToastOptions } from "vuestic-ui";
 
 import BookOverviewCard from "./BookOverviewCard.vue";
 import { levelLabel } from "./levels";
@@ -8,15 +9,22 @@ import { progressFraction } from "@/components/Bookshelf/bookshelf";
 import { useCardMinWidth } from "./useCardMinWidth";
 import type { PropType } from "vue";
 import type { BookIndexEntry } from "@/types/corpus";
-import type { BookshelfEntry } from "@/types/bookshelf";
+import type { Book, BookshelfEntry } from "@/types/bookshelf";
 
 const VISIBLE = 3;
 const STEP = 12;
+
+type ShelfBook = Pick<Book, "lang" | "author" | "title">;
 
 const props = defineProps({
   books: { type: Array as PropType<BookIndexEntry[]>, required: true },
   entries: { type: Array as PropType<BookshelfEntry[]>, default: () => [] },
 })
+
+const emit = defineEmits<{
+  remove: [book: ShelfBook]
+  restore: [book: ShelfBook]
+}>()
 
 const cards = computed(() => shelfCards(props.books, props.entries))
 const limit = ref(VISIBLE)
@@ -29,12 +37,25 @@ const remaining = computed(() =>
 )
 const nextStep = computed(() => Math.min(STEP, remaining.value))
 
+// If removals shrink the shelf below the preview size, forget the expansion;
+// restoring a book must not silently re-expand a shelf the reader collapsed.
+watch(
+  () => cards.value.length,
+  (count) => {
+    if (count <= VISIBLE) limit.value = VISIBLE
+  },
+)
+
 const stack = ref<HTMLElement | null>(null)
 const section = ref<HTMLElement | null>(null)
 const headerToggle = ref<HTMLButtonElement | null>(null)
 const bottomCollapse = ref<HTMLButtonElement | null>(null)
+const editToggle = ref<HTMLButtonElement | null>(null)
 
 const minWidth = useCardMinWidth(stack)
+
+const editing = ref(false)
+const removed = ref<Array<{ book: ShelfBook; index: number }>>([])
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
@@ -73,34 +94,146 @@ function collapse(): void {
     scrollToShelf()
   })
 }
+
+/*
+ * Removal and undo.
+ *
+ * The toast is created on the first removal and its render function reads the
+ * stack, so each removal updates the bar in place instead of closing and
+ * reopening it. Undo pops the stack; the bar follows, and closes when the stack
+ * is empty. The parent owns the store: it sees `remove` and `restore` and
+ * writes the tombstone through `useBookshelf`.
+ */
+const toast = useToast()
+let toastId: string | null = null
+
+function toastContent() {
+  const title = removed.value[removed.value.length - 1]?.book.title ?? ""
+  return h("div", { class: "undo" }, [
+    h("span", { class: "undo__text" }, `Removed \u201c${title}\u201d`),
+    h(
+      "button",
+      {
+        class: "undo__action",
+        type: "button",
+        onClick: (event: MouseEvent) => {
+          event.stopPropagation()
+          undo()
+        },
+      },
+      "Undo",
+    ),
+  ])
+}
+
+function showToast(): void {
+  if (toastId) return
+  toastId = toast.notify({
+    render: toastContent,
+    duration: 0,
+    position: "bottom-center",
+    closeable: false,
+    role: "status",
+    color: "secondary",
+    customClass: "shelf-undo-toast",
+    offsetY: 24,
+  } as ToastOptions & { role: "status" })
+  // Vuestic's own `role` attribute resolves to `alertdialog`; the prop still
+  // gives the bar an `aria-live="polite"` region, which is what announces the
+  // removal. The outer role is a known mismatch in the library.
+}
+
+function closeToast(): void {
+  if (!toastId) return
+  toast.close(toastId)
+  toastId = null
+}
+
+function toggleEditing(): void {
+  if (!editing.value) {
+    editing.value = true
+    return
+  }
+  editing.value = false
+  removed.value = []
+  closeToast()
+}
+
+function onRemove(book: BookIndexEntry, index: number): void {
+  const identity: ShelfBook = {
+    lang: book.lang,
+    author: book.author,
+    title: book.title,
+  }
+  removed.value.push({ book: identity, index })
+  emit("remove", identity)
+  showToast()
+  void nextTick(() => focusRemove(index))
+}
+
+function undo(): void {
+  const last = removed.value.pop()
+  if (!last) {
+    closeToast()
+    return
+  }
+  emit("restore", last.book)
+  if (!removed.value.length) closeToast()
+  void nextTick(() => focusRemove(last.index))
+}
+
+function focusRemove(index: number): void {
+  const buttons = section.value?.querySelectorAll<HTMLButtonElement>(".remove")
+  if (buttons?.length) {
+    buttons[Math.min(Math.max(index, 0), buttons.length - 1)]?.focus()
+    return
+  }
+  editToggle.value?.focus()
+}
+
+onUnmounted(closeToast)
 </script>
 
 <template>
   <section
-    v-if="cards.length"
+    v-if="cards.length || editing"
     ref="section"
     class="shelf"
+    :class="{ 'shelf--undo': removed.length }"
     aria-labelledby="shelf-title">
     <div class="shelf__head">
       <h2 id="shelf-title" class="shelf__title">You&rsquo;re reading&hellip;</h2>
-      <button
-        v-if="cards.length > VISIBLE"
-        ref="headerToggle"
-        type="button"
-        class="text-action shelf__toggle"
-        :aria-expanded="expanded"
-        aria-controls="shelf-grid"
-        @click="toggle">
-        {{ expanded ? "Show less" : `See all ${cards.length} books` }}
-      </button>
+      <div class="shelf__actions">
+        <button
+          v-if="cards.length > VISIBLE"
+          ref="headerToggle"
+          type="button"
+          class="text-action shelf__toggle"
+          :aria-expanded="expanded"
+          aria-controls="shelf-grid"
+          @click="toggle">
+          {{ expanded ? "Show less" : `See all ${cards.length} books` }}
+        </button>
+        <button
+          v-if="cards.length > 0 || editing"
+          ref="editToggle"
+          type="button"
+          class="text-action shelf__edit"
+          @click="toggleEditing">
+          {{ editing ? "Done" : "Edit" }}
+        </button>
+      </div>
     </div>
+
+    <p v-if="!cards.length" class="shelf__empty">Your shelf is empty.</p>
     <div
+      v-else
       id="shelf-grid"
       ref="stack"
       class="stack"
       :style="minWidth ? { '--card-min': `${minWidth}px` } : undefined">
       <BookOverviewCard
-        v-for="{ book, entry } in shown"
+        v-for="({ book, entry }, index) in shown"
         :key="book.author + ': ' + book.title"
         :lang="book.lang"
         :title="book.title"
@@ -108,8 +241,11 @@ function collapse(): void {
         :level="levelLabel(book['Vocab Level'])"
         :words="book['Word Count']"
         :size="book.size ?? ''"
-        :progress="progressFraction(entry)" />
+        :progress="progressFraction(entry)"
+        :editing="editing"
+        @remove="onRemove(book, index)" />
     </div>
+
     <div v-if="expanded" class="shelf__foot">
       <button
         v-if="remaining > 0"
@@ -134,6 +270,11 @@ function collapse(): void {
   margin: .75rem 0 1rem;
   scroll-margin-top: 1rem;
 }
+/* The undo bar is fixed to the viewport; leave room under the last row and the
+   collapse controls so it never covers them. */
+.shelf--undo {
+  padding-bottom: 5rem;
+}
 .shelf__head {
   display: flex;
   flex-wrap: wrap;
@@ -145,6 +286,17 @@ function collapse(): void {
   font-size: 1rem;
   font-weight: 500;
   margin: 0;
+}
+.shelf__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem .75rem;
+  margin-left: auto;
+}
+.shelf__empty {
+  margin: 0 0 .5rem;
+  color: var(--va-text-secondary);
 }
 .text-action {
   min-height: 2.75rem;
@@ -189,5 +341,44 @@ function collapse(): void {
     min-height: auto;
     padding-block: .1rem;
   }
+}
+</style>
+
+<style>
+/* The toast is teleported to <body>, outside this component's scope. */
+.shelf-undo-toast {
+  width: calc(100% - 1.5rem);
+  max-width: 34rem;
+  padding: .75rem 1rem;
+  border-radius: .5rem;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 25%);
+}
+.shelf-undo-toast .undo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.shelf-undo-toast .undo__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shelf-undo-toast .undo__action {
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0 .5rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.shelf-undo-toast .undo__action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 </style>

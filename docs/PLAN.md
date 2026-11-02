@@ -52,7 +52,7 @@ app passes its quality gates.
   turn or reveal alone adds the book; looking back never moves the bookmark; no
   backend is required.
 
-## Phase 3b — Bookshelf on the index (delivered, except removal)
+## Phase 3b — Bookshelf on the index (built, walkthrough pending)
 
 - **Inputs**: the local bookshelf; the corpus index.
 - **Outputs**: a row of book tiles above the results bar that expands in place
@@ -65,7 +65,7 @@ app passes its quality gates.
 - **Quality gate**: two cards across a phone; a card's row shares one height;
   typing an author lists matches; every filter's list is visible when opened;
   expanding and collapsing keep the reader's place.
-- **Remaining**: edit mode with removal and undo.
+- **Remaining**: the phone and desktop walkthrough before release.
 
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)
 

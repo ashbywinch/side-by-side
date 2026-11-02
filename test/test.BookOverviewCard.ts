@@ -18,6 +18,7 @@ function mountCard(props: Record<string, unknown> = {}) {
       words: 271975,
       ...props,
     },
+    global: { stubs: { "va-icon": { template: "<span class='icon' />" } } },
   });
 }
 
@@ -46,5 +47,16 @@ describe("BookOverviewCard", () => {
   it("shows the exact word count", () => {
     expect(mountCard().html()).toContain('text="271975 words"');
     expect(mountCard({ words: 517 }).html()).toContain('text="517 words"');
+  });
+
+  it("offers a remove control instead of a link in edit mode", () => {
+    const wrapper = mountCard({ editing: true });
+    const remove = wrapper.find(".remove");
+
+    expect(wrapper.find(".tile").element.tagName).toBe("DIV");
+    expect(remove.attributes("aria-label")).toBe(
+      "Remove Анна Каренина from your shelf",
+    );
+    expect(wrapper.find(".remove__disc").exists()).toBe(true);
   });
 });
