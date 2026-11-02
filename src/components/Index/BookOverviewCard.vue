@@ -53,7 +53,7 @@ const sizeColor: Record<string, string> = {
     <va-card class="item">
       <va-card-title>{{ title }}</va-card-title>
       <va-card-content>
-        {{ author }}
+        <span class="author">{{ author }}</span>
         <div class="row va-spacing-x-2 badges">
           <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
           <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
@@ -159,14 +159,14 @@ const sizeColor: Record<string, string> = {
   background: var(--va-primary);
 }
 /* A 48px target with a 36px disc: the finger gets the platform minimum, the
-   card gets a quiet badge. It is an overlay on the card's bottom-right, so it
-   adds no height and every card in a row keeps it on the same line. It may
-   cover the end of the word-count pill; that is the accepted trade-off until
-   the pills move. */
+   card gets a quiet badge. `--remove-top` is measured below the lowest author
+   line in the row, so every card keeps the control on one Y. It is an overlay,
+   so it adds no height; it may cover the end of the word-count pill, which is
+   the accepted trade-off until the pills move. */
 .remove {
   position: absolute;
+  top: var(--remove-top, 3rem);
   right: .75rem;
-  bottom: .75rem;
   z-index: 2;
   display: grid;
   place-items: center;

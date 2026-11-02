@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, h, nextTick, onUnmounted, ref, watch } from "vue";
+import { computed, h, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useToast, type ToastOptions } from "vuestic-ui";
 
 import BookOverviewCard from "./BookOverviewCard.vue";
 import { levelLabel } from "./levels";
+import { removeTop } from "./removePosition";
 import { shelfCards } from "./shelfCards";
 import { progressFraction } from "@/components/Bookshelf/bookshelf";
 import { useCardMinWidth } from "./useCardMinWidth";
@@ -76,6 +77,38 @@ const bottomCollapse = ref<HTMLButtonElement | null>(null)
 const editToggle = ref<HTMLButtonElement | null>(null)
 
 const minWidth = useCardMinWidth(stack)
+const removeOffset = ref(0)
+
+const stackStyle = computed(() => ({
+  ...(minWidth.value ? { "--card-min": `${minWidth.value}px` } : {}),
+  ...(removeOffset.value ? { "--remove-top": `${removeOffset.value}px` } : {}),
+}))
+
+// The author line sits at a different height on cards whose titles wrap to
+// different line counts. Measure the lowest one and put every remove control
+// below it, so the whole row shares one Y without growing the cards.
+function measureRemoveTop(): void {
+  const element = stack.value
+  if (!element) return
+  const lines = Array.from(element.querySelectorAll<HTMLElement>(".item"))
+    .map((card) => {
+      const author = card.querySelector<HTMLElement>(".author")
+      if (!author) return null
+      const cardBox = card.getBoundingClientRect()
+      const authorBox = author.getBoundingClientRect()
+      return { top: cardBox.top, bottom: authorBox.bottom }
+    })
+    .filter((line): line is { top: number; bottom: number } => line !== null)
+  removeOffset.value = removeTop(lines)
+}
+
+onMounted(() => {
+  void nextTick(measureRemoveTop)
+  void document.fonts?.ready.then(() => nextTick(measureRemoveTop))
+})
+watch([() => shown.value.length, minWidth], () => {
+  void nextTick(measureRemoveTop)
+})
 
 const editing = ref(false)
 const removed = ref<ShelfBook[]>([])
@@ -307,7 +340,7 @@ onUnmounted(() => phoneQuery?.removeEventListener?.("change", onPhoneChange))
       id="shelf-grid"
       ref="stack"
       class="stack"
-      :style="minWidth ? { '--card-min': `${minWidth}px` } : undefined">
+      :style="stackStyle">
       <BookOverviewCard
         v-for="({ book, entry }, index) in shown"
         :key="book.author + ': ' + book.title"

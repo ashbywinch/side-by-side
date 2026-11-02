@@ -115,18 +115,18 @@ Checked against the built screens at 390 and 1280, not against intentions.
   control follows the load-more convention for long lists.
 - **Edit mode, not per-card controls.** "Edit" becomes "Done"; tiles stop
   navigating and expose only a remove control. The control is a 48px target
-  with a 36px disc overlaid on the card's bottom-right, in the palette's
-  standard grey (`--va-secondary`); the glyph is `--va-text-inverted`, 18px.
-  48px meets Material's 48dp, Apple's 44pt and the repo's ≥44px rule; 36px keeps
-  the disc from dominating the card. It is an overlay, not a content row: it
-  adds no height, and every card in a row keeps it on one line. The level and
+  with a 36px disc overlaid on the right, below the author line, in the
+  palette's standard grey (`--va-secondary`); the glyph is
+  `--va-text-inverted`, 18px. 48px meets Material's 48dp, Apple's 44pt and the
+  repo's ≥44px rule; 36px keeps the disc from dominating the card. Its top is
+  measured from the lowest author line in the row, so every card shares one Y.
+  It is an overlay, not a content row: it adds no height. The level and
   word-count pills are left exactly where they are; the badge may cover the end
   of the word-count pill until the pills move, and that is accepted for now.
-- **Why not under the author.** An in-flow control under the author grows every
-  card by its row and, because titles wrap to different line counts, lands at a
-  different height on each card. The fixed space in the card is the pills' band,
-  so the overlay is the only placement that keeps the row aligned without
-  changing the card's height.
+- **Why measured.** Titles wrap to different line counts, so the author line
+  sits at different heights; an in-flow control would grow every card and land
+  at a different Y on each. Measuring the lowest author line and overlaying the
+  control below it keeps the row aligned without changing the card's height.
 - **Undo is a session-long toast.** Removal is immediate; a bottom toast names
   the book and offers "Undo" for the whole edit session, with no timer. It is
   built with Vuestic's `useToast` (`duration: 0`, `position="bottom-center"`,
