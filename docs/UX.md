@@ -109,13 +109,15 @@ expansion and edit mode.
 - **Edit mode**: "Edit" beside the heading becomes "Done". The tiles stop
   navigating; the only action on a tile is its remove control. The level and
   word-count pills stay exactly where they are.
-- **The remove control**: on the right, just below the author line, inside the
-  card. It is a 48px target with a 36px visible disc; the disc is the palette's
-  standard grey (`--va-secondary`), its glyph is `--va-text-inverted` (white in
-  the light preset, near-black in the dark one), and the close icon is 18px. A
-  2px primary focus ring sits on the disc, not on the invisible target. The
-  control is labelled "Remove <title> from your shelf". The level and
-  word-count pills stay on the card's bottom edge.
+- **The remove control**: an overlay at the card's bottom-right. It is a 48px
+  target with a 36px visible disc; the disc is the palette's standard grey
+  (`--va-secondary`), its glyph is `--va-text-inverted` (white in the light
+  preset, near-black in the dark one), and the close icon is 18px. A 2px
+  primary focus ring sits on the disc, not on the invisible target. The control
+  is labelled "Remove <title> from your shelf". It adds no height and stays on
+  one line across a row. The level and word-count pills stay exactly where they
+  are; the badge may cover the end of the word-count pill until the pills move,
+  which is accepted for now.
 - **Undo**: a removal is immediate and reversible. A bottom toast — one at a
   time, no timer, living for the whole edit session — names the removed book
   and offers "Undo". Undo pops the session stack (last removal first) and puts

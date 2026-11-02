@@ -60,14 +60,13 @@ describe("BookOverviewCard", () => {
     expect(wrapper.find(".remove__disc").exists()).toBe(true);
   });
 
-  it("puts the remove control under the author, inside the card", () => {
+  it("overlays the remove control instead of adding a row to the card", () => {
     const wrapper = mountCard({ editing: true });
-    const row = wrapper.find(".remove-row");
+    const remove = wrapper.find(".remove");
 
-    expect(row.exists()).toBe(true);
-    expect(row.find(".remove").exists()).toBe(true);
-    expect(row.element.previousSibling?.textContent).toContain("Лев Толстой");
-    expect(row.element.nextElementSibling?.classList.contains("badges")).toBe(true);
+    expect(wrapper.find(".remove-row").exists()).toBe(false);
+    expect(remove.element.parentElement?.classList.contains("tile")).toBe(true);
+    expect(remove.element.closest(".va-card-content")).toBeNull();
   });
 
   it("shows no remove control outside edit mode", () => {

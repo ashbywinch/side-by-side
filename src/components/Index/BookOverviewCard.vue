@@ -54,17 +54,6 @@ const sizeColor: Record<string, string> = {
       <va-card-title>{{ title }}</va-card-title>
       <va-card-content>
         {{ author }}
-        <div v-if="editing" class="remove-row">
-          <button
-            type="button"
-            class="remove"
-            :aria-label="`Remove ${title} from your shelf`"
-            @click="emit('remove')">
-            <span class="remove__disc" aria-hidden="true">
-              <va-icon name="close" size="18px" />
-            </span>
-          </button>
-        </div>
         <div class="row va-spacing-x-2 badges">
           <va-badge :text="level" style="--va-badge-text-wrapper-border-radius: 1.5rem" :color="levelColorFor(level)"/>
           <va-badge :text="words + ' words'" style="--va-badge-text-wrapper-border-radius: 1.5rem;" :color="sizeColor[size]"/>
@@ -83,6 +72,16 @@ const sizeColor: Record<string, string> = {
       </span>
     </va-card>
 
+    <button
+      v-if="editing"
+      type="button"
+      class="remove"
+      :aria-label="`Remove ${title} from your shelf`"
+      @click="emit('remove')">
+      <span class="remove__disc" aria-hidden="true">
+        <va-icon name="close" size="18px" />
+      </span>
+    </button>
   </component>
 </template>
 <style scoped>
@@ -160,14 +159,15 @@ const sizeColor: Record<string, string> = {
   background: var(--va-primary);
 }
 /* A 48px target with a 36px disc: the finger gets the platform minimum, the
-   card gets a quiet badge. It sits on the right, just below the author, so it
-   never lands on the pills at the card's bottom edge. */
-.remove-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: .25rem;
-}
+   card gets a quiet badge. It is an overlay on the card's bottom-right, so it
+   adds no height and every card in a row keeps it on the same line. It may
+   cover the end of the word-count pill; that is the accepted trade-off until
+   the pills move. */
 .remove {
+  position: absolute;
+  right: .75rem;
+  bottom: .75rem;
+  z-index: 2;
   display: grid;
   place-items: center;
   width: 3rem;
