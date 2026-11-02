@@ -209,18 +209,52 @@ function undo(): void {
   void nextTick(() => focusBook(last))
 }
 
-function focusBook(book: ShelfBook): void {
-  const index = shown.value.findIndex(
-    (card) =>
-      card.book.lang === book.lang &&
-      card.book.author === book.author &&
-      card.book.title === book.title,
+function matches(card: { book: ShelfBook }, book: ShelfBook): boolean {
+  return (
+    card.book.lang === book.lang &&
+    card.book.author === book.author &&
+    card.book.title === book.title
   )
-  if (index >= 0) {
-    focusRemove(index)
+}
+
+function focusBook(book: ShelfBook): void {
+  const index = cards.value.findIndex((card) => matches(card, book))
+  if (index < 0) {
+    editToggle.value?.focus()
     return
   }
-  editToggle.value?.focus()
+
+  const visible = shown.value.findIndex((card) => matches(card, book))
+  if (visible >= 0) {
+    focusRemove(visible)
+    return
+  }
+
+  // Undo can restore a book beyond the collapsed preview: expand enough to
+  // show it, then focus its control once the DOM has caught up.
+  reveal(index)
+  void nextTick(() => {
+    const restored = shown.value.findIndex((card) => matches(card, book))
+    if (restored >= 0) {
+      focusRemove(restored)
+      return
+    }
+    editToggle.value?.focus()
+  })
+}
+
+function reveal(index: number): void {
+  if (!isExpanded.value) {
+    expanded.value = true
+    limit.value = Math.min(cards.value.length, Math.max(STEP, index + 1))
+    return
+  }
+  if (index >= limit.value) {
+    limit.value = Math.min(
+      cards.value.length,
+      Math.max(limit.value + STEP, index + 1),
+    )
+  }
 }
 
 function focusRemove(index: number): void {

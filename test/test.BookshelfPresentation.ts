@@ -220,6 +220,35 @@ describe("BookshelfSection", () => {
     wrapper.unmount()
   })
 
+  it("shows the restored book when it was outside the collapsed preview", async () => {
+    const eight = books.slice(0, 8)
+    const eightEntries = entries.slice(0, 8)
+    const wrapper = mount(BookshelfSection, {
+      props: { books: eight, entries: eightEntries },
+      global: { stubs },
+      attachTo: document.body,
+    })
+
+    await wrapper.find(".shelf__edit").trigger("click")
+    await wrapper.find(".shelf__toggle").trigger("click")
+    await wrapper.findAll(".remove")[7].trigger("click")
+    await wrapper.find(".shelf__collapse").trigger("click")
+
+    expect(wrapper.findAll(".card")).toHaveLength(6)
+
+    const toast = [...document.querySelectorAll(".shelf-undo-toast")].at(-1)
+    toast?.querySelector<HTMLButtonElement>(".undo__action")?.click()
+    await nextTick()
+    await nextTick()
+
+    expect(wrapper.findAll(".card")).toHaveLength(8)
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(
+      "Remove Книга 8 from your shelf",
+    )
+
+    wrapper.unmount()
+  })
+
   it("keeps the shelf and its undo bar when the last book is removed", async () => {
     const wrapper = mount(BookshelfSection, {
       props: { books: [books[0]], entries: [entries[0]] },
