@@ -16,6 +16,8 @@ const props = defineProps({
   revealedThrough: {type:Number, default:-1},
   // Global index of the first card on this page.
   firstSegment: {type:Number, default:0},
+  // Teach once: shown until the reader has revealed their first translation.
+  showTranslationHint: {type:Boolean, default:false},
 })
 
 const emit = defineEmits(["reveal", "position-change"])
@@ -112,6 +114,9 @@ onUnmounted(() => {
 <template>
   <va-card class="page">
     <PageHeader :title="title" :author="author" :is-title-page="page == 1"/>
+    <p v-if="showTranslationHint" class="reveal-hint">
+      Translations are hidden — click one to reveal it.
+    </p>
     <div class="text" :aria-busy="loading ? 'true' : 'false'">
       <template
         v-for="(card, index) in cards"
@@ -141,6 +146,11 @@ onUnmounted(() => {
 }
 .screen-xs .text {
   margin: 1em 0;
+}
+.reveal-hint {
+  margin: 1rem 0 0;
+  color: var(--va-text-secondary);
+  font-size: .9rem;
 }
 .va-card__content {
   padding: 0.3rem;

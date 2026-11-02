@@ -119,6 +119,7 @@ describe("BookPage", () => {
     expect(screen.queryByText("Book")).toBeTruthy();
     expect(screen.queryByText("s0")).toBeTruthy();
     expect(screen.queryByText("t0")).toBeTruthy();
+    expect(screen.getByText(/translations are hidden/i)).toBeTruthy();
     expect(screen.queryByText("s24")).toBeNull();
   });
 
@@ -215,6 +216,7 @@ describe("BookPage", () => {
     expect(screen.queryByText("Picked up where you left off")).toBeTruthy();
     expect(screen.getByText("t72").className).not.toContain("masked");
     expect(screen.getByText("t76").className).toContain("masked");
+    expect(screen.queryByText(/translations are hidden/i)).toBeNull();
   });
 
   it("adds the book to the bookshelf when the reader turns a page", async () => {
@@ -246,6 +248,8 @@ describe("BookPage", () => {
 
     const entry = useBookshelf().entryFor({ lang: "en", author: "Author", title: "Book" });
     expect(entry?.revealedThrough).toBe(0);
+    expect(screen.getByText("t0").className).not.toContain("masked");
+    expect(screen.queryByText(/translations are hidden/i)).toBeNull();
   });
 
   it("restores the place on the page when the URL already names it", async () => {

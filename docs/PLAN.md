@@ -52,17 +52,18 @@ app passes its quality gates.
   turn or reveal alone adds the book; looking back never moves the bookmark; no
   backend is required.
 
-## Phase 3b — Bookshelf on the index (planned)
+## Phase 3b — Bookshelf on the index (delivered, except removal)
 
 - **Inputs**: the local bookshelf; the corpus index.
-- **Outputs**: the bookshelf above the filters (rail or section, chosen by UX
-  walkthrough), progress on the cards of read books, and a bookshelf page for
-  removal with undo.
-- **Operations**: see what you are reading, continue in one action, remove a
-  book, undo a removal.
-- **Quality gate**: the walkthrough confirms the requirements (one action back
-  to the current book, a short path to earlier ones, no extra effort to reach a
-  new book, progress visible without opening).
+- **Outputs**: a row of book tiles above the results bar with "See all", the
+  same portrait card in the catalogue, progress as a bar on the read books, a
+  bookshelf page listing every entry, and filters that collapse behind a results
+  bar (a sheet on a phone).
+- **Operations**: see what you are reading, continue in one action, reach an
+  older book through "See all", filter by level, size or author.
+- **Quality gate**: two cards across a phone; a card's row shares one height;
+  typing an author lists matches; every filter's list is visible when opened.
+- **Remaining**: edit mode with removal and undo.
 
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)
 

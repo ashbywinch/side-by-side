@@ -11,6 +11,7 @@ function entry(overrides: Partial<BookshelfEntry> = {}): BookshelfEntry {
   return {
     book: { lang: "ru", author: "Блок", title: "Двенадцать", segments: 100 },
     position: 12,
+    furthest: 12,
     revealedThrough: 20,
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
     ...overrides,

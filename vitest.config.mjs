@@ -16,6 +16,12 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
       reporter: ["text", "clover"],
+      exclude: [
+        "**/node_modules/**",
+        "**/dist/**",
+        "test/**",
+        "**/*.d.ts",
+      ],
       thresholds: {
         lines: 78,
         statements: 80,

@@ -112,13 +112,17 @@ export function createBookshelf(options: BookshelfOptions = {}): BookshelfStore 
   function touch(book: Book, position: number): void {
     if (!writable) return;
     const at = clock();
-    replace(book, (current) => ({
-      book,
-      position: clampPosition(position, book.segments),
-      revealedThrough: current?.revealedThrough ?? -1,
-      updatedAt: at,
-      ...(current?.finishedAt ? { finishedAt: current.finishedAt } : {}),
-    }));
+    replace(book, (current) => {
+      const bounded = clampPosition(position, book.segments);
+      return {
+        book,
+        position: bounded,
+        furthest: Math.max(current?.furthest ?? -1, bounded),
+        revealedThrough: current?.revealedThrough ?? -1,
+        updatedAt: at,
+        ...(current?.finishedAt ? { finishedAt: current.finishedAt } : {}),
+      };
+    });
     schedule();
   }
 
@@ -128,7 +132,17 @@ export function createBookshelf(options: BookshelfOptions = {}): BookshelfStore 
     if (!current || current.removedAt) return;
     const bounded = clampPosition(position, book.segments);
     if (bounded === current.position) return;
-    replace(book, (entry) => (entry ? { ...entry, book, position: bounded, updatedAt: clock() } : undefined));
+    replace(book, (entry) =>
+      entry
+        ? {
+            ...entry,
+            book,
+            position: bounded,
+            furthest: Math.max(entry.furthest ?? -1, bounded),
+            updatedAt: clock(),
+          }
+        : undefined,
+    );
     schedule();
   }
 
@@ -145,6 +159,10 @@ export function createBookshelf(options: BookshelfOptions = {}): BookshelfStore 
         // The bookmark only moves by reading; revealing while browsing must not
         // drag it to the page being browsed.
         position: current?.position ?? clampPosition(position, book.segments),
+        furthest: Math.max(
+          current?.furthest ?? -1,
+          clampPosition(position, book.segments),
+        ),
         revealedThrough,
         updatedAt: at,
         ...(finishedAt ? { finishedAt } : {}),
@@ -160,6 +178,7 @@ export function createBookshelf(options: BookshelfOptions = {}): BookshelfStore 
         ? {
             ...current,
             position: 0,
+            furthest: 0,
             revealedThrough: -1,
             updatedAt: clock(),
           }

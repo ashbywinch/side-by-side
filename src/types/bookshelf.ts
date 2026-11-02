@@ -16,6 +16,8 @@ export interface Book {
 export interface BookshelfEntry {
   book: Book;
   position: number;
+  /** Furthest segment reached: the progress mark, which never moves back. */
+  furthest: number;
   revealedThrough: number;
   updatedAt: Date;
   finishedAt?: Date;

@@ -40,11 +40,16 @@ export function isFinished(entry: BookshelfEntry): boolean {
   return entry.finishedAt !== undefined;
 }
 
-/** Fraction of the book behind the reader's viewport; full once finished. */
+/**
+ * How far into the book the reader has got: the furthest segment they reached,
+ * not the place they happen to be looking at. Scrolling back to re-read the
+ * opening must not un-read the book.
+ */
 export function progressFraction(entry: BookshelfEntry): number {
   if (isFinished(entry)) return 1;
   const segments = entry.book.segments;
   if (!Number.isFinite(segments) || segments <= 0) return 0;
-  const behind = Math.min(Math.max(entry.position + 1, 0), segments);
+  const reached = Math.max(entry.furthest ?? -1, entry.position);
+  const behind = Math.min(Math.max(reached + 1, 0), segments);
   return behind / segments;
 }
