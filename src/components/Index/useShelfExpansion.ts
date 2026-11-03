@@ -1,5 +1,6 @@
 import { computed, nextTick, onUnmounted, ref, watch, type Ref } from "vue";
 
+import { prefersReducedMotion } from "../motion";
 import type { ShelfCard } from "./shelfCards";
 
 const STEP = 12;
@@ -57,10 +58,6 @@ export function useShelfExpansion(
   watch(preview, (count) => {
     if (cards.value.length <= count) expanded.value = false
   })
-
-  function prefersReducedMotion(): boolean {
-    return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
-  }
 
   function scrollToShelf(): void {
     section.value?.scrollIntoView?.({

@@ -27,6 +27,17 @@ function mountPage(cards: Array<Record<string, unknown>> = []) {
 }
 
 describe("PageOfBook", () => {
+  it("exposes the text box and the card so a turn can measure and snapshot them", () => {
+    const wrapper = mountPage();
+    const exposed = wrapper.vm as unknown as {
+      contentElement: HTMLElement | null;
+      cardElement: HTMLElement | null;
+    };
+
+    expect(exposed.contentElement).toBe(wrapper.find(".text").element);
+    expect(exposed.cardElement).toBe(wrapper.find(".page").element);
+  });
+
   it("removes its keyboard listener when unmounted", () => {
     const remove = vi.spyOn(window, "removeEventListener");
     const wrapper = mountPage();

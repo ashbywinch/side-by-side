@@ -68,6 +68,24 @@ app passes its quality gates.
   expanding and collapsing keep the reader's place.
 - **Remaining**: the phone and desktop walkthrough before release.
 
+## Phase 3c — Page turns on touch and in the margins (delivered)
+
+- **Inputs**: the reader's touch, pointer and keyboard; the measured space
+  between the viewport edge and the text.
+- **Outputs**: invisible full-height margin targets, horizontal swipe paging,
+  `ArrowLeft`/`ArrowRight`, an opaque snapshot wipe for the page turn that
+  hides the bottom-to-top jump, and a first-run lesson animation that stops
+  once the gesture is learned.
+- **Operations**: turn a page by swiping on a phone, by clicking the margin on
+  a desktop, and by keyboard; a new reader is shown how, a returning one is
+  not.
+- **Quality gate**: every input lands on the one turn path, so the bookmark
+  and browse rules are unchanged; a vertical drag still scrolls and a tap
+  still reveals; the ends are disabled; the turn wipes the outgoing page aside
+  without double-exposing text and is instant under reduced motion; the lesson
+  is capped at three shows, plays even for a book with history, and is static
+  under reduced motion.
+
 ## Phase 4 — Google sign-in and cross-device sync (issue #139)
 
 - **Inputs**: Phase 3 bookshelf, Google OAuth client, Cloudflare D1.
