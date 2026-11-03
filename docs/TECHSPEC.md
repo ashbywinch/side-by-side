@@ -10,6 +10,7 @@
 | `src/pages/Index` | Index route, filters, pagination | Reads `index.jsonl`; renders cards |
 | `src/pages/Book` | Book route; maps a URL page to a chunk, resolves the bookmark, records reveals and position | Uses `useBookReader` and `useBookshelf` |
 | `src/components/Book` | Reader presentation, chunk math, JSONL fetching, the bookmark notice | Props/events; no routing |
+| `src/components/Book` page turning | `pageTurn` (page arithmetic, swipe classification and commit), `pageMargins` + `usePageMargins` (measured invisible margin targets), `usePageTurning` (axis-locked 1:1 drag, velocity commit, arrow keys), `usePageSlide` (row slide with an opaque snapshot for a turn), `scrollToTop` (bounded scroll when no turn animation runs), `PageTurnTargets`/`PageTurnHint`, `pageTurnHintStorage` + `usePageTurnHint` | Consumes the route's page and the reader's page count; emits turns into `BookPage`'s existing `updatePageValue` path |
 | `src/components/Bookshelf` | Bookmark store: pure position maths, versioned localStorage, reactive store | Consumes `meta.json` counts; provides entries to pages |
 | `src/components/Index/BookshelfSection` | The inline shelf composition: header controls, the preview/expanded grid, the footer and the undo clearance | Wires `useShelfExpansion`, `useShelfEditing` and `useRemoveTop`; emits remove/restore to the page, which writes through `useBookshelf` |
 | `src/components/Index/useShelfExpansion` + `useShelfEditing` + `useRemoveTop` | Preview/expanded counts and focus, the edit/undo stack and toast, and the author-line measurement | Composable seams for the shelf; storage stays in `useBookshelf` |
@@ -31,6 +32,7 @@
 | Book | `lang`, `author`, `title`, `segments` | A value object on a bookshelf entry; identity plus its length. The corpus has no ids, so identity is its address |
 | BookshelfEntry | `book`, `position`, `revealedThrough`, `updatedAt`, `finishedAt?`, `removedAt?` | The reader's relationship to one book. Segment indices, never pages; a single high-water mark for reveals; `removedAt` is a tombstone |
 | Bookshelf | `version`, `entries[]` | Versioned local data; one entry per book, ordered by recency on read |
+| PageTurnHint | `version`, `shown`, `turned` | Device-wide lesson state in `sbs:page-turn-hint:v1`; `shown` is capped at 3, `turned` is set only by a swipe or margin click |
 | User (planned) | provider subject, optional profile | Google OAuth; minimal data |
 
 ## Architecture
@@ -68,6 +70,20 @@ import `src/`. `test/test.architecture.ts` enforces these boundaries.
   implementation keeps the UI off storage and leaves room for an API-backed
   store at sign-in. IndexedDB was considered and rejected: it would keep `Date`
   objects natively but costs an async store for a few dozen small records.
+- **Original CSS motion, no animation library** — the page-turn lesson is a
+  two-second hint, not a curl. StPageFlip (MIT) takes over layout, clones page
+  DOM and drives its own paging; turn.js is non-commercial; Lottie adds a
+  runtime and same-terms derivative obligations for a small cue. A hand-written
+  keyframe animation is smaller, honours reduced motion and adds no dependency
+  ([page-turning.md](page-turning.md)). The gesture lesson follows Material's
+  hint-motion rule — the page itself performs a partial swipe — rather than an
+  abstract arrow.
+- **A row slide with an opaque snapshot, not a crossfade** — a turn freezes the
+  outgoing page, places the new page one panel to the side, and slides both by
+  the same distance; the new page starts at the drag's peek position so the
+  release never jumps. Fading two layers would show the new text through the
+  old (a double exposure); opaque layers avoid it. See
+  [page-turning.md](page-turning.md).
 - **GitHub Actions + Cloudflare versions** — green candidate, smoke, human
   approval, atomic promotion, automatic rollback.
 
@@ -102,6 +118,18 @@ import `src/`. `test/test.architecture.ts` enforces these boundaries.
   requirements): navigating back or jumping elsewhere is browsing, which never
   writes. This is why a reader cannot lose their place by checking an earlier
   page.
+- **Every page input is the one turn path** ([page-turning.md](page-turning.md)):
+  swipe, margin click, arrow key and pager all call `updatePageValue`, so a
+  new input method cannot invent its own paging or bypass the bookmark's
+  adjacency rule. The reader turns the page itself; `?page=` is pointed at it
+  after the row, never during it, because a route re-render mid-row drops
+  frames on a phone.
+- **A swipe is direct manipulation, not an animation triggered on release**
+  ([page-turning.md](page-turning.md)): after a 6px axis lock the page follows
+  the finger 1:1 and reveals the adjacent page's edge; the release commits on
+  distance or flick velocity, otherwise the page springs back. The turn
+  snapshot is taken at the release position, so the completion continues from
+  the hand rather than restarting from rest.
 - **Entries are tombstones, never deletions** (PRD control requirement): a
   removed book keeps its entry with `removedAt`, so undo restores it exactly
   and a second device cannot resurrect it once sync exists. The shelf's remove

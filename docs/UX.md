@@ -9,10 +9,11 @@ delivered; sign-in and cross-device sync are the next phase.
    choose a book, and reach a readable first page.
 2. **Read and reveal**: read a source card, reveal its translation, reveal the
    next one, hide all with `Esc`, and keep reading without losing place.
-3. **Page turn**: move forward and back; confirm the page number, scroll
-   position, and URL stay in sync; a deep link opens the same page.
-4. **Mobile**: repeat 1–3 at phone width, including the translation reveal and
-   pagination controls.
+3. **Page turn**: move forward and back by swipe, margin click, the pager and
+   the arrow keys; confirm the page number, scroll position, and URL stay in
+   sync; a deep link opens the same page.
+4. **Mobile**: repeat 1–3 at phone width, including the swipe, the translation
+   reveal and pagination controls.
 5. **Return later**: reopen the site, open the book you were reading, and land
    on your bookmarked page with the same translations uncovered, at the same
    place on the page; a bar offers the way back if you browse elsewhere.
@@ -32,6 +33,36 @@ delivered; sign-in and cross-device sync are the next phase.
   does not render translation-only cards in the current corpus.
 - Page turns keep the reading position at the top of the new page. Browser
   back/forward restores the previous position.
+- **Turning pages.** A horizontal swipe tracks the finger 1:1: after a 6px axis
+  lock the page follows the drag, revealing the adjacent page's edge, and the
+  release commits the turn if it travelled 50px or was a flick in that
+  direction; otherwise the page springs back. A vertical drag scrolls. The
+  empty space between the viewport edge and the text is an invisible
+  full-height button, sized to the measured margin, never smaller than 24px and
+  never over text; it is the click target on a wide screen and on a phone.
+  `ArrowLeft` and `ArrowRight` also turn. Every path goes through the same page
+  turn path, so the bookmark and history rules do not change; the URL follows
+  the row rather than driving it. At the first and last
+  page the turn is disabled rather than silently repeated; a URL beyond the end
+  still clamps to the last page. A turn moves the row: the page being left is
+  frozen at the release position for a drag, the new page is placed one panel
+  to the side, and both slide by the same distance — the new page starts where
+  the drag peek left it, so nothing jumps, and its contents fade in as it
+  arrives. The jump from the bottom of one page to the top of the next is never
+  scrolled; the new page is already waiting underneath.
+  See [page-turning.md](page-turning.md).
+- **The first-run turn lesson.** On a book with more than one page, a
+  decorative cue teaches the mechanism the device actually has. With a coarse
+  pointer the live page nudges left under a hand, sliding the next page's card
+  in behind a gutter, while a bottom caption reads “Swipe left for the next
+  page”; with a fine pointer the available margins are clearly lit, and a chip
+  at the margin holds the words “Click the margin to turn the page” with the
+  mouse glyph on the right. It appears at most three times per device and stops
+  for good once the reader turns a page by swipe or margin click. The book's
+  own history makes no difference: a resumed book still teaches. It waits 1.2s
+  so it does not collide with the translation hint, hides on a turn or after
+  its hold (a reveal does not dismiss it), and removes its movement under
+  `prefers-reduced-motion`.
 - The page header shows title/author on page 1 and a compact header otherwise;
   the footer shows “X of Y”.
 - Loading shows a quiet busy state without blanking the current page. A
@@ -46,6 +77,13 @@ delivered; sign-in and cross-device sync are the next phase.
 
 - All controls are keyboard reachable; the translation reveal is operable
   without a mouse.
+- Page turning has a single-pointer alternative to the swipe: the invisible
+  margin targets and the pager. The margin target shows a chevron and a 2px
+  focus ring on `:focus-visible`, and is at least 24px wide (28px on a phone).
+  `ArrowLeft`/`ArrowRight` turn without tabbing.
+- The turn lesson is decorative (`aria-hidden`, `pointer-events: none`); the
+  pager and the live region are its accessible signal. Its movement, and the
+  page-turn wipe, are removed under `prefers-reduced-motion`.
 - The page region exposes `aria-busy` while loading and a polite “Page X of Y”
   live region.
 - Masked translations are hidden from screen readers until revealed.

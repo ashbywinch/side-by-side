@@ -34,6 +34,7 @@ Full runbook: `docs/releasing.md`. Hosting details: `docs/deployment.md`.
 | Release a version / recover a failed release | `docs/releasing.md` |
 | Hosting, rollback, corpus limits, headers | `docs/deployment.md` |
 | Repair shifted translations | `docs/translation-repair.md` |
+| Turn pages: swipe, margin targets, the first-run lesson | `docs/page-turning.md` |
 | What the product is for — JTBD, personas, constraints | `docs/PRD.md` |
 | How it is built — components, layers, decisions | `docs/TECHSPEC.md` |
 | What is being built, in what order | `docs/PLAN.md` |
@@ -98,6 +99,8 @@ Read the relevant doc before changing behavior.
   builder fail on it.
 - The reader fetches `meta.json` + one 500-segment chunk; do not reintroduce
   whole-book fetching.
+- A page turn never navigates mid-row: the reader turns the page, then points
+  `?page=` at it. A route re-render during the slide reads as a jump on a phone.
 - Reading progress is local-only in `localStorage` (`sbs:bookshelf:v1`) behind
   `useBookshelf`; components never touch storage directly. A bookmark moves
   only by reading — browsing never writes.
