@@ -27,17 +27,19 @@ const routes: RouteRecordRaw[] = [
 ];
 
 /**
- * Every route starts at the top unless it is a history traversal. A book that
- * has a stored reading position scrolls there itself, after it renders; the
- * window itself must never inherit the previous page's offset, or a book opens
- * part-way down and then scrolls back up.
+ * Most routes start at the top. A book owns its own scroll instead: it has a
+ * stored reading position to restore, and it resets the window itself when it
+ * has none. Letting the router scroll a book would overwrite that restore,
+ * because the router's scroll lands after the book has scrolled to its place.
  */
 export function scrollBehavior(
-  _to: RouteLocationNormalized,
+  to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
   savedPosition: { left: number; top: number } | null,
 ) {
-  return savedPosition ?? { top: 0 };
+  if (savedPosition) return savedPosition;
+  if (to.name === "Book") return false;
+  return { top: 0 };
 }
 
 const router = createRouter({

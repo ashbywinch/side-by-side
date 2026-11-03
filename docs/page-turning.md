@@ -211,10 +211,14 @@ Interaction tests dispatch real `TouchEvent` sequences and assert the URL, the
 bookmark and the DOM outcome; the pure geometry, gesture and storage rules are
 unit-tested. The lesson's timing is tested with fake timers.
 
-The window's scroll is never the book's business on open: `router.ts` resets it
-to the top on every route change that is not a history traversal, and a book with
-a stored position scrolls there after it renders. A book that scrolls itself to
-the top appears to animate up from wherever the previous page was left.
+The window's scroll belongs to the book on a book route: `router.ts` starts every
+other route at the top and leaves a book alone, because a book has a stored
+position to restore and the router's scroll lands *after* that restore. On open
+the book itself goes to the stored segment, or to the top when it has none — both
+instantly, and before the page paints, so the first frame that shows content is
+already in the right place. A smooth scroll here reads as the page gliding up
+from wherever the previous route was left, and the router doing it silently
+cancels the restore.
 
 ## Accepting it
 

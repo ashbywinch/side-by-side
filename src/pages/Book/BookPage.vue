@@ -505,10 +505,14 @@ async function loadPage(targetPage?: number) {
 
   if (scrollOnLoad) {
     scrollOnLoad = false
-    // A fresh open is already at the top: the router resets the window on a
-    // route change. Only a stored position or a turn has anywhere to go.
-    if (start !== pageStart) pageRef.value?.scrollToSegment(start)
-    else if (transition) window.scrollTo({ top: 0 })
+    if (start !== pageStart) {
+      // A stored position inside the page: go back to that segment.
+      pageRef.value?.scrollToSegment(start)
+    } else {
+      // No stored position: the window must not keep the offset it had on the
+      // previous route, and landing there is not a scroll worth animating.
+      window.scrollTo({ top: 0 })
+    }
   }
 
   if (transition && !reader.error.value && !prefersReducedMotion()) {

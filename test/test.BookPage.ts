@@ -254,6 +254,35 @@ describe("BookPage", () => {
     expect(screen.queryByText(/translations are hidden/i)).toBeNull();
   });
 
+  it("reopens from the shelf at the stored place on the page", async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+
+    // Segment 30 is inside page 2 (24..47) but is not its first segment, so
+    // reopening must scroll within the page, not just land on page 2's top.
+    const store = createBookshelf({ storage: window.localStorage, debounceMs: 0 });
+    store.reveal({ lang: "en", author: "Author", title: "Book", segments: SEGMENTS }, 30, 30);
+    store.flush();
+    store.dispose();
+    resetBookshelf();
+
+    // The shelf links to the book with no ?page=: the stored position decides.
+    const route = (await import("vue-router")) as unknown as {
+      __route: { query: Record<string, unknown> };
+    };
+    route.__route.query = {};
+
+    render(BookPage, {
+      props: { lang: "en", author: "Author", title: "Book" },
+    });
+    await settle();
+
+    expect(screen.queryByText("s24")).toBeTruthy();
+    expect(scrollIntoView).toHaveBeenCalled();
+
+    delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
+  });
+
   it("adds the book to the bookshelf when the reader turns a page", async () => {
     render(BookPage, {
       props: { lang: "en", author: "Author", title: "Book" },
@@ -313,10 +342,9 @@ describe("BookPage", () => {
     delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
   });
 
-  it("does not scroll itself when a fresh book opens at the top", async () => {
-    // The router resets the window on a route change; the book must not add a
-    // scroll of its own, or opening it animates up from the previous page's
-    // offset.
+  it("puts a fresh book at the top without animating there", async () => {
+    // The window keeps the previous route's offset, so the book resets it —
+    // instantly: a smooth scroll reads as the page gliding up from the middle.
     const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
 
     render(BookPage, {
@@ -324,7 +352,7 @@ describe("BookPage", () => {
     });
     await settle();
 
-    expect(scrollTo).not.toHaveBeenCalled();
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0 });
     scrollTo.mockRestore();
   });
 
