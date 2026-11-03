@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalized,
+  type RouteRecordRaw,
+} from "vue-router";
 
 import BookPage from "./pages/Book/BookPage.vue";
 import IndexPage from "./pages/Index/IndexPage.vue";
@@ -21,16 +26,24 @@ const routes: RouteRecordRaw[] = [
   },
 ];
 
+/**
+ * Every route starts at the top unless it is a history traversal. A book that
+ * has a stored reading position scrolls there itself, after it renders; the
+ * window itself must never inherit the previous page's offset, or a book opens
+ * part-way down and then scrolls back up.
+ */
+export function scrollBehavior(
+  _to: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
+  savedPosition: { left: number; top: number } | null,
+) {
+  return savedPosition ?? { top: 0 };
+}
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, _from, savedPosition) {
-    // A book restores its own viewport from the stored position; only history
-    // traversal (back/forward) gets the browser's remembered offset.
-    if (to.name === "Book") return savedPosition ?? false;
-    if (savedPosition) return savedPosition;
-    return { top: 0 };
-  },
+  scrollBehavior,
 });
 
 export default router;

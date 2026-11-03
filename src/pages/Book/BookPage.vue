@@ -6,7 +6,6 @@ import { useMediaQuery } from "@vueuse/core";
 import { pageForPosition, positionForPage } from "@/components/Bookshelf/position";
 import { useBookshelf } from "@/components/Bookshelf/useBookshelf";
 import { pageAfter, type PageTurn, type TurnSource } from "@/components/Book/pageTurn";
-import { scrollToTop } from "@/components/Book/scrollToTop";
 import { createPageSlide, PAGE_SLIDE_MS } from "@/components/Book/usePageSlide";
 import { usePageMargins } from "@/components/Book/usePageMargins";
 import { usePageTurnHint } from "@/components/Book/usePageTurnHint";
@@ -241,7 +240,6 @@ const slide = createPageSlide({
 let pendingSlide: PageTurn | null = null
 let pendingSlideOffset = 0
 let lastDragOffset = 0
-let cancelTurnScroll: (() => void) | null = null
 
 /** Hint motion: the page itself nudges left under the hand, then eases back. */
 function clearHintNudge(): void {
@@ -504,19 +502,13 @@ async function loadPage(targetPage?: number) {
 
   await nextTick()
 
-  cancelTurnScroll?.()
-  cancelTurnScroll = null
 
   if (scrollOnLoad) {
     scrollOnLoad = false
+    // A fresh open is already at the top: the router resets the window on a
+    // route change. Only a stored position or a turn has anywhere to go.
     if (start !== pageStart) pageRef.value?.scrollToSegment(start)
     else if (transition) window.scrollTo({ top: 0 })
-    else
-      cancelTurnScroll = scrollToTop({
-        distance: window.scrollY,
-        viewportHeight: window.innerHeight,
-        reducedMotion: prefersReducedMotion(),
-      })
   }
 
   if (transition && !reader.error.value && !prefersReducedMotion()) {
@@ -617,8 +609,6 @@ onUnmounted(() => {
     cancelAnimationFrame(traceFrame)
     traceFrame = null
   }
-  cancelTurnScroll?.()
-  cancelTurnScroll = null
   if (urlSyncTimer !== null) {
     clearTimeout(urlSyncTimer)
     urlSyncTimer = null

@@ -205,12 +205,16 @@ have.
 | `src/components/Book/PageTurnHint.vue` | The hint motion, click cue and bottom caption |
 | `src/components/Book/pageTurnHintStorage.ts` | Versioned read/write and validation |
 | `src/components/Book/usePageTurnHint.ts` | The show cap, delay, hold and learned flag |
-| `src/components/Book/scrollToTop.ts` | The distance-bounded scroll and its fallback |
 | `src/types/pageTurnHint.ts` | The stored record |
 
-Interaction tests dispatch real `TouchEvent` sequences and assert the route,
-the bookmark and the DOM outcome; the pure geometry, gesture and storage rules
-are unit-tested. The lesson's timing is tested with fake timers.
+Interaction tests dispatch real `TouchEvent` sequences and assert the URL, the
+bookmark and the DOM outcome; the pure geometry, gesture and storage rules are
+unit-tested. The lesson's timing is tested with fake timers.
+
+The window's scroll is never the book's business on open: `router.ts` resets it
+to the top on every route change that is not a history traversal, and a book with
+a stored position scrolls there after it renders. A book that scrolls itself to
+the top appears to animate up from wherever the previous page was left.
 
 ## Accepting it
 

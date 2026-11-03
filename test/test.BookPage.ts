@@ -313,7 +313,10 @@ describe("BookPage", () => {
     delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
   });
 
-  it("puts a fresh book at the top of the page", async () => {
+  it("does not scroll itself when a fresh book opens at the top", async () => {
+    // The router resets the window on a route change; the book must not add a
+    // scroll of its own, or opening it animates up from the previous page's
+    // offset.
     const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
 
     render(BookPage, {
@@ -321,7 +324,7 @@ describe("BookPage", () => {
     });
     await settle();
 
-    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "auto" });
+    expect(scrollTo).not.toHaveBeenCalled();
     scrollTo.mockRestore();
   });
 
