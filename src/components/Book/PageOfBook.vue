@@ -3,7 +3,7 @@ import PageHeader from '@/components/Book/PageHeader.vue';
 import TextSnippet from '@/components/Book/TextSnippet.vue';
 import { revealedOnPage, topSegment } from '@/components/Bookshelf/position';
 import type { BookSegment } from '@/components/Book/useBookReader';
-import { onMounted, onUnmounted, ref, watch, type PropType } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue';
 
 const props = defineProps({
   title: { type:String, required: true},
@@ -25,8 +25,18 @@ const emit = defineEmits(["reveal", "position-change"])
 // What is on screen right now. The stored mark says what has been read; this
 // says what is showing, so hiding with Esc does not un-read anything.
 const visible = ref(0)
+const cardEl = ref<{ $el?: HTMLElement } | HTMLElement | null>(null)
+const textEl = ref<HTMLElement | null>(null)
 const elements: Array<HTMLElement | null> = []
 let ticking = false
+
+/** The card's root element, whether the template ref is a component or a node. */
+const cardElement = computed<HTMLElement | null>(() => {
+  const value = cardEl.value
+  if (!value) return null
+  if (value instanceof HTMLElement) return value
+  return value.$el ?? null
+})
 
 function restored(): number {
   return revealedOnPage(props.revealedThrough, props.firstSegment, props.cards.length)
@@ -99,7 +109,7 @@ function scrollToSegment(segment: number) {
   }
 }
 
-defineExpose({ scrollToSegment })
+defineExpose({ scrollToSegment, contentElement: textEl, cardElement })
 
 onMounted(() => {
   window.addEventListener("keydown", onEvent, true);
@@ -112,12 +122,12 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <va-card class="page">
+  <va-card ref="cardEl" class="page">
     <PageHeader :title="title" :author="author" :is-title-page="page == 1"/>
     <p v-if="showTranslationHint" class="reveal-hint">
       Translations are hidden — click one to reveal it.
     </p>
-    <div class="text" :aria-busy="loading ? 'true' : 'false'">
+    <div ref="textEl" class="text" :aria-busy="loading ? 'true' : 'false'">
       <template
         v-for="(card, index) in cards"
         :key="`${card.start ?? 'segment'}-${index}`">
@@ -131,7 +141,7 @@ onUnmounted(() => {
       </template>
     </div>
     <div v-if="numPages > 1" class="row justify-center">
-      <div>{{page}} of {{numPages}}</div>
+      <div aria-live="polite" aria-atomic="true">{{page}} of {{numPages}}</div>
     </div>
   </va-card>
 </template>

@@ -8,3 +8,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/*
+ * A page turn translates the page sideways; without this, a mobile browser
+ * widens the layout viewport to fit the translated card and zooms out for the
+ * duration of the turn. Clip the horizontal overflow at the root: the row is
+ * visible to the viewport edge, but it cannot change the page's width. The
+ * clip does not create a scroll container, so vertical scrolling is untouched.
+ */
+html,
+body {
+  overflow-x: clip;
+}

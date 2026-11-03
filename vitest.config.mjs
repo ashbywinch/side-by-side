@@ -5,6 +5,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [vue(), tsconfigPaths()],
+  define: {
+    __BUILD_STAMP__: JSON.stringify("test"),
+  },
 
   test: {
     setupFiles: ["./test/setup.ts"],

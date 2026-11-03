@@ -16,7 +16,7 @@ applyPreset(preferredColor.value)
 
 <template>
   <div :class="($matches && $matches.xs.only) ? 'screen-xs' : ''">
-    <va-navbar color="primary" class="mb-3">
+    <va-navbar color="primary" class="site-nav mb-3">
       <RouterLink :to="{name:'Index'}" class="brand">
         <va-navbar-item class="logo">
           <va-icon
@@ -46,6 +46,11 @@ applyPreset(preferredColor.value)
 }
 .screen-xs .container {
   margin: 0 .75rem;
+}
+
+/* The site chrome stays above a page-turn snapshot, which is fixed. */
+.site-nav {
+  z-index: 20;
 }
 
 header span {

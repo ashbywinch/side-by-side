@@ -15,6 +15,7 @@ export default ts.config(
       globals: {
         ...globals.node,
         ...globals.browser,
+        __BUILD_STAMP__: "readonly",
       },
       parserOptions: {
         parser: "@typescript-eslint/parser",
