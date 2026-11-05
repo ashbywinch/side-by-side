@@ -12,6 +12,11 @@ ai_timeout = 1800
 fallback_models = []
 # Standards/docs are read from main, never from the PR head.
 repo_context_from_default_branch = true
+# The renderer caps rendered context at repo_context_max_lines (default 500) and
+# STOPS at the first file that overruns - every later file is dropped silently.
+# These files are ~2165 lines together. Raise this whenever the list grows.
+# See pr_agent/algo/repo_context.py.
+repo_context_max_lines = 2500
 repo_context_files = [
   "AGENTS.md",
   "README.md",
@@ -49,7 +54,7 @@ require_tests_review = true
 require_security_review = true
 require_estimate_effort_to_review = true
 num_max_findings = 20
-extra_instructions = "Check the PR against each file in repo_context_files. Add a 'Compliance' section per doc, listing any violations or 'No violations'. Flag violations as findings, not just notes: coding and structural deviations from docs/coding-standards.md (including JS/TS conventions), test-standard deviations from docs/testing-standards.md, requirement deviations from docs/PRD.md (JTBD, personas, constraints, user requirements), architecture/layer deviations from docs/TECHSPEC.md (components, object model, boundary rules), phase/scope deviations from docs/PLAN.md, UX deviations from docs/ux-standards.md and docs/UX.md, documentation-quality deviations from docs/writing-documentation.md, folder/reachability deviations from docs/documentation-structure.md, and release-process deviations from docs/releasing.md and docs/deployment.md. A release-process violation is a finding: ad-hoc wrangler deploy, manual semver/production tags, guessed versions, or approving production on the user's behalf. Suppression comments are findings when their why fails the evidence bar in docs/coding-standards.md."
+extra_instructions = "Check the PR against each file in repo_context_files. Report every violation as its own finding with path:line and the rule it breaks; never report something as compliant unless you checked it against the file that states the rule. Flag violations as findings, not just notes: coding and structural deviations from docs/coding-standards.md (including JS/TS conventions), test-standard deviations from docs/testing-standards.md, requirement deviations from docs/PRD.md (JTBD, personas, constraints, user requirements), architecture/layer deviations from docs/TECHSPEC.md (components, object model, boundary rules), phase/scope deviations from docs/PLAN.md, UX deviations from docs/ux-standards.md and docs/UX.md, documentation-quality deviations from docs/writing-documentation.md, folder/reachability deviations from docs/documentation-structure.md, and release-process deviations from docs/releasing.md and docs/deployment.md. A release-process violation is a finding: ad-hoc wrangler deploy, manual semver/production tags, guessed versions, or approving production on the user's behalf. Suppression comments are findings when their why fails the evidence bar in docs/coding-standards.md."
 
 [pr_code_suggestions]
 persistent_comment = true
